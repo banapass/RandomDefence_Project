@@ -5,20 +5,20 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
-    [field: SerializeField]
-    public Camera GameCamera { get; private set; }
     [SerializeField] Transform boardArea;
     [SerializeField] Tile tilePrefab;
-    [SerializeField] Vector2 tileSize;
-    [SerializeField] int createCount;
-    [SerializeField] int cameraSpecing;
     [SerializeField] Tile[,] tileMap;
+    AStarPathfinding pathfinding;
 
-    // Start is called before the first frame update
+    List<Vector3> path;
+
     void Start()
     {
-        CreateBoard(tileSize);
-        // CameraResizing(boardArea.localScale.x);
+        CreateBoard(Constants.MAP_SIZE);
+        pathfinding = new AStarPathfinding();
+        pathfinding.Init();
+        pathfinding.InitializeGrid(tileMap);
+        path = pathfinding.FindPath();
     }
 
     private void CreateBoard(Vector2 _tileSize)
@@ -31,7 +31,7 @@ public class BoardManager : MonoBehaviour
 
 
         Vector2 _resolusionSize = (Vector2)boardArea.localScale / _tileSize;
-        Vector2 _startPos = (Vector2)boardArea.transform.position + (-tileSize * 0.5f) * _resolusionSize;// new Vector2(-_start, -_start) * _resolusionSize;
+        Vector2 _startPos = (Vector2)boardArea.transform.position + (-_tileSize * 0.5f) * _resolusionSize;
 
         for (int y = 0; y < _tileSize.y; y++)
         {
@@ -50,7 +50,17 @@ public class BoardManager : MonoBehaviour
             }
         }
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
 
+        if (path == null) return;
+
+        for (int i = 0; i < path.Count; i++)
+        {
+            Gizmos.DrawWireCube(path[i], Vector3.one);
+        }
+    }
     // private void OnDrawGizmos()
     // {
     //     Gizmos.DrawWireCube(transform.position, Vector2.one);
