@@ -54,11 +54,12 @@ public class BoardManager : MonoBehaviour
     {
         Gizmos.color = Color.blue;
 
-        if (path == null) return;
+        if (pathfinding == null) return;
+        if (pathfinding.Path == null) return;
 
-        for (int i = 0; i < path.Count; i++)
+        for (int i = 0; i < pathfinding.Path.Count; i++)
         {
-            Gizmos.DrawWireCube(path[i], Vector3.one);
+            Gizmos.DrawWireCube(pathfinding.Path[i], Vector3.one);
         }
     }
     // private void OnDrawGizmos()

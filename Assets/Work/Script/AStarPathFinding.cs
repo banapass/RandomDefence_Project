@@ -5,6 +5,8 @@ public class AStarPathfinding
 {
     private Node[,] grid;
     private int gridSizeX, gridSizeY;
+    private List<Vector3> path;
+    public List<Vector3> Path { get { return path; } }
 
     public void Init()
     {
@@ -23,13 +25,17 @@ public class AStarPathfinding
                 Tile _currTile = _tilemap[y, x];
                 Vector3 worldPosition = _currTile.transform.position;
                 grid[y, x] = new Node(_currTile.IsWalkable, worldPosition, x, y);
+
+                if (x == 1 && y == 0)
+                    grid[y, x].walkable = false;
             }
         }
     }
 
     public List<Vector3> FindPath()
     {
-        List<Vector3> path = new List<Vector3>();
+        if (path == null) path = new List<Vector3>();
+        else path.Clear();
 
         Node startNode = grid[0, 0];
         Node targetNode = grid[gridSizeY - 1, gridSizeX - 1];
@@ -56,14 +62,14 @@ public class AStarPathfinding
                 }
             }
 
+            path.Add(currentNode.worldPosition);
             openSet.Remove(currentNode);
             closedSet.Add(currentNode);
 
+            // 목표 노드 도착
             if (currentNode == targetNode)
-            {
-                path = RetracePath(startNode, targetNode);
                 return path;
-            }
+
 
             foreach (Node neighbor in GetNeighbors(currentNode))
             {
@@ -77,7 +83,7 @@ public class AStarPathfinding
                 {
                     neighbor.gCost = newMovementCostToNeighbor;
                     neighbor.hCost = GetDistance(neighbor, targetNode);
-                    neighbor.parent = currentNode;
+                    // neighbor.parent = currentNode;
 
                     if (!openSet.Contains(neighbor))
                     {
@@ -87,23 +93,23 @@ public class AStarPathfinding
             }
         }
 
-        return path;
+        return null;
     }
 
-    List<Vector3> RetracePath(Node startNode, Node endNode)
-    {
-        List<Vector3> path = new List<Vector3>();
-        Node currentNode = endNode;
+    // List<Vector3> RetracePath(Node startNode, Node endNode)
+    // {
+    //     List<Vector3> path = new List<Vector3>();
+    //     Node currentNode = endNode;
 
-        while (currentNode != startNode)
-        {
-            path.Add(currentNode.worldPosition);
-            currentNode = currentNode.parent;
-        }
-        path.Reverse();
+    //     while (currentNode != startNode)
+    //     {
+    //         path.Add(currentNode.worldPosition);
+    //         currentNode = currentNode.parent;
+    //     }
+    //     path.Reverse();
 
-        return path;
-    }
+    //     return path;
+    // }
 
     List<Node> GetNeighbors(Node node)
     {
@@ -147,7 +153,6 @@ public class AStarPathfinding
         return neighbors;
     }
 
-    // 월드 포지션에 해당하는 노드 가져오기
     Node NodeFromWorldPosition(Vector3 worldPosition)
     {
         int x = Mathf.FloorToInt(worldPosition.x);
@@ -160,7 +165,6 @@ public class AStarPathfinding
         return null;
     }
 
-    // 두 노드 사이의 거리 계산
     int GetDistance(Node nodeA, Node nodeB)
     {
         int distX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
@@ -168,14 +172,13 @@ public class AStarPathfinding
         return distX + distY;
     }
 
-    // 그리드 노드 클래스
     public class Node
     {
         public bool walkable;
         public Vector3 worldPosition;
         public int gridX, gridY;
         public int gCost, hCost;
-        public Node parent;
+        // public Node parent;
 
         public Node(bool walkable, Vector3 worldPosition, int gridX, int gridY)
         {
