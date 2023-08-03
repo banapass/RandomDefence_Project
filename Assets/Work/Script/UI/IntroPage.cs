@@ -8,8 +8,6 @@ public class IntroPage : BaseUi
     public override void OnOpen()
     {
         Debug.Log("On Open");
-
-        UIManager.Instance.Hide(this);        
     }
     public override void OnClose(TweenCallback _onComplete)
     {

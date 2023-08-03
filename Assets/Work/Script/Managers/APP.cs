@@ -7,12 +7,10 @@ public class APP : Singleton<APP>
 {
     private void Start()
     {
-        Init();       
+        Init();
     }
     public void Init()
     {
-        Tile _tile = ResourceStorage.GetResource<Tile>("Prefab/Tile");
 
-        UIManager.Instance.Show("UI/Page/Intro", true);
     }
 }

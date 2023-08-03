@@ -25,6 +25,8 @@ public class BoardManager : MonoBehaviour
         pathfinding.Init();
         pathfinding.InitializeGrid(tileMap);
         path = pathfinding.FindPath();
+
+        MonsterController.Instance.Init(this);
     }
 
     private void CreateBoard(Vector2 _tileSize)
@@ -75,6 +77,7 @@ public class BoardManager : MonoBehaviour
             Gizmos.DrawWireCube(pathfinding.Path[i], Vector3.one);
         }
     }
+    public List<Vector3> GetCurrentPath() => pathfinding.Path;
     // private void OnDrawGizmos()
     // {
     //     Gizmos.DrawWireCube(transform.position, Vector2.one);
