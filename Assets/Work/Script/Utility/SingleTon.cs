@@ -1,53 +1,57 @@
-using UnityEngine;
-
-public class Singleton<T> : MonoBehaviour where T : Singleton<T>
+namespace framework
 {
-    private static T instance;
+    using UnityEngine;
 
-    public static T Instance
+    public class Singleton<T> : MonoBehaviour where T : Singleton<T>
     {
-        get
+        private static T instance;
+
+        public static T Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = FindObjectOfType<T>();
+
+                    if (instance == null)
+                    {
+                        GameObject singletonObject = new GameObject();
+                        instance = singletonObject.AddComponent<T>();
+                        singletonObject.name = typeof(T).ToString() + " (Singleton)";
+
+                        if (instance.IsDontDestroyOnLoad())
+                            DontDestroyOnLoad(singletonObject);
+                    }
+                }
+
+                return instance;
+            }
+        }
+
+        protected virtual void Awake()
         {
             if (instance == null)
             {
-                instance = FindObjectOfType<T>();
-
-                if (instance == null)
-                {
-                    GameObject singletonObject = new GameObject();
-                    instance = singletonObject.AddComponent<T>();
-                    singletonObject.name = typeof(T).ToString() + " (Singleton)";
-
-                    if (instance.IsDontDestroyOnLoad())
-                        DontDestroyOnLoad(singletonObject);
-                }
+                instance = this as T;
+                if (IsDontDestroyOnLoad())
+                    DontDestroyOnLoad(gameObject);
             }
-
-            return instance;
+            else
+            {
+                Destroy(gameObject);
+            }
         }
-    }
-
-    protected virtual void Awake()
-    {
-        if (instance == null)
+        public virtual bool IsDontDestroyOnLoad()
         {
-            instance = this as T;
-            if (IsDontDestroyOnLoad())
-                DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
+            return true;
         }
     }
-    public virtual bool IsDontDestroyOnLoad()
-    {
-        return true;
-    }
+
+
+
+
+
+
+
 }
-
-
-
-
-
-

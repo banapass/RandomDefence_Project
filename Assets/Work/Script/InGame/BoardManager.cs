@@ -1,4 +1,4 @@
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +11,12 @@ public class BoardManager : MonoBehaviour
     AStarPathfinding pathfinding;
 
     List<Vector3> path;
+
+    public bool IsBreakTime { get { return CurrentGameState == GameState.BreakTime; } }
+
+    [field: SerializeField, ReadOnly]
+    public GameState CurrentGameState { get; private set; }
+    public static event Action<GameState> OnChangedGameState;
 
     void Start()
     {
@@ -49,6 +55,13 @@ public class BoardManager : MonoBehaviour
                 tileMap[y, x] = _tile;
             }
         }
+    }
+    public void ChangeGameState(GameState _gameState)
+    {
+        if (CurrentGameState == _gameState) return;
+
+        CurrentGameState = _gameState;
+        OnChangedGameState?.Invoke(_gameState);
     }
     private void OnDrawGizmos()
     {

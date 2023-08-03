@@ -4,9 +4,20 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour, IDamageble
 {
+    private MonsterInfo inMonsterInfo;
     private float currHp;
     private float maxHp;
     private float speed = 3;
+
+    private List<Vector3> path;
+
+    public void Init(MonsterInfo _monsterInfo, List<Vector3> _path)
+    {
+        this.inMonsterInfo = _monsterInfo;
+        this.path = _path;
+        if (path == null) Debug.LogError("Monster Init Failed : Path Is Null");
+
+    }
 
     public void TakeDamage(float _damage)
     {

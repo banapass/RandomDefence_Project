@@ -4,3 +4,8 @@ public enum Orientation
     Portrait
     // Add more orientations if needed
 }
+
+public enum GameState
+{
+    Play, BreakTime, GameOver
+}

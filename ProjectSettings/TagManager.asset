@@ -41,3 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Tile
+    uniqueID: 3452549843
+    locked: 0
+  - name: Area
+    uniqueID: 1457190849
+    locked: 0
+  - name: Unit
+    uniqueID: 4292843263
+    locked: 0
+  - name: Particle
+    uniqueID: 2540394361
+    locked: 0

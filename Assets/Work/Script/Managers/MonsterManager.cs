@@ -9,4 +9,9 @@ public class MonsterManager : MonoBehaviour
     {
 
     }
+    private void SpawnMonster()
+    {
+        Monster _newMonster = Instantiate(monsterPrefab);
+        _newMonster.Init(new MonsterInfo(), null);
+    }
 }
