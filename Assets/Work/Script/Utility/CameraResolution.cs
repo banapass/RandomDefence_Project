@@ -24,27 +24,28 @@ public class CameraResolution : MonoBehaviour
     void Start()
     {
         mainCamera = GetComponent<Camera>();
+        // AdjustCameraSize();
         UpdateOrthographicSize();
     }
-    // void AdjustCameraSize()
-    // {
-    //     Rect rect = mainCamera.rect;
+    void AdjustCameraSize()
+    {
+        Rect rect = mainCamera.rect;
 
-    //     float scaleheight = ((float)Screen.width / Screen.height) / ((float)16 / 9);
-    //     // float scaleheight = ((float)Screen.safeArea.width / Screen.safeArea.height) / ((float)16 / 9);
-    //     float scalewidth = 1f / scaleheight;
-    //     if (scaleheight < 1)
-    //     {
-    //         rect.height = scaleheight;
-    //         rect.y = (1f - scaleheight) / 2f;
-    //     }
-    //     else
-    //     {
-    //         rect.width = scalewidth;
-    //         rect.x = (1f - scalewidth) / 2f;
-    //     }
-    //     mainCamera.rect = rect;
-    // }
+        float scaleheight = ((float)Screen.width / Screen.height) / ((float)16 / 9);
+        // float scaleheight = ((float)Screen.safeArea.width / Screen.safeArea.height) / ((float)16 / 9);
+        float scalewidth = 1f / scaleheight;
+        if (scaleheight < 1)
+        {
+            rect.height = scaleheight;
+            rect.y = (1f - scaleheight) / 2f;
+        }
+        else
+        {
+            rect.width = scalewidth;
+            rect.x = (1f - scalewidth) / 2f;
+        }
+        mainCamera.rect = rect;
+    }
 
     // 정해 놓은 비율에 맞게 OrthSize 변경
     private void UpdateOrthographicSize()
@@ -64,8 +65,4 @@ public class CameraResolution : MonoBehaviour
 
         transform.position = new Vector3(0, _newY, -10);
     }
-    // private void OnPreCull()
-    // {
-    //     GL.Clear(true, true, Color.black);
-    // }
 }

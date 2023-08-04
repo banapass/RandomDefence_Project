@@ -16,18 +16,17 @@ public class AStarPathfinding
         grid = new Node[gridSizeY, gridSizeX];
     }
 
-    public void InitializeGrid(Tile[,] _tilemap)
+    public void InitializeGrid(BaseTile[,] _tilemap)
     {
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                Tile _currTile = _tilemap[y, x];
+                BaseTile _currTile = _tilemap[y, x];
                 Vector3 worldPosition = _currTile.transform.position;
                 grid[y, x] = new Node(_currTile.IsWalkable, worldPosition, x, y);
-
-                if (x == 1 && y == 0)
-                    grid[y, x].walkable = false;
+                // if (x == 1 && y == 0)
+                //     grid[y, x].walkable = false;
             }
         }
     }

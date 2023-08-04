@@ -1,9 +1,10 @@
 using System;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+abstract public class BaseTile : MonoBehaviour
 {
-    public bool IsWalkable { get { return true; } }
+    public virtual bool IsWalkable { get { return true; } }
+
     public void SetTilePos(int x, int y)
     {
         transform.position = new Vector2(x, y);

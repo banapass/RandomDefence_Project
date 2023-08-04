@@ -6,16 +6,15 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
     [SerializeField] Transform boardArea;
-    [SerializeField] Tile tilePrefab;
-    [SerializeField] Tile[,] tileMap;
+    [SerializeField] EmptyTile tilePrefab;
+    [SerializeField] EmptyTile[,] tileMap;
     AStarPathfinding pathfinding;
-
     List<Vector3> path;
+
 
     public bool IsBreakTime { get { return CurrentGameState == GameState.BreakTime; } }
 
-    [field: SerializeField, ReadOnly]
-    public GameState CurrentGameState { get; private set; }
+    [field: SerializeField, ReadOnly] public GameState CurrentGameState { get; private set; }
     public static event Action<GameState> OnChangedGameState;
 
     void Start()
@@ -35,7 +34,7 @@ public class BoardManager : MonoBehaviour
         bool _isOddNumberY = _tileSize.y % 2 != 0;
         Vector2 _start = _tileSize / 2;
 
-        tileMap = new Tile[(int)_tileSize.y, (int)_tileSize.x];
+        tileMap = new EmptyTile[(int)_tileSize.y, (int)_tileSize.x];
 
 
         Vector2 _resolusionSize = (Vector2)boardArea.localScale / _tileSize;
@@ -57,6 +56,19 @@ public class BoardManager : MonoBehaviour
                 tileMap[y, x] = _tile;
             }
         }
+
+        // Unit Batch Debug
+        UnitPlacementTile _placementTile = Instantiate(framework.ResourceStorage.GetResource<UnitPlacementTile>("Prefab/Unitplacement"));
+        tileMap[0, 1].SetInnerTile(_placementTile);
+        Unit _unit = Instantiate(framework.ResourceStorage.GetResource<Unit>("Prefab/Unit"));
+        UnitInfo _info = new UnitInfo();
+        _info.coolTime = 4;
+        _info.atk = 10;
+        _info.unitID = 1;
+        _unit.Init(_info);
+        _placementTile.Init(_unit);
+
+
     }
     public void ChangeGameState(GameState _gameState)
     {
