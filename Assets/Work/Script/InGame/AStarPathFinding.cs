@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class AStarPathfinding
 {
+    private Node startNode;
+    private Node endNode;
     private Node[,] grid;
     private int gridSizeX, gridSizeY;
     private List<Vector3> path;
@@ -14,8 +16,14 @@ public class AStarPathfinding
         gridSizeX = mapSize.x;
         gridSizeY = mapSize.y;
         grid = new Node[gridSizeY, gridSizeX];
+        InitializeGrid();
+        SetStartEndPoint();
     }
-
+    private void SetStartEndPoint()
+    {
+        startNode = grid[0, 0];
+        endNode = grid[gridSizeY - 1, gridSizeX - 1];
+    }
     public void InitializeGrid(BaseTile[,] _tilemap)
     {
         for (int x = 0; x < gridSizeX; x++)
@@ -25,23 +33,71 @@ public class AStarPathfinding
                 BaseTile _currTile = _tilemap[y, x];
                 Vector3 worldPosition = _currTile.transform.position;
                 grid[y, x] = new Node(_currTile.IsWalkable, worldPosition, x, y);
-                // if (x == 1 && y == 0)
-                //     grid[y, x].walkable = false;
             }
         }
     }
+    public void SynchronizeAt(BaseTile[,] _tilemap, bool _walkable = false, bool _worldPos = false)
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                Node _node = grid[y, x];
+                BaseTile _currTile = _tilemap[y, x];
+                if (_walkable) _node.walkable = _currTile.IsWalkable;
+                if (_worldPos) _node.worldPosition = _currTile.transform.position;
+            }
+        }
+    }
+    private void InitializeGrid()
+    {
+        for (int x = 0; x < gridSizeX; x++)
+            for (int y = 0; y < gridSizeY; y++)
+                grid[y, x] = new Node(true, default, x, y);
+    }
 
+    public bool IsCanPlaceTile(EmptyTile _tile)
+    {
+        Queue<Node> _openSet = new Queue<Node>();
+        List<Node> _visited = new List<Node>();
+        Node _targetNode = grid[_tile.TileCoord.y, _tile.TileCoord.x];
+
+        _openSet.Enqueue(startNode);
+        _targetNode.walkable = false;
+
+        while (_openSet.Count > 0)
+        {
+            Node _currentNode = _openSet.Dequeue();
+
+            if (_currentNode == endNode) return true;
+
+            foreach (Node _node in GetNeighbors(_currentNode))
+            {
+                if (_visited.Contains(_node)) continue;
+                if (!_node.walkable) continue;
+
+                if (!_visited.Contains(_node))
+                    _visited.Add(_node);
+
+                _openSet.Enqueue(_node);
+            }
+        }
+
+        _targetNode.walkable = true;
+
+        return false;
+    }
     public List<Vector3> FindPath()
     {
         if (path == null) path = new List<Vector3>();
         else path.Clear();
 
-        Node startNode = grid[0, 0];
-        Node targetNode = grid[gridSizeY - 1, gridSizeX - 1];
 
-        if (startNode == null || targetNode == null)
+
+        if (startNode == null || endNode == null)
         {
-            Debug.LogError("Start or target node is null!");
+            SetStartEndPoint();
+            Debug.LogError("Start or end node is null!");
             return path;
         }
 
@@ -55,7 +111,9 @@ public class AStarPathfinding
             Node currentNode = openSet[0];
             for (int i = 1; i < openSet.Count; i++)
             {
-                if (openSet[i].fCost < currentNode.fCost || (openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost))
+                if (openSet[i].fCost < currentNode.fCost ||
+                   (openSet[i].fCost == currentNode.fCost &&
+                    openSet[i].hCost < currentNode.hCost))
                 {
                     currentNode = openSet[i];
                 }
@@ -66,7 +124,7 @@ public class AStarPathfinding
             closedSet.Add(currentNode);
 
             // 목표 노드 도착
-            if (currentNode == targetNode)
+            if (currentNode == endNode)
                 return path;
 
 
@@ -81,7 +139,7 @@ public class AStarPathfinding
                 if (newMovementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor))
                 {
                     neighbor.gCost = newMovementCostToNeighbor;
-                    neighbor.hCost = GetDistance(neighbor, targetNode);
+                    neighbor.hCost = GetDistance(neighbor, endNode);
                     // neighbor.parent = currentNode;
 
                     if (!openSet.Contains(neighbor))

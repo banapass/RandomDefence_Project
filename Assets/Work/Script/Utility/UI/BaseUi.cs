@@ -10,7 +10,7 @@ namespace framework
     {
         public string UiPath { get; private set; }
         public virtual void OnOpen() { }
-        public virtual void OnClose(TweenCallback _onComplete) { }
+        public virtual void OnClose(TweenCallback<BaseUi> _onComplete) { }
 
         public void SetUIPath(string _name) => UiPath = _name;
     }

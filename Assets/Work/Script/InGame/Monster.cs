@@ -19,11 +19,21 @@ public class Monster : MonoBehaviour, IDamageble
         this.path = _path;
         currentPathIndex = 0;
         transform.position = path[currentPathIndex];
+        // Debug.Log(this.path == _path);
         if (path == null) Debug.LogError("Monster Init Failed : Path Is Null");
+
+    }
+    private void OnEnable()
+    {
+
+    }
+    private void OnDisable()
+    {
 
     }
     private void Update()
     {
+        if (path == null) return;
         if (isDestination) return;
         FollowPath();
     }

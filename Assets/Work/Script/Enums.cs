@@ -9,3 +9,8 @@ public enum GameState
 {
     Play, BreakTime, GameOver
 }
+
+public enum PlacementState
+{
+    None, UnitPlacement
+}

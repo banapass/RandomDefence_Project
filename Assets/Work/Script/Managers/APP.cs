@@ -11,6 +11,7 @@ public class APP : Singleton<APP>
     }
     public void Init()
     {
-
+        InputController.Instance.Init();
+        UIManager.Instance.Show(UiPath.INGAME, false);
     }
 }

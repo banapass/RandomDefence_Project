@@ -2,14 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using framework;
 
-public class BoardManager : MonoBehaviour
+public class BoardManager : Singleton<BoardManager>
 {
     [SerializeField] Transform boardArea;
     [SerializeField] EmptyTile tilePrefab;
     [SerializeField] EmptyTile[,] tileMap;
     AStarPathfinding pathfinding;
-    List<Vector3> path;
+    // List<Vector3> path;
 
 
     public bool IsBreakTime { get { return CurrentGameState == GameState.BreakTime; } }
@@ -22,12 +23,32 @@ public class BoardManager : MonoBehaviour
         CreateBoard(Constants.MAP_SIZE);
         pathfinding = new AStarPathfinding();
         pathfinding.Init();
-        pathfinding.InitializeGrid(tileMap);
-        path = pathfinding.FindPath();
+        pathfinding.SynchronizeAt(tileMap, true, true);
+        pathfinding.FindPath();
 
         MonsterController.Instance.Init(this);
     }
+    private void OnEnable()
+    {
+        InputController.OnTriedPlaceNewTile += OnChangedTileMap;
+    }
+    private void OnDisable()
+    {
+        InputController.OnTriedPlaceNewTile -= OnChangedTileMap;
+    }
 
+    private void OnChangedTileMap(EmptyTile _tile)
+    {
+        if (!pathfinding.IsCanPlaceTile(_tile)) return;
+
+        UnitPlacementTile _placementTile = Instantiate(framework.ResourceStorage.GetResource<UnitPlacementTile>("Prefab/Unitplacement"));
+        _tile.SetInnerTile(_placementTile);
+
+        pathfinding.SynchronizeAt(tileMap, true);
+        pathfinding.FindPath();
+
+        Debug.Log("On Changed Tile Map");
+    }
     private void CreateBoard(Vector2 _tileSize)
     {
         bool _isOddNumberX = _tileSize.x % 2 != 0;
@@ -53,22 +74,29 @@ public class BoardManager : MonoBehaviour
                 // _tile.SetTilePos(x, y);
                 _tile.name = string.Format($"({x} / {y})");
                 _tile.transform.position = _startPos + _nextPos;
+                _tile.SetCoord(new Coord(x, y));
                 tileMap[y, x] = _tile;
             }
         }
 
         // Unit Batch Debug
+        UnitBatchTest(tileMap[0, 1]);
+        UnitBatchTest(tileMap[1, 2]);
+
+    }
+    private void UnitBatchTest(EmptyTile _tile)
+    {
         UnitPlacementTile _placementTile = Instantiate(framework.ResourceStorage.GetResource<UnitPlacementTile>("Prefab/Unitplacement"));
-        tileMap[0, 1].SetInnerTile(_placementTile);
         Unit _unit = Instantiate(framework.ResourceStorage.GetResource<Unit>("Prefab/Unit"));
         UnitInfo _info = new UnitInfo();
         _info.coolTime = 4;
         _info.atk = 10;
         _info.unitID = 1;
         _unit.Init(_info);
+
+
+        _tile.SetInnerTile(_placementTile);
         _placementTile.Init(_unit);
-
-
     }
     public void ChangeGameState(GameState _gameState)
     {
