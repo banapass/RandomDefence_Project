@@ -1,0 +1,15 @@
+[
+    {
+        "stageId": "stage01",
+        "rounds": [
+            {
+                "monsterId": "1001",
+                "spawnCount": 10
+            },
+            {
+                "monsterId": "1002",
+                "spawnCount": 20
+            }
+        ]
+    }
+]

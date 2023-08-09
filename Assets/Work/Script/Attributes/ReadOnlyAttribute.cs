@@ -15,6 +15,5 @@ public class ReadOnlyDrawer : PropertyDrawer
     {
         GUI.enabled = false;
         EditorGUI.PropertyField(position, property, label, true);
-        // GUI.enabled = true;
     }
 }

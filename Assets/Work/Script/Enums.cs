@@ -7,7 +7,7 @@ public enum Orientation
 
 public enum GameState
 {
-    Play, BreakTime, GameOver
+    None, Playing, BreakTime, GameOver, GameClear
 }
 
 public enum PlacementState

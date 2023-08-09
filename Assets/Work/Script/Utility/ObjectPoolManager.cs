@@ -44,16 +44,11 @@ public class ObjectPool<T> where T : Component
     }
 }
 
-public class ObjectPoolManager : MonoBehaviour
+public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
 {
-    public static ObjectPoolManager Instance;
     Dictionary<string, ObjectPool<Component>> poolList = new Dictionary<string, ObjectPool<Component>>();
     [SerializeField] List<ObjectSet<Component>> objectSetsList = new List<ObjectSet<Component>>(); // 인스펙터에서 직접 설정
 
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     // 인스펙터에서 직접 설정한 Pool이 있을 시 호출
     public void Init()
@@ -80,19 +75,20 @@ public class ObjectPoolManager : MonoBehaviour
     {
         if (poolList.ContainsKey(_obj.name)) return;
 
-        ObjectPool<T> objectPool = new ObjectPool<T>();
-        ObjectSet<T> _objSet = new ObjectSet<T>(_obj, _createCount);
+        ObjectPool<Component> objectPool = new ObjectPool<Component>();
+        ObjectSet<Component> _objSet = new ObjectSet<Component>(_obj, _createCount);
         objectPool.CreatePool(_objSet, this.transform);
-        poolList.Add(_objSet.createObj.name, objectPool as ObjectPool<Component>);
+        poolList.Add(_objSet.createObj.name, objectPool);
     }
     // Key값을 직접 매개변수로 Pool 등록
     public void AddPool<T>(T _obj, int _createCount, string _key) where T : Component
     {
         if (poolList.ContainsKey(_key)) return;
 
-        ObjectPool<T> objectPool = new ObjectPool<T>();
-        ObjectSet<T> _objSet = new ObjectSet<T>(_obj, _createCount);
+        ObjectPool<Component> objectPool = new ObjectPool<Component>();
+        ObjectSet<Component> _objSet = new ObjectSet<Component>(_obj, _createCount);
         objectPool.CreatePool(_objSet, this.transform, _key);
+
         poolList.Add(_key, objectPool as ObjectPool<Component>);
     }
     public bool IsExistPool(string _id)
@@ -128,6 +124,7 @@ public class ObjectPoolManager : MonoBehaviour
     {
         if (poolList.ContainsKey(_objName))
         {
+            Debug.Log($"Pool Count : {poolList[_objName].pool}");
             if (poolList[_objName].pool.Count > 0)
             {
                 Component obj = poolList[_objName].pool.Dequeue();

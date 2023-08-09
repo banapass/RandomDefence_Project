@@ -13,5 +13,6 @@ public class APP : Singleton<APP>
     {
         InputController.Instance.Init();
         UIManager.Instance.Show(UiPath.INGAME, false);
+        TableManager.Instance.Init();
     }
 }

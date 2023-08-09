@@ -9,45 +9,49 @@ public class BoardManager : Singleton<BoardManager>
     [SerializeField] Transform boardArea;
     [SerializeField] EmptyTile tilePrefab;
     [SerializeField] EmptyTile[,] tileMap;
+    private HashSet<UnitPlacementTile> placedTiles;
     AStarPathfinding pathfinding;
     // List<Vector3> path;
 
 
     public bool IsBreakTime { get { return CurrentGameState == GameState.BreakTime; } }
-
     [field: SerializeField, ReadOnly] public GameState CurrentGameState { get; private set; }
     public static event Action<GameState> OnChangedGameState;
 
     void Start()
     {
+        placedTiles = new HashSet<UnitPlacementTile>();
+
         CreateBoard(Constants.MAP_SIZE);
         pathfinding = new AStarPathfinding();
         pathfinding.Init();
         pathfinding.SynchronizeAt(tileMap, true, true);
         pathfinding.FindPath();
 
-        MonsterController.Instance.Init(this);
+        WaveManager.Instance.Init(this, TableManager.Instance.GetStageInfo("stage01"));
     }
     private void OnEnable()
     {
-        InputController.OnTriedPlaceNewTile += OnChangedTileMap;
+        InputController.OnTriedPlaceNewTile += OnTriedPlaceNewTile;
     }
     private void OnDisable()
     {
-        InputController.OnTriedPlaceNewTile -= OnChangedTileMap;
+        InputController.OnTriedPlaceNewTile -= OnTriedPlaceNewTile;
     }
 
-    private void OnChangedTileMap(EmptyTile _tile)
+    private void Update()
+    {
+
+    }
+
+    private void OnTriedPlaceNewTile(EmptyTile _tile)
     {
         if (!pathfinding.IsCanPlaceTile(_tile)) return;
 
-        UnitPlacementTile _placementTile = Instantiate(framework.ResourceStorage.GetResource<UnitPlacementTile>("Prefab/Unitplacement"));
-        _tile.SetInnerTile(_placementTile);
+        CreateUnitPlacementTile(_tile);
 
         pathfinding.SynchronizeAt(tileMap, true);
         pathfinding.FindPath();
-
-        Debug.Log("On Changed Tile Map");
     }
     private void CreateBoard(Vector2 _tileSize)
     {
@@ -104,6 +108,12 @@ public class BoardManager : Singleton<BoardManager>
 
         CurrentGameState = _gameState;
         OnChangedGameState?.Invoke(_gameState);
+    }
+    private void CreateUnitPlacementTile(EmptyTile _tile)
+    {
+        UnitPlacementTile _placementTile = Instantiate(framework.ResourceStorage.GetResource<UnitPlacementTile>("Prefab/Unitplacement"));
+        _tile.SetInnerTile(_placementTile);
+        placedTiles.Add(_placementTile);
     }
     private void OnDrawGizmos()
     {

@@ -9,11 +9,14 @@ namespace framework
     {
         private Dictionary<string, BaseUi> uiDict = new Dictionary<string, BaseUi>();
         [SerializeField] Transform pageCanvas;
+        [SerializeField] RectTransform pageRect;
         [SerializeField] Transform popupCanvas;
+        [SerializeField] RectTransform popupRect;
 
 
         [field: SerializeField, ReadOnly]
         public BaseUi CurrentPage { get; private set; }
+
         public void Show(string _uiPath, bool _isPopup)
         {
             if (uiDict.ContainsKey(_uiPath))
@@ -23,7 +26,7 @@ namespace framework
             }
 
             BaseUi _rawUI = ResourceStorage.GetResource<BaseUi>(_uiPath);
-            Transform _targetParent = _isPopup ? popupCanvas : pageCanvas;
+            Transform _targetParent = _isPopup ? popupRect : pageRect;
 
             if (_rawUI != null)
             {

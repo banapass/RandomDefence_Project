@@ -36,7 +36,7 @@ public class AStarPathfinding
             }
         }
     }
-    public void SynchronizeAt(BaseTile[,] _tilemap, bool _walkable = false, bool _worldPos = false)
+    public void SynchronizeAt(BaseTile[,] _tilemap, bool _updateWalkable = false, bool _updateWorldPos = false)
     {
         for (int x = 0; x < gridSizeX; x++)
         {
@@ -44,8 +44,8 @@ public class AStarPathfinding
             {
                 Node _node = grid[y, x];
                 BaseTile _currTile = _tilemap[y, x];
-                if (_walkable) _node.walkable = _currTile.IsWalkable;
-                if (_worldPos) _node.worldPosition = _currTile.transform.position;
+                if (_updateWalkable) _node.walkable = _currTile.IsWalkable;
+                if (_updateWorldPos) _node.worldPosition = _currTile.transform.position;
             }
         }
     }
