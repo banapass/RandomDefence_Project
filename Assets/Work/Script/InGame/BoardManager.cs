@@ -28,6 +28,7 @@ public class BoardManager : Singleton<BoardManager>
         pathfinding.SynchronizeAt(tileMap, true, true);
         pathfinding.FindPath();
 
+        ChangeGameState(GameState.BreakTime);
         WaveManager.Instance.Init(this, TableManager.Instance.GetStageInfo("stage01"));
     }
     private void OnEnable()
@@ -95,7 +96,7 @@ public class BoardManager : Singleton<BoardManager>
         UnitInfo _info = new UnitInfo();
         _info.coolTime = 4;
         _info.atk = 10;
-        _info.unitID = 1;
+        _info.unitId = "unit010";
         _unit.Init(_info);
 
 

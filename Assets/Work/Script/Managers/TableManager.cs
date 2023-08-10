@@ -7,9 +7,11 @@ public class TableManager : framework.Singleton<TableManager>
 {
     private Dictionary<string, MonsterInfo> monsterDict;
     private Dictionary<string, StageInfo> stageDict;
+    private Dictionary<string, UnitInfo> unitDict;
 
     private readonly string STAGEDATA_PATH = "Data/StageData";
     private readonly string MONSTERDATA_PATH = "Data/MonsterData";
+    private readonly string UNITDATA_PATH = "Data/UnitData";
 
     [SerializeField] StageInfo stageinfo;
     public void Init()
@@ -24,7 +26,7 @@ public class TableManager : framework.Singleton<TableManager>
         {
             if (stageDict.ContainsKey(_stages[i].stageId))
             {
-                Debug.LogError("동일한 스테이지 아이디가 존재합니다. 확인 필요");
+                Debug.LogError($"동일한 스테이지 아이디가 존재합니다. ID : {_stages[i].stageId}");
                 continue;
             }
             else
@@ -45,7 +47,7 @@ public class TableManager : framework.Singleton<TableManager>
 
             if (monsterDict.ContainsKey(_monsterInfo.monsterId))
             {
-                Debug.LogError("동일한 몬스터 아이디가 존재합니다. 확인 필요");
+                Debug.LogError($"동일한 몬스터 아이디가 존재합니다. ID:{_monsterInfo.monsterId}");
                 continue;
             }
             else
@@ -55,9 +57,23 @@ public class TableManager : framework.Singleton<TableManager>
 
         }
 
+        // UnitInfo 파싱
 
-        Monster _monster = framework.ResourceStorage.GetResource<Monster>(monsterDict["1001"].prefabPath);
-        Debug.Log(_monster);
+        UnitInfo[] _unitInfos = Parse<UnitInfo>(UNITDATA_PATH);
+        unitDict = new Dictionary<string, UnitInfo>();
+
+        for (int i = 0; i < _unitInfos.Length; i++)
+        {
+            UnitInfo _currUnit = _unitInfos[i];
+            if (unitDict.ContainsKey(_currUnit.unitId))
+            {
+                Debug.LogError($"동일한 Unit ID가 존재합니다. ID:{_currUnit.unitId}");
+            }
+            unitDict.Add(_currUnit.unitId, _currUnit);
+            Debug.Log(_currUnit.rarity);
+        }
+
+
 
     }
 
@@ -85,5 +101,9 @@ public class TableManager : framework.Singleton<TableManager>
     public MonsterInfo GetMonsterInfo(string _monsterId)
     {
         return monsterDict[_monsterId];
+    }
+    public UnitInfo GetUnitInfo(string _unitId)
+    {
+        return unitDict[_unitId];
     }
 }

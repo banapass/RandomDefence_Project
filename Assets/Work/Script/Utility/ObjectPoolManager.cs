@@ -65,10 +65,6 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
             poolList.Add(objectSetsList[i].createObj.name, objectPool);
         }
     }
-    public bool IsExist(string _prefabName)
-    {
-        return poolList.ContainsKey(_prefabName);
-    }
 
     // 오브젝트의 Name을 Key값으로 Pool 등록
     public void AddPool<T>(T _obj, int _createCount) where T : Component
@@ -91,11 +87,10 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
 
         poolList.Add(_key, objectPool as ObjectPool<Component>);
     }
-    public bool IsExistPool(string _id)
+    public bool IsExist(string _prefabName)
     {
-        return poolList.ContainsKey(_id);
+        return poolList.ContainsKey(_prefabName);
     }
-
     public GameObject GetGameObject(string _objName)
     {
         if (poolList.ContainsKey(_objName))
@@ -124,7 +119,6 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
     {
         if (poolList.ContainsKey(_objName))
         {
-            Debug.Log($"Pool Count : {poolList[_objName].pool}");
             if (poolList[_objName].pool.Count > 0)
             {
                 Component obj = poolList[_objName].pool.Dequeue();

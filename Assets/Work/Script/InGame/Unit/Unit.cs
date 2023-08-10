@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
+using UniRx.Triggers;
 
 public class Unit : MonoBehaviour
 {
@@ -14,7 +16,7 @@ public class Unit : MonoBehaviour
     }
     public void OnAttack()
     {
-        Debug.Log("On Attack");
+
     }
     public void Cooldown(float _deltaTime)
     {

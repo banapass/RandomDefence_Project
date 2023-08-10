@@ -32,7 +32,6 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
             OnDeath = _onDeath;
 
         if (path == null) Debug.LogError("Monster Init Failed : Path Is Null");
-
     }
     private void OnEnable()
     {

@@ -1,9 +1,7 @@
 namespace Utility
 {
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Text;
+    using Newtonsoft.Json;
     using UnityEngine;
 
     public static class JsonWrapper
@@ -11,15 +9,17 @@ namespace Utility
         public static T[] FromJson<T>(string json)
         {
             string _wrappedJson = "{\"items\":" + json + "}";
-            Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(_wrappedJson);
+            Wrapper<T> wrapper = JsonConvert.DeserializeObject<Wrapper<T>>(_wrappedJson);
             return wrapper.items;
+
+            // JsonUtility.FromJson<Wrapper<T>>(_wrappedJson);
         }
 
         public static string ToJson<T>(T[] array)
         {
             Wrapper<T> wrapper = new Wrapper<T>();
             wrapper.items = array;
-            return JsonUtility.ToJson(wrapper, true);
+            return JsonConvert.SerializeObject(wrapper); //JsonUtility.ToJson(wrapper, true);
         }
 
         [Serializable]

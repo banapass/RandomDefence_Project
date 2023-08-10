@@ -1,6 +1,13 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+[System.Serializable]
 public struct UnitInfo
 {
-    public int unitID;
+    public string unitId;
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public UnitRarity rarity;
     public float atk;
     public float coolTime;
 

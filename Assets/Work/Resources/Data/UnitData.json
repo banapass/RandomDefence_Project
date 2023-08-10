@@ -1,0 +1,32 @@
+[
+    {
+        "unitId": "unit001",
+        "rarity": "Common",
+        "atk": 10,
+        "coolTime": 4
+    },
+    {
+        "unitId": "unit002",
+        "rarity": "Uncommon",
+        "atk": 20,
+        "coolTime": 5
+    },
+    {
+        "unitId": "unit003",
+        "rarity": "Rare",
+        "atk": 30,
+        "coolTime": 2
+    },
+    {
+        "unitId": "unit004",
+        "rarity": "Epic",
+        "atk": 50,
+        "coolTime": 3
+    },
+    {
+        "unitId": "unit005",
+        "rarity": "Legendary",
+        "atk": 100,
+        "coolTime": 2
+    }
+]

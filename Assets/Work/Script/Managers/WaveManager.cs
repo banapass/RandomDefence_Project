@@ -37,6 +37,7 @@ public class WaveManager : Singleton<WaveManager>
     }
     public void StartNextRound()
     {
+        if (!boardManager.IsBreakTime) return;
         if (spawning == null)
             spawning = Spawning();
 
@@ -44,6 +45,7 @@ public class WaveManager : Singleton<WaveManager>
         currWaveMonster = TableManager.Instance.GetMonsterInfo(currStageInfo.rounds[currRound].monsterId);
         remainSpawnCount = currStageInfo.rounds[currRound].spawnCount;
 
+        boardManager.ChangeGameState(GameState.Playing);
         StartCoroutine(spawning);
     }
     public void StopSpawning()
@@ -98,7 +100,8 @@ public class WaveManager : Singleton<WaveManager>
         }
         else
         {
-            StartNextRound();
+            boardManager.ChangeGameState(GameState.BreakTime);
+            // StartNextRound();
         }
     }
 }
