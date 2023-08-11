@@ -5,6 +5,8 @@ using framework;
 
 public class APP : Singleton<APP>
 {
+    [SerializeField] float angle;
+    [SerializeField] int count;
     private void Start()
     {
         Init();
@@ -14,5 +16,6 @@ public class APP : Singleton<APP>
         InputController.Instance.Init();
         UIManager.Instance.Show(UiPath.INGAME, false);
         TableManager.Instance.Init();
+
     }
 }

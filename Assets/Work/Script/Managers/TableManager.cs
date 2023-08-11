@@ -70,7 +70,7 @@ public class TableManager : framework.Singleton<TableManager>
                 Debug.LogError($"동일한 Unit ID가 존재합니다. ID:{_currUnit.unitId}");
             }
             unitDict.Add(_currUnit.unitId, _currUnit);
-            Debug.Log(_currUnit.rarity);
+            Debug.Log(_currUnit.projectileInfo.prefab);
         }
 
 

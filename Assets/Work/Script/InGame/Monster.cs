@@ -9,9 +9,8 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     public string ObjectID { get; set; }
 
     private MonsterInfo inMonsterInfo;
-    private float currHp;
-    private float maxHp;
-    private float speed = 10;
+    [SerializeField, ReadOnly] private float currHp;
+
     private List<Vector3> path;
 
     private int currentPathIndex;
@@ -22,8 +21,8 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
     public void Init(MonsterInfo _monsterInfo, List<Vector3> _path, Action<Monster> _onDeath)
     {
-
         this.inMonsterInfo = _monsterInfo;
+        this.currHp = inMonsterInfo.hp;
         this.path = _path;
         currentPathIndex = 0;
         transform.position = path[currentPathIndex];
@@ -33,13 +32,13 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
         if (path == null) Debug.LogError("Monster Init Failed : Path Is Null");
     }
-    private void OnEnable()
-    {
+    // private void OnEnable()
+    // {
 
-    }
-    private void OnDisable()
-    {
-    }
+    // }
+    // private void OnDisable()
+    // {
+    // }
     private void Update()
     {
         if (path == null) return;
@@ -56,11 +55,8 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     }
     private void OnDie()
     {
-        // Debug.Log("Monster Is Dead");
         OnDeath(this);
-
         ObjectPoolManager.Instance.ReturnParts(this, ObjectID);
-        Destroy(this.gameObject);
     }
     public void FollowPath()
     {
@@ -88,6 +84,6 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     }
     public void MoveToPoint(Vector3 _target)
     {
-        transform.position = Vector3.MoveTowards(transform.position, _target, Time.deltaTime * speed);
+        transform.position = Vector3.MoveTowards(transform.position, _target, Time.deltaTime * inMonsterInfo.speed);
     }
 }

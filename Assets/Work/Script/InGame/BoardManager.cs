@@ -93,10 +93,7 @@ public class BoardManager : Singleton<BoardManager>
     {
         UnitPlacementTile _placementTile = Instantiate(framework.ResourceStorage.GetResource<UnitPlacementTile>("Prefab/Unitplacement"));
         Unit _unit = Instantiate(framework.ResourceStorage.GetResource<Unit>("Prefab/Unit"));
-        UnitInfo _info = new UnitInfo();
-        _info.coolTime = 4;
-        _info.atk = 10;
-        _info.unitId = "unit010";
+        UnitInfo _info = TableManager.Instance.GetUnitInfo("unit001");
         _unit.Init(_info);
 
 

@@ -9,6 +9,8 @@ public struct UnitInfo
     [JsonConverter(typeof(StringEnumConverter))]
     public UnitRarity rarity;
     public float atk;
+    public float range;
     public float coolTime;
+    public ProjectileInfo projectileInfo;
 
 }

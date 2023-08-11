@@ -115,7 +115,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
             return null;
         }
     }
-    public T GetParts<T>(string _objName) where T : Object
+    public T GetParts<T>(string _objName) where T : Component
     {
         if (poolList.ContainsKey(_objName))
         {
@@ -139,8 +139,9 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
         }
         else
         {
-            Debug.LogError("GetObjectError : Object Key is Not Founded");
-            return null;
+            // Debug.LogError("GetObjectError : Object Key is Not Founded");
+            AddPool<T>(framework.ResourceStorage.GetResource<T>(_objName), 5, _objName);
+            return GetParts<T>(_objName);
         }
     }
     public void ReturnParts(Component _obj, string _objName)

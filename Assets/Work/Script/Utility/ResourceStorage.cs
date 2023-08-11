@@ -14,12 +14,10 @@ namespace framework
 
             if (resDict.ContainsKey(_path))
             {
-                Debug.Log("Aready Res");
                 return resDict[_path] as T;
             }
             else
             {
-                Debug.Log("Create New Res");
                 T _res = Resources.Load<T>(_path);
                 if (_res == null)
                 {

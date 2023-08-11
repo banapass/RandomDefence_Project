@@ -22,8 +22,8 @@ public class UnitPlacementTile : BaseTile
 
         if (unit.IsReadyToAttack())
         {
-            unit.OnAttack();
-            unit.ResetCoolTime();
+            if (unit.OnAttack())
+                unit.ResetCoolTime();
         }
     }
 

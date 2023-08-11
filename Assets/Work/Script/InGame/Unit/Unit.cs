@@ -6,17 +6,28 @@ using UniRx.Triggers;
 
 public class Unit : MonoBehaviour
 {
-    protected UnitInfo unitInfo;
+    public UnitInfo Info { get; protected set; }
     protected float currentCoolTime;
+    [SerializeField] protected LayerMask targetLayer;
 
     public void Init(UnitInfo _unitInfo)
     {
-        unitInfo = _unitInfo;
-        currentCoolTime = unitInfo.coolTime;
+        Info = _unitInfo;
+        currentCoolTime = Info.coolTime;
     }
-    public void OnAttack()
+    public virtual bool OnAttack()
     {
+        Collider2D _col = Physics2D.OverlapCircle(transform.position, Info.range, targetLayer);
 
+        if (_col == null) return false;
+
+        if (_col.TryGetComponent<Monster>(out var _monster))
+        {
+            ProjectileBase _projectile = ObjectPoolManager.Instance.GetParts<ProjectileBase>(Info.projectileInfo.prefab);
+            _projectile.Init(this, _monster);
+        }
+
+        return _col != null;
     }
     public void Cooldown(float _deltaTime)
     {
@@ -29,6 +40,10 @@ public class Unit : MonoBehaviour
     }
     public void ResetCoolTime()
     {
-        currentCoolTime = unitInfo.coolTime;
+        currentCoolTime = Info.coolTime;
+    }
+    public float CalculateDamage()
+    {
+        return Info.atk;
     }
 }
