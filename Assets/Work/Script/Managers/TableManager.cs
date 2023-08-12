@@ -71,6 +71,10 @@ public class TableManager : framework.Singleton<TableManager>
             }
             unitDict.Add(_currUnit.unitId, _currUnit);
             Debug.Log(_currUnit.projectileInfo.prefab);
+            if (_currUnit.projectileInfo.debuffInfo != null)
+            {
+                Debug.Log($"DebuffType : {_currUnit.projectileInfo.debuffInfo.Value.debuffType}");
+            }
         }
 
 

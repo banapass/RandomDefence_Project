@@ -20,3 +20,8 @@ public enum UnitRarity
 {
     Common, Uncommon, Rare, Epic, Legendary
 }
+
+public enum DebuffType
+{
+    None = 0, Slow
+}

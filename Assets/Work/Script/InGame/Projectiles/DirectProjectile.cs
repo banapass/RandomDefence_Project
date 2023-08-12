@@ -50,8 +50,11 @@ public class DirectProjectile : ProjectileBase
         if (!other.TryGetComponent<Monster>(out var _hitMonster)) return;
         if (hitMonsters.Contains(_hitMonster)) return;
 
-        Debug.Log("Hit Monster");
-        _hitMonster.TakeDamage(unit.CalculateDamage());
         hitMonsters.Add(_hitMonster);
+
+        _hitMonster.TakeDamage(unit.CalculateDamage());
+        TryApplyDebuff(_hitMonster);
+
+
     }
 }

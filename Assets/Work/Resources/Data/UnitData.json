@@ -4,11 +4,17 @@
         "rarity": "Common",
         "atk": 10,
         "range": 2,
-        "coolTime": 1,
+        "coolTime": 0.4,
         "projectileInfo": {
             "prefab": "Prefab/Projectile/projectile",
             "count": 1,
-            "speed": 10
+            "speed": 10,
+            "debuffInfo": {
+                "chanceOfDebuff": 0.4,
+                "intensity": 0.2,
+                "duration": 2,
+                "debuffType": "Slow"
+            }
         }
     },
     {

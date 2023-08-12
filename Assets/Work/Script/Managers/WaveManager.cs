@@ -24,6 +24,9 @@ public class WaveManager : Singleton<WaveManager>
 
         MonsterPooling();
         StartNextRound();
+
+        MemoryPool<Debuff> _debuffPool = new MemoryPool<Debuff>();
+        // _debuffPool.AddPool<SlowDebuff>(10);
     }
     private void MonsterPooling()
     {

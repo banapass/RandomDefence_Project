@@ -7,6 +7,8 @@ using UniRx.Triggers;
 public class Unit : MonoBehaviour
 {
     public UnitInfo Info { get; protected set; }
+    public ProjectileInfo ProjectileInfo => Info.projectileInfo;
+    public bool HasDebuff => ProjectileInfo.debuffInfo != null;
     protected float currentCoolTime;
     [SerializeField] protected LayerMask targetLayer;
 
@@ -46,4 +48,12 @@ public class Unit : MonoBehaviour
     {
         return Info.atk;
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, Info.range);
+    }
+#endif
 }

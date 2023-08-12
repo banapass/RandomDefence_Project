@@ -12,9 +12,13 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     [SerializeField, ReadOnly] private float currHp;
 
     private List<Vector3> path;
+    [SerializeField] private List<Debuff> debuffs;
+    private List<Debuff> finishedDebuffs;
 
     private int currentPathIndex;
     private bool isDestination;
+
+    private bool isDead;
 
     public event Action<Monster> OnDeath;
 
@@ -26,24 +30,34 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         this.path = _path;
         currentPathIndex = 0;
         transform.position = path[currentPathIndex];
+        isDead = false;
+
+        if (path == null) Debug.LogError("Monster Init Failed : Path Is Null");
 
         if (OnDeath == null)
             OnDeath = _onDeath;
 
-        if (path == null) Debug.LogError("Monster Init Failed : Path Is Null");
+
+        if (debuffs == null) debuffs = new List<Debuff>();
+        else debuffs.Clear();
+
+        if (finishedDebuffs == null) finishedDebuffs = new List<Debuff>();
+        else finishedDebuffs.Clear();
     }
     // private void OnEnable()
     // {
 
     // }
-    // private void OnDisable()
-    // {
-    // }
+    private void OnDisable()
+    {
+
+    }
     private void Update()
     {
         if (path == null) return;
         if (isDestination) return;
         FollowPath();
+        UpdateDebuff(Time.deltaTime);
     }
     public void TakeDamage(float _damage)
     {
@@ -55,9 +69,17 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     }
     private void OnDie()
     {
+        if (isDead) return;
+        isDead = true;
+
         OnDeath(this);
+
+        debuffs.Clear();
+        finishedDebuffs.Clear();
         ObjectPoolManager.Instance.ReturnParts(this, ObjectID);
+
     }
+    #region Move 관련
     public void FollowPath()
     {
 
@@ -84,6 +106,89 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     }
     public void MoveToPoint(Vector3 _target)
     {
-        transform.position = Vector3.MoveTowards(transform.position, _target, Time.deltaTime * inMonsterInfo.speed);
+        transform.position = Vector3.MoveTowards(transform.position, _target, Time.deltaTime * CalculateSpeed());
     }
+    #endregion
+
+    private float CalculateSpeed()
+    {
+        float _slowIntensity = 0;
+        for (int i = 0; i < debuffs.Count; i++)
+        {
+            Debuff _debuff = debuffs[i];
+            if (_debuff == null) continue;
+            if (_debuff.Info.debuffType != DebuffType.Slow) continue;
+
+            _slowIntensity += _debuff.Info.intensity;
+        }
+
+        _slowIntensity = _slowIntensity > Constants.MAX_SLOW ? Constants.MAX_SLOW : _slowIntensity;
+
+        return inMonsterInfo.speed - inMonsterInfo.speed * _slowIntensity;
+    }
+
+    #region Debuff 관련
+
+    private void UpdateDebuff(float _deltaTime)
+    {
+        for (int i = 0; i < debuffs.Count; i++)
+        {
+            debuffs[i].UpdateDuration(Time.deltaTime);
+
+            if (!debuffs[i].IsDubuffFinished()) continue;
+            if (finishedDebuffs.Contains(debuffs[i])) continue;
+
+            finishedDebuffs.Add(debuffs[i]);
+        }
+
+        for (int i = 0; i < finishedDebuffs.Count; i++)
+            RemoveDebuff(finishedDebuffs[i]);
+
+        if (finishedDebuffs.Count > 0)
+            finishedDebuffs.Clear();
+    }
+    public Debuff HasSameAttacker(Unit _attacker)
+    {
+        for (int i = 0; i < debuffs.Count; i++)
+        {
+            if (debuffs[i].Attacker != _attacker) continue;
+            return debuffs[i];
+        }
+        return null;
+    }
+    public void AddDebuff(Debuff _debuff)
+    {
+        if (debuffs.Contains(_debuff)) return;
+
+        debuffs.Add(_debuff);
+        // Debuff _sameDebuff = HasSameAttacker(_debuff);
+        // if (_sameDebuff != null)
+        //     _sameDebuff.ResetTime();
+        // else
+        //     MemoryPoolManager.Instance.ReleaseDebuff(_debuff);
+
+
+
+    }
+    public void RemoveDebuff(Debuff _debuff)
+    {
+        if (!debuffs.Contains(_debuff)) return;
+
+        debuffs.Remove(_debuff);
+    }
+
+    private void ReturnAllDebuff()
+    {
+        if (debuffs.Count <= 0) return;
+
+        for (int i = 0; i < debuffs.Count; i++)
+        {
+            MemoryPoolManager.Instance.ReleaseDebuff(debuffs[i]);
+        }
+
+        debuffs.Clear();
+    }
+
+    #endregion
+
 }
