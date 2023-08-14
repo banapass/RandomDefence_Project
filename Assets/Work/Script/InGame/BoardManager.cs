@@ -7,20 +7,32 @@ using framework;
 public class BoardManager : Singleton<BoardManager>
 {
     [SerializeField] Transform boardArea;
-    [SerializeField] EmptyTile tilePrefab;
     [SerializeField] EmptyTile[,] tileMap;
-    private HashSet<UnitPlacementTile> placedTiles;
+    private List<UnitPlacementTile> unitPlacementTiles;
     AStarPathfinding pathfinding;
     // List<Vector3> path;
 
 
-    public bool IsBreakTime { get { return CurrentGameState == GameState.BreakTime; } }
-    [field: SerializeField, ReadOnly] public GameState CurrentGameState { get; private set; }
-    public static event Action<GameState> OnChangedGameState;
+    // public bool IsBreakTime { get { return CurrentGameState == GameState.BreakTime; } }
+    // [field: SerializeField, ReadOnly] public GameState CurrentGameState { get; private set; }
+    // public static event Action<GameState> OnChangedGameState;
 
-    void Start()
+    // void Start()
+    // {
+    //     placedTiles = new HashSet<UnitPlacementTile>();
+
+    //     CreateBoard(Constants.MAP_SIZE);
+    //     pathfinding = new AStarPathfinding();
+    //     pathfinding.Init();
+    //     pathfinding.SynchronizeAt(tileMap, true, true);
+    //     pathfinding.FindPath();
+
+    //     // ChangeGameState(GameState.BreakTime);
+    //     WaveManager.Instance.Init(this, TableManager.Instance.GetStageInfo("stage01"));
+    // }
+    public void Init()
     {
-        placedTiles = new HashSet<UnitPlacementTile>();
+        unitPlacementTiles = new List<UnitPlacementTile>();
 
         CreateBoard(Constants.MAP_SIZE);
         pathfinding = new AStarPathfinding();
@@ -28,7 +40,7 @@ public class BoardManager : Singleton<BoardManager>
         pathfinding.SynchronizeAt(tileMap, true, true);
         pathfinding.FindPath();
 
-        ChangeGameState(GameState.BreakTime);
+        // ChangeGameState(GameState.BreakTime);
         WaveManager.Instance.Init(this, TableManager.Instance.GetStageInfo("stage01"));
     }
     private void OnEnable()
@@ -38,11 +50,6 @@ public class BoardManager : Singleton<BoardManager>
     private void OnDisable()
     {
         InputController.OnTriedPlaceNewTile -= OnTriedPlaceNewTile;
-    }
-
-    private void Update()
-    {
-
     }
 
     private void OnTriedPlaceNewTile(EmptyTile _tile)
@@ -66,11 +73,12 @@ public class BoardManager : Singleton<BoardManager>
         Vector2 _resolusionSize = (Vector2)boardArea.localScale / _tileSize;
         Vector2 _startPos = (Vector2)boardArea.transform.position + (-_tileSize * 0.5f) * _resolusionSize;
 
+        EmptyTile _rawTile = ResourceStorage.GetResource<EmptyTile>("Prefab/Tile");
         for (int y = 0; y < _tileSize.y; y++)
         {
             for (int x = 0; x < _tileSize.x; x++)
             {
-                var _tile = Instantiate(tilePrefab, transform);
+                var _tile = Instantiate(_rawTile, transform);
                 _tile.transform.localScale = _resolusionSize;
 
                 Vector2 _nextPos = new Vector2(x, y) * _resolusionSize;
@@ -84,34 +92,55 @@ public class BoardManager : Singleton<BoardManager>
             }
         }
 
+#if UNITY_EDITOR
         // Unit Batch Debug
         UnitBatchTest(tileMap[0, 1]);
         UnitBatchTest(tileMap[1, 2]);
+#endif
 
     }
+#if UNITY_EDITOR
     private void UnitBatchTest(EmptyTile _tile)
     {
         UnitPlacementTile _placementTile = Instantiate(framework.ResourceStorage.GetResource<UnitPlacementTile>("Prefab/Unitplacement"));
         Unit _unit = Instantiate(framework.ResourceStorage.GetResource<Unit>("Prefab/Unit"));
-        UnitInfo _info = TableManager.Instance.GetUnitInfo("unit001");
+        UnitInfo _info = TableManager.Instance.GetRandomUnitInfo();
         _unit.Init(_info);
 
 
         _tile.SetInnerTile(_placementTile);
         _placementTile.Init(_unit);
     }
-    public void ChangeGameState(GameState _gameState)
-    {
-        if (CurrentGameState == _gameState) return;
+#endif
+    // public void ChangeGameState(GameState _gameState)
+    // {
+    //     if (CurrentGameState == _gameState) return;
 
-        CurrentGameState = _gameState;
-        OnChangedGameState?.Invoke(_gameState);
-    }
+    //     CurrentGameState = _gameState;
+    //     OnChangedGameState?.Invoke(_gameState);
+    // }
     private void CreateUnitPlacementTile(EmptyTile _tile)
     {
         UnitPlacementTile _placementTile = Instantiate(framework.ResourceStorage.GetResource<UnitPlacementTile>("Prefab/Unitplacement"));
         _tile.SetInnerTile(_placementTile);
-        placedTiles.Add(_placementTile);
+        unitPlacementTiles.Add(_placementTile);
+    }
+    public void TryPlaceNewUnit()
+    {
+        if (!CanPlaceUnit()) return;
+        // unitPlacementTiles
+
+
+    }
+    private bool CanPlaceUnit()
+    {
+        for (int i = unitPlacementTiles.Count - 1; i >= 0; i--)
+        {
+            if (unitPlacementTiles[i].HasUnit) continue;
+            return true;
+        }
+
+        return false;
     }
     private void OnDrawGizmos()
     {

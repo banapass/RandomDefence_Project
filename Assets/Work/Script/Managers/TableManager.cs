@@ -7,11 +7,13 @@ public class TableManager : framework.Singleton<TableManager>
 {
     private Dictionary<string, MonsterInfo> monsterDict;
     private Dictionary<string, StageInfo> stageDict;
-    private Dictionary<string, UnitInfo> unitDict;
+    private Dictionary<UnitRarity, List<UnitInfo>> unitRarityMap;
+    private UnitRarityInfo[] unitRarities;
 
-    private readonly string STAGEDATA_PATH = "Data/StageData";
-    private readonly string MONSTERDATA_PATH = "Data/MonsterData";
-    private readonly string UNITDATA_PATH = "Data/UnitData";
+    private const string STAGEDATA_PATH = "Data/StageData";
+    private const string MONSTERDATA_PATH = "Data/MonsterData";
+    private const string UNITDATA_PATH = "Data/UnitData";
+    private const string UNITRARITY_PATH = "Data/UnitRarityConfig";
 
     [SerializeField] StageInfo stageinfo;
     public void Init()
@@ -60,25 +62,26 @@ public class TableManager : framework.Singleton<TableManager>
         // UnitInfo 파싱
 
         UnitInfo[] _unitInfos = Parse<UnitInfo>(UNITDATA_PATH);
-        unitDict = new Dictionary<string, UnitInfo>();
+        unitRarityMap = new Dictionary<UnitRarity, List<UnitInfo>>();
 
         for (int i = 0; i < _unitInfos.Length; i++)
         {
             UnitInfo _currUnit = _unitInfos[i];
-            if (unitDict.ContainsKey(_currUnit.unitId))
-            {
-                Debug.LogError($"동일한 Unit ID가 존재합니다. ID:{_currUnit.unitId}");
-            }
-            unitDict.Add(_currUnit.unitId, _currUnit);
-            Debug.Log(_currUnit.projectileInfo.prefab);
-            if (_currUnit.projectileInfo.debuffInfo != null)
-            {
-                Debug.Log($"DebuffType : {_currUnit.projectileInfo.debuffInfo.Value.debuffType}");
-            }
+            if (!unitRarityMap.ContainsKey(_currUnit.rarity))
+                unitRarityMap.Add(_currUnit.rarity, new List<UnitInfo>());
+
+            unitRarityMap[_unitInfos[i].rarity].Add(_currUnit);
         }
 
 
+        // UnitRarityInfo 파싱
+        unitRarities = Parse<UnitRarityInfo>(UNITRARITY_PATH);
 
+
+        for (int i = 0; i < 100; i++)
+        {
+            GetRandomUnitInfo();
+        }
     }
 
     private T[] Parse<T>(string _path)
@@ -106,8 +109,36 @@ public class TableManager : framework.Singleton<TableManager>
     {
         return monsterDict[_monsterId];
     }
-    public UnitInfo GetUnitInfo(string _unitId)
+    public UnitInfo GetRandomUnitInfo()
     {
-        return unitDict[_unitId];
+        UnitRarity _pickedRarity = GetRandomRarity();
+        List<UnitInfo> _selectedUnitList = unitRarityMap[_pickedRarity];
+
+        if (_selectedUnitList == null)
+            Debug.LogError($"{_pickedRarity}등급에 해당되는 유닛 정보가 없습니다.");
+
+
+        return _selectedUnitList[Random.Range(0, _selectedUnitList.Count)];
     }
+    private UnitRarity GetRandomRarity()
+    {
+        float _totalWeight = 0;
+
+        for (int i = 0; i < unitRarities.Length; i++)
+            _totalWeight += unitRarities[i].weight;
+
+
+        float _randomWeight = Random.value * _totalWeight;
+
+        for (int i = 0; i < unitRarities.Length; i++)
+        {
+            if (_randomWeight < unitRarities[i].weight)
+                return unitRarities[i].rarity;
+            else
+                _randomWeight -= unitRarities[i].weight;
+        }
+
+        return UnitRarity.Legendary;
+    }
+
 }

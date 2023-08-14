@@ -12,13 +12,17 @@ public enum GameState
 
 public enum PlacementState
 {
-    None, UnitPlacement
+    None, UnitPlacement, Unit
 }
 
 [System.Serializable]
 public enum UnitRarity
 {
-    Common, Uncommon, Rare, Epic, Legendary
+    Common,
+    Uncommon,
+    Rare,
+    Epic,
+    Legendary
 }
 
 public enum DebuffType

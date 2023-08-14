@@ -23,7 +23,7 @@ public class WaveManager : Singleton<WaveManager>
         currRound = -1;
 
         MonsterPooling();
-        StartNextRound();
+        // StartNextRound();
 
         MemoryPool<Debuff> _debuffPool = new MemoryPool<Debuff>();
         // _debuffPool.AddPool<SlowDebuff>(10);
@@ -40,7 +40,7 @@ public class WaveManager : Singleton<WaveManager>
     }
     public void StartNextRound()
     {
-        if (!boardManager.IsBreakTime) return;
+        if (!GameManager.Instance.IsBreakTime) return;
         if (spawning == null)
             spawning = Spawning();
 
@@ -48,7 +48,7 @@ public class WaveManager : Singleton<WaveManager>
         currWaveMonster = TableManager.Instance.GetMonsterInfo(currStageInfo.rounds[currRound].monsterId);
         remainSpawnCount = currStageInfo.rounds[currRound].spawnCount;
 
-        boardManager.ChangeGameState(GameState.Playing);
+        GameManager.Instance.ChangeGameState(GameState.Playing);
         StartCoroutine(spawning);
     }
     public void StopSpawning()
@@ -88,10 +88,11 @@ public class WaveManager : Singleton<WaveManager>
             Debug.LogError("스폰된 몬스터 리스트에 추가되지않은 몬스터가 죽었습니다.");
 
 
-        if (spawnMonsters.Count <= 0)
-        {
-            CheckGameEnd();
-        }
+        if (remainSpawnCount > 0) return;
+        if (spawnMonsters.Count > 0) return;
+
+        CheckGameEnd();
+
     }
     private void CheckGameEnd()
     {
@@ -103,7 +104,7 @@ public class WaveManager : Singleton<WaveManager>
         }
         else
         {
-            boardManager.ChangeGameState(GameState.BreakTime);
+            GameManager.Instance.ChangeGameState(GameState.BreakTime);
             // StartNextRound();
         }
     }

@@ -6,11 +6,15 @@ using UniRx.Triggers;
 
 public class Unit : MonoBehaviour
 {
+    [field: SerializeField, ReadOnly]
     public UnitInfo Info { get; protected set; }
     public ProjectileInfo ProjectileInfo => Info.projectileInfo;
     public bool HasDebuff => ProjectileInfo.debuffInfo != null;
     protected float currentCoolTime;
-    [SerializeField] protected LayerMask targetLayer;
+
+    [SerializeField, ReadOnly] protected LayerMask targetLayer;
+
+
 
     public void Init(UnitInfo _unitInfo)
     {

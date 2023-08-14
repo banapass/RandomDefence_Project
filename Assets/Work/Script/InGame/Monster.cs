@@ -21,6 +21,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     private bool isDead;
 
     public event Action<Monster> OnDeath;
+    public static event Action<MonsterHitInfo> OnTakeDamage;
 
 
     public void Init(MonsterInfo _monsterInfo, List<Vector3> _path, Action<Monster> _onDeath)
@@ -44,14 +45,6 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         if (finishedDebuffs == null) finishedDebuffs = new List<Debuff>();
         else finishedDebuffs.Clear();
     }
-    // private void OnEnable()
-    // {
-
-    // }
-    private void OnDisable()
-    {
-
-    }
     private void Update()
     {
         if (path == null) return;
@@ -61,11 +54,14 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     }
     public void TakeDamage(float _damage)
     {
+        if (isDead) return;
+
         currHp -= _damage;
 
         if (currHp <= 0)
             OnDie();
 
+        OnTakeDamage?.Invoke(new MonsterHitInfo((int)_damage, transform.position));
     }
     private void OnDie()
     {
@@ -74,8 +70,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
         OnDeath(this);
 
-        debuffs.Clear();
-        finishedDebuffs.Clear();
+        ReturnAllDebuff();
         ObjectPoolManager.Instance.ReturnParts(this, ObjectID);
 
     }
@@ -187,6 +182,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         }
 
         debuffs.Clear();
+        finishedDebuffs.Clear();
     }
 
     #endregion

@@ -6,7 +6,7 @@ namespace framework
 
     public class ResourceStorage
     {
-        public static Dictionary<string, Object> resDict = new Dictionary<string, Object>();
+        private static Dictionary<string, Object> resDict = new Dictionary<string, Object>();
 
         public static T GetResource<T>(string _path) where T : Object
         {

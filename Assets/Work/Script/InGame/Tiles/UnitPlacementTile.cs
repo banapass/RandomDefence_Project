@@ -5,6 +5,7 @@ using UnityEngine;
 public class UnitPlacementTile : BaseTile
 {
     public override bool IsWalkable => false;
+    public bool HasUnit => unit != null;
     private Unit unit;
 
     public void Init(Unit _unit)
@@ -26,5 +27,4 @@ public class UnitPlacementTile : BaseTile
                 unit.ResetCoolTime();
         }
     }
-
 }
