@@ -58,6 +58,8 @@ public class AStarPathfinding
 
     public bool IsCanPlaceTile(EmptyTile _tile)
     {
+        if (startNode.gridX == _tile.TileCoord.x && startNode.gridY == _tile.TileCoord.y) return false;
+
         Queue<Node> _openSet = new Queue<Node>();
         List<Node> _visited = new List<Node>();
         Node _targetNode = grid[_tile.TileCoord.y, _tile.TileCoord.x];
@@ -89,11 +91,6 @@ public class AStarPathfinding
     }
     public List<Vector3> FindPath()
     {
-        if (path == null) path = new List<Vector3>();
-        else path.Clear();
-
-
-
         if (startNode == null || endNode == null)
         {
             SetStartEndPoint();
@@ -119,13 +116,13 @@ public class AStarPathfinding
                 }
             }
 
-            path.Add(currentNode.worldPosition);
+            // path.Add(currentNode.worldPosition);
             openSet.Remove(currentNode);
             closedSet.Add(currentNode);
 
             // 목표 노드 도착
             if (currentNode == endNode)
-                return path;
+                return RetracePath(startNode, endNode);
 
 
             foreach (Node neighbor in GetNeighbors(currentNode))
@@ -140,7 +137,7 @@ public class AStarPathfinding
                 {
                     neighbor.gCost = newMovementCostToNeighbor;
                     neighbor.hCost = GetDistance(neighbor, endNode);
-                    // neighbor.parent = currentNode;
+                    neighbor.parent = currentNode;
 
                     if (!openSet.Contains(neighbor))
                     {
@@ -153,20 +150,24 @@ public class AStarPathfinding
         return null;
     }
 
-    // List<Vector3> RetracePath(Node startNode, Node endNode)
-    // {
-    //     List<Vector3> path = new List<Vector3>();
-    //     Node currentNode = endNode;
+    List<Vector3> RetracePath(Node startNode, Node endNode)
+    {
+        if (path == null) path = new List<Vector3>();
+        else path.Clear();
 
-    //     while (currentNode != startNode)
-    //     {
-    //         path.Add(currentNode.worldPosition);
-    //         currentNode = currentNode.parent;
-    //     }
-    //     path.Reverse();
+        Node currentNode = endNode;
 
-    //     return path;
-    // }
+        while (currentNode != startNode)
+        {
+            path.Add(currentNode.worldPosition);
+            currentNode = currentNode.parent;
+        }
+
+        path.Add(startNode.worldPosition);
+        path.Reverse();
+
+        return path;
+    }
 
     List<Node> GetNeighbors(Node node)
     {

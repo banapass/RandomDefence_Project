@@ -13,14 +13,17 @@ public class APP : Singleton<APP>
     }
     public void Init()
     {
-        InputController.Instance.Init();
-        UIManager.Instance.Show(UiPath.INGAME, false);
+        AtlasManager.Instance.Init();
         TableManager.Instance.Init();
         MemoryPoolManager.Instance.Init();
+        UIManager.Instance.Show(UiPath.INGAME, false);
 
 
         GameManager.Instance.ChangeGameState(GameState.BreakTime);
         BoardManager.Instance.Init();
+        InputController.Instance.Init();
+
+        ObjectPoolManager.Instance.AddPool<Effector>(ResourceStorage.GetResource<Effector>("Prefab/Effect/DieEffect"), 10, "Die");
     }
 
     private void OnEnable()

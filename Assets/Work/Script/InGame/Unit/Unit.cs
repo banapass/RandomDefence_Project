@@ -6,7 +6,7 @@ using UniRx.Triggers;
 
 public class Unit : MonoBehaviour
 {
-    [field: SerializeField, ReadOnly]
+    [field: SerializeField]
     public UnitInfo Info { get; protected set; }
     public ProjectileInfo ProjectileInfo => Info.projectileInfo;
     public bool HasDebuff => ProjectileInfo.debuffInfo != null;
@@ -23,7 +23,7 @@ public class Unit : MonoBehaviour
     }
     public virtual bool OnAttack()
     {
-        Collider2D _col = Physics2D.OverlapCircle(transform.position, Info.range, targetLayer);
+        Collider2D _col = Physics2D.OverlapBox(transform.position, Vector2.one * Info.CalculateRange(), 0, targetLayer);
 
         if (_col == null) return false;
 
@@ -57,7 +57,7 @@ public class Unit : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, Info.range);
+        Gizmos.DrawWireCube(transform.position, Vector2.one * Info.CalculateRange());
     }
 #endif
 }

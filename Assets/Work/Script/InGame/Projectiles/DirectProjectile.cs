@@ -51,7 +51,6 @@ public class DirectProjectile : ProjectileBase
         if (hitMonsters.Contains(_hitMonster)) return;
 
         hitMonsters.Add(_hitMonster);
-
         _hitMonster.TakeDamage(unit.CalculateDamage());
         TryApplyDebuff(_hitMonster);
 

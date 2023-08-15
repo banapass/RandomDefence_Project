@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1557958834362625006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.7737443, y: -8.172815, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.3915094, g: 0.53275186, b: 1, a: 1}
+  m_Color: {r: 0.27429688, g: 0.4121717, b: 0.8679245, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -97,6 +97,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 983bf4add1a36cb4d94d68778513040b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Info>k__BackingField:
+    unitId: 
+    rarity: 0
+    atk: 0
+    range: 0
+    coolTime: 0
+    projectileInfo:
+      prefab: 
+      speed: 0
+      count: 0
   targetLayer:
     serializedVersion: 2
     m_Bits: 64

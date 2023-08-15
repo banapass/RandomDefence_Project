@@ -70,6 +70,9 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
         OnDeath(this);
 
+        Effector _effector = ObjectPoolManager.Instance.GetParts<Effector>("Die");
+        _effector.transform.position = transform.position;
+
         ReturnAllDebuff();
         ObjectPoolManager.Instance.ReturnParts(this, ObjectID);
 
@@ -93,7 +96,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     }
     private bool IsArrivalNextDestination(Vector3 _nextPos)
     {
-        return GetDistance(_nextPos) <= 0.1f;
+        return GetDistance(_nextPos) <= 0.01f;
     }
     private float GetDistance(Vector3 _nextPos)
     {
@@ -101,7 +104,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     }
     public void MoveToPoint(Vector3 _target)
     {
-        transform.position = Vector3.MoveTowards(transform.position, _target, Time.deltaTime * CalculateSpeed());
+        transform.position = Vector2.MoveTowards(transform.position, _target, Time.deltaTime * CalculateSpeed());
     }
     #endregion
 

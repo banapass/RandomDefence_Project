@@ -4,11 +4,11 @@
         "rounds": [
             {
                 "monsterId": "1001",
-                "spawnCount": 10
+                "spawnCount": 40
             },
             {
                 "monsterId": "1002",
-                "spawnCount": 20
+                "spawnCount": 40
             }
         ]
     }

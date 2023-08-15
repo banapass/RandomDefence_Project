@@ -18,6 +18,7 @@ public enum PlacementState
 [System.Serializable]
 public enum UnitRarity
 {
+    None,
     Common,
     Uncommon,
     Rare,

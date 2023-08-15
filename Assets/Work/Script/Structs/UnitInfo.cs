@@ -13,4 +13,10 @@ public struct UnitInfo
     public float coolTime;
     public ProjectileInfo projectileInfo;
 
+
+    public float CalculateRange()
+    {
+        return range + range + 1;
+    }
+
 }
