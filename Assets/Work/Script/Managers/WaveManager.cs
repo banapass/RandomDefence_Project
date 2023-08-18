@@ -10,7 +10,7 @@ public class WaveManager : Singleton<WaveManager>
     private MonsterInfo currWaveMonster;
     private List<Monster> spawnMonsters;
 
-    private TrailRenderer wayEffector;
+    private WayNavigator wayNavigator;
 
     private int currRound;
     private int remainSpawnCount = 0;
@@ -26,9 +26,11 @@ public class WaveManager : Singleton<WaveManager>
 
         MonsterPooling();
         // StartNextRound();
-        TrailRenderer _wayRenderer = ResourceStorage.GetResource<TrailRenderer>("Prefab/Effect/Way");
-        wayEffector = Instantiate(_wayRenderer);
-        wayEffector.enabled = false;
+        WayNavigator _rawWayNavigator = ResourceStorage.GetResource<WayNavigator>("Prefab/Effect/WayNavigator");
+        wayNavigator = Instantiate(_rawWayNavigator);
+        wayNavigator.SetPath(boardManager.GetCurrentPath());
+        // wayNavigator.StartNavigate();
+
 
         MemoryPool<Debuff> _debuffPool = new MemoryPool<Debuff>();
         // _debuffPool.AddPool<SlowDebuff>(10);

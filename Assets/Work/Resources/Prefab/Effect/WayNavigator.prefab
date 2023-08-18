@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8192752915200897699}
   - component: {fileID: 9373720841374923}
+  - component: {fileID: -721490220855969262}
   m_Layer: 0
-  m_Name: Way
+  m_Name: WayNavigator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!96 &9373720841374923
 TrailRenderer:
@@ -40,7 +41,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8734110075053600301}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -74,7 +75,7 @@ TrailRenderer:
   m_SortingLayerID: -1754572935
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Time: 0.2
+  m_Time: 0.3
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -84,7 +85,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.07446861
+        value: 0.10387993
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -136,3 +137,16 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &-721490220855969262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8734110075053600301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a61a410b5b5de6c4f820f28b3dd89c10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navigateSpeed: 5

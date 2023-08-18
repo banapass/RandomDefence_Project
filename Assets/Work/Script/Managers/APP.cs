@@ -20,8 +20,8 @@ public class APP : Singleton<APP>
 
 
         GameManager.Instance.GameStart();
-        GameManager.Instance.ChangeGameState(GameState.BreakTime);
         BoardManager.Instance.Init();
+        GameManager.Instance.ChangeGameState(GameState.BreakTime);
         InputController.Instance.Init();
 
         ObjectPoolManager.Instance.AddPool<Effector>(ResourceStorage.GetResource<Effector>("Prefab/Effect/DieEffect"), 10, "Die");

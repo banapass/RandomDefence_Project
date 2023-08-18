@@ -100,7 +100,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     }
     private bool IsArrivalNextDestination(Vector3 _nextPos)
     {
-        return GetDistance(_nextPos) <= 0.01f;
+        return GetDistance(_nextPos) <= 0.001f;
     }
     private float GetDistance(Vector3 _nextPos)
     {
