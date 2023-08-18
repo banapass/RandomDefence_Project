@@ -6,5 +6,6 @@ public class Constants
     public const float PROJECTILE_LIFETIME = 5.0f;
     public const float MAX_SLOW = 0.8f;
     public const string DEBUFF_KEY = "Debuff";
+    public const int MAX_LIFE = 5;
 
 }

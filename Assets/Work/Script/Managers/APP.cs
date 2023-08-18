@@ -19,20 +19,11 @@ public class APP : Singleton<APP>
         UIManager.Instance.Show(UiPath.INGAME, false);
 
 
+        GameManager.Instance.GameStart();
         GameManager.Instance.ChangeGameState(GameState.BreakTime);
         BoardManager.Instance.Init();
         InputController.Instance.Init();
 
         ObjectPoolManager.Instance.AddPool<Effector>(ResourceStorage.GetResource<Effector>("Prefab/Effect/DieEffect"), 10, "Die");
-    }
-
-    private void OnEnable()
-    {
-        Monster.OnTakeDamage += OnTakeDamage;
-    }
-
-    private void OnTakeDamage(MonsterHitInfo _hitInfo)
-    {
-        Debug.Log($"TakeDamage : {_hitInfo.takeDamage} : HitPosition : {_hitInfo.hitPosition}");
     }
 }

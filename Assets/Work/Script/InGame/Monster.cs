@@ -22,6 +22,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
     public event Action<Monster> OnDeath;
     public static event Action<MonsterHitInfo> OnTakeDamage;
+    public static event Action OnArrivalLastDestination;
 
 
     public void Init(MonsterInfo _monsterInfo, List<Vector3> _path, Action<Monster> _onDeath)
@@ -68,7 +69,10 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         if (isDead) return;
         isDead = true;
 
-        OnDeath(this);
+        if (!isDestination)
+            OnDeath(this);
+
+        else OnArrivalLastDestination?.Invoke();
 
         Effector _effector = ObjectPoolManager.Instance.GetParts<Effector>("Die");
         _effector.transform.position = transform.position;

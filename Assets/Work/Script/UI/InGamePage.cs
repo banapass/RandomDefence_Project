@@ -11,6 +11,7 @@ public class InGamePage : BaseUi
     [SerializeField] Button unitPlacementBtn;
     [SerializeField] Button unitBtn;
     [SerializeField] Button nextRoundBtn;
+    [SerializeField] Heart[] hearts;
 
     public static event Action<PlacementState> OnChangePlacementState;
 
@@ -30,10 +31,12 @@ public class InGamePage : BaseUi
     private void OnEnable()
     {
         GameManager.OnChangedGameState += OnChangedGameState;
+        GameManager.OnLifeDamaged += OnLifeDamaged;
     }
     private void OnDisable()
     {
         GameManager.OnChangedGameState -= OnChangedGameState;
+        GameManager.OnLifeDamaged -= OnLifeDamaged;
     }
 
     private void OnChangedGameState(GameState _changedStage)
@@ -41,7 +44,21 @@ public class InGamePage : BaseUi
         bool _isBreakTime = _changedStage == GameState.BreakTime;
 
         nextRoundBtn.enabled = _isBreakTime;
+    }
+    private void OnLifeDamaged(int _currLife)
+    {
+        // if (_currLife <= 0)
+        // {
+        //     hearts[0].TakeDamage();
+        //     return;
+        // }
 
+        for (int i = hearts.Length - 1; i >= 0; i--)
+        {
+            bool _isDamagedHeart = i >= _currLife;
 
+            if (_isDamagedHeart)
+                hearts[i].TakeDamage();
+        }
     }
 }
