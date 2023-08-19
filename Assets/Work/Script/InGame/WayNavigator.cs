@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
+using UniRx.Triggers;
 
 public class WayNavigator : MonoBehaviour
 {
@@ -22,15 +24,22 @@ public class WayNavigator : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnChangedGameState += OnChangedGameState;
+        AStarPathfinding.OnChangedPath += OnChangedPath;
     }
     private void OnDisable()
     {
         GameManager.OnChangedGameState -= OnChangedGameState;
+        AStarPathfinding.OnChangedPath -= OnChangedPath;
     }
 
     public void SetPath(List<Vector3> _path)
     {
         path = _path;
+    }
+    private void OnChangedPath()
+    {
+        StopNavigate();
+        StartNavigate();
     }
     public void StartNavigate()
     {

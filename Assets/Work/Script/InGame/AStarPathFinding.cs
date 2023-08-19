@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class AStarPathfinding
     private int gridSizeX, gridSizeY;
     private List<Vector3> path;
     public List<Vector3> Path { get { return path; } }
+
+    public static event Action OnChangedPath;
 
     public void Init()
     {
@@ -165,6 +168,7 @@ public class AStarPathfinding
 
         path.Add(startNode.worldPosition);
         path.Reverse();
+        OnChangedPath?.Invoke();
 
         return path;
     }

@@ -10,6 +10,9 @@ public class BoardManager : Singleton<BoardManager>
     [SerializeField] EmptyTile[,] tileMap;
     private List<UnitPlacementTile> unitPlacementTiles;
     AStarPathfinding pathfinding;
+
+
+    // public static event Action OnPlacedNewTile;
     // List<Vector3> path;
 
 

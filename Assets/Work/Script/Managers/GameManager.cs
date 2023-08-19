@@ -7,6 +7,7 @@ using framework;
 public class GameManager : Singleton<GameManager>
 {
     private int currHeart;
+    private int currGold;
 
 
     public bool IsBreakTime { get { return CurrentGameState == GameState.BreakTime; } }
@@ -15,6 +16,7 @@ public class GameManager : Singleton<GameManager>
 
     public static event Action<GameState> OnChangedGameState;
     public static event Action<int> OnLifeDamaged;
+    public static event Action<int> OnChangedGold;
 
     private void OnEnable()
     {
@@ -28,6 +30,7 @@ public class GameManager : Singleton<GameManager>
     public void GameStart()
     {
         currHeart = Constants.MAX_LIFE;
+        GainGold(Constants.START_GOLD);
     }
 
     public void ChangeGameState(GameState _gameState)
@@ -49,6 +52,25 @@ public class GameManager : Singleton<GameManager>
         }
 
         OnLifeDamaged?.Invoke(currHeart);
+    }
+
+    public bool UseGold(int _gold)
+    {
+        if (currGold >= _gold)
+        {
+            currGold -= _gold;
+            OnChangedGold?.Invoke(currGold);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public void GainGold(int _cost)
+    {
+        currGold += _cost;
+        OnChangedGold?.Invoke(currGold);
     }
 
 }

@@ -30,7 +30,6 @@ public class InputController : Singleton<InputController>
                             .Subscribe(_tile => TryPlaceTile(_tile));
 
         var _unitPlaceObserver = this.UpdateAsObservable()
-                                 .Where(_ => GameManager.Instance.IsBreakTime)
                                  .Where(_ => placementState == PlacementState.Unit)
                                  .Where(_ => Input.GetMouseButtonDown(0))
                                  .Select(_unitTile => GetUnitPlacementTile())

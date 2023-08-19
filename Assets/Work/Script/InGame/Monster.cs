@@ -62,6 +62,10 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         if (currHp <= 0)
             OnDie();
 
+        FloatingText _text = ObjectPoolManager.Instance.GetParts<FloatingText>(Constants.FLOATING_TEXT);
+        _text.transform.position = transform.position;
+        _text.Play(_damage);
+
         OnTakeDamage?.Invoke(new MonsterHitInfo((int)_damage, transform.position));
     }
     private void OnDie()
@@ -115,6 +119,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     private float CalculateSpeed()
     {
         float _slowIntensity = 0;
+
         for (int i = 0; i < debuffs.Count; i++)
         {
             Debuff _debuff = debuffs[i];
@@ -163,14 +168,6 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         if (debuffs.Contains(_debuff)) return;
 
         debuffs.Add(_debuff);
-        // Debuff _sameDebuff = HasSameAttacker(_debuff);
-        // if (_sameDebuff != null)
-        //     _sameDebuff.ResetTime();
-        // else
-        //     MemoryPoolManager.Instance.ReleaseDebuff(_debuff);
-
-
-
     }
     public void RemoveDebuff(Debuff _debuff)
     {

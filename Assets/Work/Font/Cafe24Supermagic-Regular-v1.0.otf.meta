@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: f594b2ff3b78b9f4cb4898129a9eec46
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Cafe24 Supermagic OTF
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 84f92cb13c06f4d44858230a5fd3eedf, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

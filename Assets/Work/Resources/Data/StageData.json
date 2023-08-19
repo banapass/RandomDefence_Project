@@ -9,6 +9,14 @@
             {
                 "monsterId": "1002",
                 "spawnCount": 40
+            },
+            {
+                "monsterId": "1003",
+                "spawnCount": 40
+            },
+            {
+                "monsterId": "1004",
+                "spawnCount": 40
             }
         ]
     }

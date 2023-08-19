@@ -5,14 +5,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
 using framework;
+using TMPro;
 
 public class InGamePage : BaseUi
 {
+    [Header("Button")]
     [SerializeField] Button unitPlacementBtn;
     [SerializeField] Button unitBtn;
     [SerializeField] Button nextRoundBtn;
+
+    [Header("Text")]
+    [SerializeField] TextMeshProUGUI gold_txt;
+
     [SerializeField] Heart[] hearts;
 
+
+    private const string GOLD_FORMAT = "{0} G";
     public static event Action<PlacementState> OnChangePlacementState;
 
     public override void OnOpen()
@@ -32,11 +40,13 @@ public class InGamePage : BaseUi
     {
         GameManager.OnChangedGameState += OnChangedGameState;
         GameManager.OnLifeDamaged += OnLifeDamaged;
+        GameManager.OnChangedGold += UpdateCost;
     }
     private void OnDisable()
     {
         GameManager.OnChangedGameState -= OnChangedGameState;
         GameManager.OnLifeDamaged -= OnLifeDamaged;
+        GameManager.OnChangedGold -= UpdateCost;
     }
 
     private void OnChangedGameState(GameState _changedStage)
@@ -60,5 +70,10 @@ public class InGamePage : BaseUi
             if (_isDamagedHeart)
                 hearts[i].TakeDamage();
         }
+    }
+
+    private void UpdateCost(int _currCost)
+    {
+        gold_txt.text = string.Format(GOLD_FORMAT, _currCost);
     }
 }
