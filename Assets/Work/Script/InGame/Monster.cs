@@ -62,7 +62,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         if (currHp <= 0)
             OnDie();
 
-        FloatingText _text = ObjectPoolManager.Instance.GetParts<FloatingText>(Constants.FLOATING_TEXT);
+        TextEffector _text = ObjectPoolManager.Instance.GetParts<TextEffector>(Constants.FLOATING_TEXT);
         _text.transform.position = transform.position;
         _text.Play(_damage);
 
@@ -78,7 +78,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
         else OnArrivalLastDestination?.Invoke();
 
-        Effector _effector = ObjectPoolManager.Instance.GetParts<Effector>("Die");
+        ParticleEffector _effector = ObjectPoolManager.Instance.GetParts<ParticleEffector>(Constants.MONSTER_DEAD_KEY);
         _effector.transform.position = transform.position;
 
         ReturnAllDebuff();

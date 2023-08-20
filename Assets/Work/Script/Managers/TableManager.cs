@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utility;
+using framework;
 
 public class TableManager : framework.Singleton<TableManager>
 {
@@ -20,73 +22,84 @@ public class TableManager : framework.Singleton<TableManager>
     {
 
         // StageInfo 파싱
-
-        StageInfo[] _stages = JsonWrapper.FromJson<StageInfo>(Resources.Load<TextAsset>(STAGEDATA_PATH).text);
-        stageDict = new Dictionary<string, StageInfo>();
-
-        for (int i = 0; i < _stages.Length; i++)
+        ResourceStorage.GetObjectRes<TextAsset>(STAGEDATA_PATH, _textAsset =>
         {
-            if (stageDict.ContainsKey(_stages[i].stageId))
-            {
-                Debug.LogError($"동일한 스테이지 아이디가 존재합니다. ID : {_stages[i].stageId}");
-                continue;
-            }
-            else
-            {
-                stageDict.Add(_stages[i].stageId, _stages[i]);
-            }
+            StageInfo[] _stages = Parse<StageInfo>(_textAsset.text);
+            stageDict = new Dictionary<string, StageInfo>();
 
-        }
+            for (int i = 0; i < _stages.Length; i++)
+            {
+                if (stageDict.ContainsKey(_stages[i].stageId))
+                {
+                    Debug.LogError($"동일한 스테이지 아이디가 존재합니다. ID : {_stages[i].stageId}");
+                    continue;
+                }
+                else
+                {
+                    stageDict.Add(_stages[i].stageId, _stages[i]);
+                }
+            }
+        });
+
 
 
         // MonsterInfo 파싱
-        MonsterInfo[] _monsterInfos = Parse<MonsterInfo>(MONSTERDATA_PATH);
-        monsterDict = new Dictionary<string, MonsterInfo>();
-
-        for (int i = 0; i < _monsterInfos.Length; i++)
+        ResourceStorage.GetObjectRes<TextAsset>(MONSTERDATA_PATH, _textAsset =>
         {
-            MonsterInfo _monsterInfo = _monsterInfos[i];
+            MonsterInfo[] _monsterInfos = Parse<MonsterInfo>(_textAsset.text);
+            monsterDict = new Dictionary<string, MonsterInfo>();
 
-            if (monsterDict.ContainsKey(_monsterInfo.monsterId))
+            for (int i = 0; i < _monsterInfos.Length; i++)
             {
-                Debug.LogError($"동일한 몬스터 아이디가 존재합니다. ID:{_monsterInfo.monsterId}");
-                continue;
-            }
-            else
-            {
-                monsterDict.Add(_monsterInfo.monsterId, _monsterInfo);
-            }
+                MonsterInfo _monsterInfo = _monsterInfos[i];
 
-        }
+                if (monsterDict.ContainsKey(_monsterInfo.monsterId))
+                {
+                    Debug.LogError($"동일한 몬스터 아이디가 존재합니다. ID:{_monsterInfo.monsterId}");
+                    continue;
+                }
+                else
+                {
+                    monsterDict.Add(_monsterInfo.monsterId, _monsterInfo);
+                }
+            }
+        });
+
 
         // UnitInfo 파싱
-
-        UnitInfo[] _unitInfos = Parse<UnitInfo>(UNITDATA_PATH);
-        unitRarityMap = new Dictionary<UnitRarity, List<UnitInfo>>();
-
-        for (int i = 0; i < _unitInfos.Length; i++)
+        ResourceStorage.GetObjectRes<TextAsset>(UNITDATA_PATH, _textAsset =>
         {
-            UnitInfo _currUnit = _unitInfos[i];
-            if (!unitRarityMap.ContainsKey(_currUnit.rarity))
-                unitRarityMap.Add(_currUnit.rarity, new List<UnitInfo>());
+            UnitInfo[] _unitInfos = Parse<UnitInfo>(_textAsset.text);
+            unitRarityMap = new Dictionary<UnitRarity, List<UnitInfo>>();
 
-            unitRarityMap[_unitInfos[i].rarity].Add(_currUnit);
-        }
+            for (int i = 0; i < _unitInfos.Length; i++)
+            {
+                UnitInfo _currUnit = _unitInfos[i];
+                if (!unitRarityMap.ContainsKey(_currUnit.rarity))
+                    unitRarityMap.Add(_currUnit.rarity, new List<UnitInfo>());
+
+                unitRarityMap[_unitInfos[i].rarity].Add(_currUnit);
+            }
+        });
+
 
 
         // UnitRarityInfo 파싱
-        unitRarities = Parse<UnitRarityInfo>(UNITRARITY_PATH);
-
-
-        for (int i = 0; i < 100; i++)
+        ResourceStorage.GetObjectRes<TextAsset>(UNITRARITY_PATH, _textAsset =>
         {
-            GetRandomUnitInfo();
-        }
+            unitRarities = Parse<UnitRarityInfo>(_textAsset.text);
+        });
+
+
+        // for (int i = 0; i < 100; i++)
+        // {
+        //     GetRandomUnitInfo();
+        // }
     }
 
-    private T[] Parse<T>(string _path)
+    private T[] Parse<T>(string _text)
     {
-        T[] _parse = JsonWrapper.FromJson<T>(Resources.Load<TextAsset>(_path).text);
+        T[] _parse = JsonWrapper.FromJson<T>(_text);
         return _parse;
     }
 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 283876796097501603}
   - component: {fileID: 1677703853282851375}
   - component: {fileID: 6918555730491120147}
-  - component: {fileID: 6308942253586916643}
+  - component: {fileID: 1195563057155270676}
   m_Layer: 0
   m_Name: FloatingText
   m_TagString: Untagged
@@ -32,7 +32,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 1677703853282851375}
   m_maskType: 0
---- !u!114 &6308942253586916643
+--- !u!114 &1195563057155270676
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -182,6 +182,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5750468993668496584}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43a9d266efd1e474291ad6629b221e27, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f2c128dcb355d241bab54ca3ec1f92b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8000046676166367742}
   - component: {fileID: 7597681913826823433}
   - component: {fileID: 3514075048604010066}
-  - component: {fileID: 6331070710532044634}
+  - component: {fileID: 2575950235127263526}
   m_Layer: 0
   m_Name: DieEffect
   m_TagString: Untagged
@@ -4887,7 +4887,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &6331070710532044634
+--- !u!114 &2575950235127263526
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4896,7 +4896,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2430489372726996791}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29e9dcb112ceeae489afcd7e4f18fa74, type: 3}
+  m_Script: {fileID: 11500000, guid: d9cd85717c751e74e8610f7e62af7533, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particle: {fileID: 0}
+  particle: {fileID: 7597681913826823433}

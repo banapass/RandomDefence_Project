@@ -11,7 +11,7 @@ public class AtlasManager : Singleton<AtlasManager>
 
     public void Init()
     {
-        atlas = ResourceStorage.GetResource<SpriteAtlas>("Atlas/Atlas");
+        ResourceStorage.GetObjectRes<SpriteAtlas>("Atlas/Atlas", _atlas => atlas = _atlas);
     }
     public Sprite GetSprite(string _spriteName)
     {

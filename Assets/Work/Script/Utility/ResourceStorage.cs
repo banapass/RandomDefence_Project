@@ -1,32 +1,191 @@
 namespace framework
 {
-    using System.Collections;
+
+    using System;
+    using System.Threading.Tasks;
     using System.Collections.Generic;
     using UnityEngine;
+    using UnityEngine.AddressableAssets;
+    using UnityEngine.ResourceManagement.AsyncOperations;
+    using UObject = UnityEngine.Object;
 
     public class ResourceStorage
     {
-        private static Dictionary<string, Object> resDict = new Dictionary<string, Object>();
+        private static Dictionary<string, UObject> resDict = new Dictionary<string, UObject>();
 
-        public static T GetResource<T>(string _path) where T : Object
+        public async static Task LoadComponentsByLabel<T>(string _label, bool _isCache, Action<string, Component> _onCompleted = null) where T : Component
         {
-            if (resDict == null) resDict = new Dictionary<string, Object>();
+            var _handle = Addressables.LoadResourceLocationsAsync(_label);
+            await _handle.Task;
 
-            if (resDict.ContainsKey(_path))
+            foreach (var _in in _handle.Result)
             {
-                return resDict[_path] as T;
+                T _object = await LoadComponent<T>(_in.PrimaryKey);
+                if (_isCache)
+                    resDict.Add(_in.PrimaryKey, _object);
+                _onCompleted?.Invoke(_in.PrimaryKey, _object);
+            }
+        }
+        public async static Task LoadObjectByLabel<T>(string _label) where T : UObject
+        {
+            var _handle = Addressables.LoadResourceLocationsAsync(_label);
+            await _handle.Task;
+
+            foreach (var _obj in _handle.Result)
+            {
+                T _result = await LoadObject<UObject>(_obj.PrimaryKey) as T;
+                Debug.Log(_obj.PrimaryKey);
+                resDict.Add(_obj.PrimaryKey, _result);
+            }
+
+        }
+
+        private static async Task<T> LoadComponent<T>(string _path) where T : Component
+        {
+            var _handle = Addressables.LoadAssetAsync<GameObject>(_path);
+            await _handle.Task;
+
+            if (_handle.Status == AsyncOperationStatus.Succeeded)
+            {
+
+                return _handle.Result.GetComponent<T>();
             }
             else
             {
-                T _res = Resources.Load<T>(_path);
-                if (_res == null)
-                {
-                    Debug.LogError("불러온 리소스가 Null 입니다 : 파일 경로 확인 필요");
-                    return null;
-                }
+                Debug.Log($"Load Asset Failed : {_handle.OperationException}");
+            }
 
-                resDict.Add(_path, _res);
-                return _res;
+            return null;
+        }
+        private static async Task<T> LoadObject<T>(string _path) where T : UObject
+        {
+            var _handle = Addressables.LoadAssetAsync<UObject>(_path);
+            await _handle.Task;
+
+            if (_handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                return _handle.Result as T;
+            }
+            else
+            {
+                Debug.Log($"Load Asset Failed : {_handle.OperationException}");
+            }
+
+            return null;
+        }
+        // public static T GetRawComponent<T>(string _path, Action) where T : Component
+        // {
+        //     if (resDict == null) resDict = new Dictionary<string, UObject>();
+
+        //     if (resDict.ContainsKey(_path))
+        //     {
+        //         Debug.Log("INININI");
+        //         Component _result = resDict[_path] as Component;
+        //         return _result.GetComponent<T>();
+        //     }
+        //     else
+        //     {
+        //         var _op = Addressables.LoadAssetAsync<T>(_path);
+
+
+        //         if (_op.Status == AsyncOperationStatus.Succeeded)
+        //         {
+        //             resDict.Add(_path, _op.Result);
+        //             return _op.Result;
+        //         }
+        //         else
+        //         {
+        //             Debug.Log(_op.Status);
+        //             Debug.Log($"Resource Load Failed : {_op.OperationException}");
+        //             return null;
+        //         }
+        //     }
+        // }
+
+        public static void GetObjectRes<T>(string _path, Action<T> _onCompleted) where T : UObject
+        {
+            if (resDict == null) resDict = new Dictionary<string, UObject>();
+
+            if (resDict.TryGetValue(_path, out UObject _res))
+            {
+                _onCompleted?.Invoke((T)_res);
+                return;
+            }
+            else
+            {
+                Addressables.LoadAssetAsync<T>(_path).Completed += _handle =>
+                {
+                    if (_handle.Status == AsyncOperationStatus.Succeeded)
+                    {
+                        resDict.Add(_path, _handle.Result);
+                        _onCompleted?.Invoke(_handle.Result);
+                    }
+                    else
+                    {
+                        // Debug.Log(_handle.Status);
+                        Debug.Log($"Resource Load Failed : {_handle.OperationException}");
+                        _onCompleted?.Invoke(default);
+                    }
+                };
+
+            }
+        }
+        public static void GetComponentAsset<T>(string _path, Action<T> _onCompleted) where T : Component
+        {
+            if (resDict == null) resDict = new Dictionary<string, UObject>();
+
+            if (resDict.TryGetValue(_path, out UObject _res))
+            {
+                _onCompleted?.Invoke((T)_res);
+                return;
+            }
+            else
+            {
+                Addressables.LoadAssetAsync<GameObject>(_path).Completed += _handle =>
+                {
+                    if (_handle.Status == AsyncOperationStatus.Succeeded)
+                    {
+                        T _component = _handle.Result.GetComponent<T>();
+                        resDict.Add(_path, _component);
+                        _onCompleted?.Invoke(_component);
+                    }
+                    else
+                    {
+                        // Debug.Log(_handle.Status);
+                        Debug.Log($"Resource Load Failed : {_handle.OperationException}");
+                        _onCompleted?.Invoke(default);
+                    }
+                };
+
+            }
+        }
+        public static void GetComponentAsset<T1, T2>(string _path, Action<T1, T2> _onCompleted, T2 _param) where T1 : Component
+        {
+            if (resDict == null) resDict = new Dictionary<string, UObject>();
+
+            if (resDict.TryGetValue(_path, out UObject _res))
+            {
+                _onCompleted?.Invoke((T1)_res, _param);
+                return;
+            }
+            else
+            {
+                Addressables.LoadAssetAsync<GameObject>(_path).Completed += _handle =>
+                {
+                    if (_handle.Status == AsyncOperationStatus.Succeeded)
+                    {
+                        T1 _component = _handle.Result.GetComponent<T1>();
+                        resDict.Add(_path, _component);
+                        _onCompleted?.Invoke(_component, _param);
+                    }
+                    else
+                    {
+                        // Debug.Log(_handle.Status);
+                        Debug.Log($"Resource Load Failed : {_handle.OperationException}");
+                        _onCompleted?.Invoke(default, _param);
+                    }
+                };
+
             }
         }
 

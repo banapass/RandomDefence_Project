@@ -24,17 +24,20 @@ namespace framework
                 Debug.LogError("이미 생성된 UI를 보여주려고 하고있습니다.");
                 return;
             }
-
-            BaseUi _rawUI = ResourceStorage.GetResource<BaseUi>(_uiPath);
-            Transform _targetParent = _isPopup ? popupRect : pageRect;
-
-            if (_rawUI != null)
+            ResourceStorage.GetComponentAsset<BaseUi>(_uiPath, _rawUi =>
             {
-                BaseUi _instUi = Instantiate(_rawUI, _targetParent);
-                _instUi.SetUIPath(_uiPath);
-                uiDict.Add(_uiPath, _instUi);
-                _instUi.OnOpen();
-            }
+                Transform _targetParent = _isPopup ? popupRect : pageRect;
+
+                if (_rawUi != null)
+                {
+                    BaseUi _instUi = Instantiate(_rawUi, _targetParent);
+                    _instUi.SetUIPath(_uiPath);
+                    uiDict.Add(_uiPath, _instUi);
+                    _instUi.OnOpen();
+                }
+            });
+
+
 
         }
         public void Hide(BaseUi _baseUi)

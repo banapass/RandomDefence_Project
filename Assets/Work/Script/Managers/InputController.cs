@@ -87,10 +87,13 @@ public class InputController : Singleton<InputController>
 
         UnitInfo _selectedUnit = TableManager.Instance.GetRandomUnitInfo();
 
-        Unit _rawUnit = ResourceStorage.GetResource<Unit>("Prefab/Unit");
-        Unit _instUnit = Instantiate(_rawUnit);
-        _instUnit.Init(_selectedUnit);
-        _tile.Init(_instUnit);
+        ResourceStorage.GetComponentAsset<Unit>("Prefab/Unit", _rawUnit =>
+        {
+            Unit _instUnit = Instantiate(_rawUnit);
+            _instUnit.Init(_selectedUnit);
+            _tile.Init(_instUnit);
+        });
+
     }
     private Vector3 GetMousePosition()
     {

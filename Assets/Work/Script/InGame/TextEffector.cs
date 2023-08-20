@@ -1,14 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
 
-public class FloatingText : MonoBehaviour, IObjectable
+public class TextEffector : Effector
 {
-    public string ObjectID { get; set; }
-
     private TextMeshPro textMesh;
     private Sequence sequence;
 
@@ -37,7 +34,7 @@ public class FloatingText : MonoBehaviour, IObjectable
 
         transform.DOMove(transform.position + Vector3.up * 1.5f, 1f)
         .SetEase(Ease.OutCirc)
-        .OnComplete(() => ObjectPoolManager.Instance.ReturnParts(this, ObjectID));
+        .OnComplete(() => ReturnPool());
 
 
     }
@@ -62,6 +59,4 @@ public class FloatingText : MonoBehaviour, IObjectable
         // });
         // sequence.SetAutoKill(false);
     }
-
 }
-

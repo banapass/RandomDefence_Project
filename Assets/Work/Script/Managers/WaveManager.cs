@@ -25,14 +25,18 @@ public class WaveManager : Singleton<WaveManager>
         currRound = -1;
 
         MonsterPooling();
-        // StartNextRound();
-        WayNavigator _rawWayNavigator = ResourceStorage.GetResource<WayNavigator>("Prefab/Effect/WayNavigator");
-        wayNavigator = Instantiate(_rawWayNavigator);
-        wayNavigator.SetPath(boardManager.GetCurrentPath());
-        // wayNavigator.StartNavigate();
+
+        ResourceStorage.GetComponentAsset<WayNavigator>("Prefab/Effect/WayNavigator", _way =>
+        {
+            wayNavigator = Instantiate(_way);
+            wayNavigator.SetPath(boardManager.GetCurrentPath());
+            wayNavigator.StartNavigate();
+        });
 
 
-        MemoryPool<Debuff> _debuffPool = new MemoryPool<Debuff>();
+
+
+        // MemoryPool<Debuff> _debuffPool = new MemoryPool<Debuff>();
         // _debuffPool.AddPool<SlowDebuff>(10);
     }
     private void MonsterPooling()
@@ -41,8 +45,11 @@ public class WaveManager : Singleton<WaveManager>
 
         for (int i = 0; i < _monsterInfos.Count; i++)
         {
-            var _rawMonster = framework.ResourceStorage.GetResource<Monster>(_monsterInfos[i].prefabPath);
-            ObjectPoolManager.Instance.AddPool<Monster>(_rawMonster, 40, _monsterInfos[i].monsterId);
+            ResourceStorage.GetComponentAsset<Monster, string>(_monsterInfos[i].prefabPath, (_monster, _monsterId) =>
+            {
+                ObjectPoolManager.Instance.AddPool<Monster>(_monster, 40, _monsterId);
+            }, _monsterInfos[i].monsterId);
+
         }
     }
     public void StartNextRound()

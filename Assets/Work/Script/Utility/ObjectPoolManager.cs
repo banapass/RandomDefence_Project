@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -140,8 +141,9 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
         else
         {
             // Debug.LogError("GetObjectError : Object Key is Not Founded");
-            AddPool<T>(framework.ResourceStorage.GetResource<T>(_objName), 5, _objName);
-            return GetParts<T>(_objName);
+            // AddPool<T>(await framework.ResourceStorage.GetResource<T>(_objName), 5, _objName);
+            // return GetParts<T>(_objName);
+            return null;
         }
     }
     public void ReturnParts(Component _obj, string _objName)

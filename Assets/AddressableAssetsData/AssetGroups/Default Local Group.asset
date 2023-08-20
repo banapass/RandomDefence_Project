@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: ddb1524923198094283f1a8f992e378d
+  m_SerializeEntries:
+  - m_GUID: c1e089f6d37fbae4184412c9b8e5d979
+    m_Address: Prefab/Tile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb0f83727f4616a4687f8cafc1073cbd
+    m_Address: Prefab/Unit
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9623d39a4cf98044eb4a08e139efb320
+    m_Address: Prefab/Unitplacement
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3478aa14a4bd2c342ac9cfd3303be02c
+    m_Address: Prefab/Projectile/projectile
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Projectile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aecfd61bcb2b46549957d3814f95d1cb
+    m_Address: Prefab/Monster/Monster02
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2cd4d2c33645c74bb45f7ef5a555e1f
+    m_Address: Prefab/Monster/Monster03
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6efd397c39f89e44c9bc0a449030867e
+    m_Address: Prefab/Monster/Monster01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6b1e28755e8b3945b87b0aec32f666b
+    m_Address: Prefab/Monster/Monster04
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e0cae43f90bf8145979c165eecebcc1
+    m_Address: DeadEffect
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Effector
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ecb1cd5329a5684b96d06b15c6ef34e
+    m_Address: Prefab/Effect/FloatingText
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Effector
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8ffa4de7bcfa1141af75a3d13b8f68e
+    m_Address: Prefab/Effect/WayNavigator
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b742c1aeea6d80b4c96c2301d163f09c
+    m_Address: Data/UnitRarityConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Data
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 937ecf6bc51d6ac4d88d158c9b9f0a0b
+    m_Address: Data/MonsterData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Data
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0df505f67afa3a45acbd870f616a9f9
+    m_Address: Data/StageData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Data
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e77e66e216808646bcb49dcb9de7cd7
+    m_Address: Data/UnitData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Data
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c86ca4de9de46a4abf58d8a031918a1
+    m_Address: UI/Page/InGame
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b86f9c229cfc3714e9286c9c7dcaf30b
+    m_Address: UI/Page/Intro
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 666a81586160cdf4a8f6fb30c36056ad, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 4048912fcdcbaf74c9ce616b0e96d9f1, type: 2}
+    - {fileID: 11400000, guid: 90815ff3e9c62ed48a79806f0fc4c8ba, type: 2}

@@ -37,14 +37,18 @@ public class BoardManager : Singleton<BoardManager>
     {
         unitPlacementTiles = new List<UnitPlacementTile>();
 
-        CreateBoard(Constants.MAP_SIZE);
-        pathfinding = new AStarPathfinding();
-        pathfinding.Init();
-        pathfinding.SynchronizeAt(tileMap, true, true);
-        pathfinding.FindPath();
+        ResourceStorage.GetComponentAsset<EmptyTile>("Prefab/Tile", _tile =>
+        {
+            CreateBoard(Constants.MAP_SIZE, _tile);
+            pathfinding = new AStarPathfinding();
+            pathfinding.Init();
+            pathfinding.SynchronizeAt(tileMap, true, true);
+            pathfinding.FindPath();
 
+            WaveManager.Instance.Init(this, TableManager.Instance.GetStageInfo("stage01"));
+        });
         // ChangeGameState(GameState.BreakTime);
-        WaveManager.Instance.Init(this, TableManager.Instance.GetStageInfo("stage01"));
+
     }
     private void OnEnable()
     {
@@ -64,7 +68,7 @@ public class BoardManager : Singleton<BoardManager>
         pathfinding.SynchronizeAt(tileMap, true);
         pathfinding.FindPath();
     }
-    private void CreateBoard(Vector2 _tileSize)
+    private void CreateBoard(Vector2 _tileSize, EmptyTile _tileRes)
     {
         bool _isOddNumberX = _tileSize.x % 2 != 0;
         bool _isOddNumberY = _tileSize.y % 2 != 0;
@@ -76,12 +80,13 @@ public class BoardManager : Singleton<BoardManager>
         Vector2 _resolusionSize = (Vector2)boardArea.localScale / _tileSize;
         Vector2 _startPos = (Vector2)boardArea.transform.position + (-_tileSize * 0.5f) * _resolusionSize;
 
-        EmptyTile _rawTile = ResourceStorage.GetResource<EmptyTile>("Prefab/Tile");
+        // EmptyTile _rawTile = ResourceStorage.GetResource<EmptyTile>("Prefab/Tile");
+
         for (int y = 0; y < _tileSize.y; y++)
         {
             for (int x = 0; x < _tileSize.x; x++)
             {
-                var _tile = Instantiate(_rawTile, transform);
+                var _tile = Instantiate(_tileRes, transform);
                 _tile.transform.localScale = _resolusionSize;
 
                 Vector2 _nextPos = new Vector2(x, y) * _resolusionSize;
@@ -97,22 +102,22 @@ public class BoardManager : Singleton<BoardManager>
 
 #if UNITY_EDITOR
         // Unit Batch Debug
-        UnitBatchTest(tileMap[0, 1]);
-        UnitBatchTest(tileMap[1, 2]);
+        // UnitBatchTest(tileMap[0, 1]);
+        // UnitBatchTest(tileMap[1, 2]);
 #endif
 
     }
 #if UNITY_EDITOR
     private void UnitBatchTest(EmptyTile _tile)
     {
-        UnitPlacementTile _placementTile = Instantiate(framework.ResourceStorage.GetResource<UnitPlacementTile>("Prefab/Unitplacement"));
-        Unit _unit = Instantiate(framework.ResourceStorage.GetResource<Unit>("Prefab/Unit"));
-        UnitInfo _info = TableManager.Instance.GetRandomUnitInfo();
-        _unit.Init(_info);
+        // UnitPlacementTile _placementTile = Instantiate(framework.ResourceStorage.GetResource<UnitPlacementTile>("Prefab/Unitplacement"));
+        // Unit _unit = Instantiate(framework.ResourceStorage.GetResource<Unit>("Prefab/Unit"));
+        // UnitInfo _info = TableManager.Instance.GetRandomUnitInfo();
+        // _unit.Init(_info);
 
 
-        _tile.SetInnerTile(_placementTile);
-        _placementTile.Init(_unit);
+        // _tile.SetInnerTile(_placementTile);
+        // _placementTile.Init(_unit);
     }
 #endif
     // public void ChangeGameState(GameState _gameState)
@@ -124,9 +129,14 @@ public class BoardManager : Singleton<BoardManager>
     // }
     private void CreateUnitPlacementTile(EmptyTile _tile)
     {
-        UnitPlacementTile _placementTile = Instantiate(framework.ResourceStorage.GetResource<UnitPlacementTile>("Prefab/Unitplacement"));
-        _tile.SetInnerTile(_placementTile);
-        unitPlacementTiles.Add(_placementTile);
+        framework.ResourceStorage.GetComponentAsset<UnitPlacementTile>("Prefab/Unitplacement", _unitTile =>
+        {
+            UnitPlacementTile _placementTile = Instantiate(_unitTile);
+            _tile.SetInnerTile(_placementTile);
+            unitPlacementTiles.Add(_placementTile);
+        });
+
+
     }
     public void TryPlaceNewUnit()
     {
