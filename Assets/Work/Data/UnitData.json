@@ -6,7 +6,7 @@
         "range": 1,
         "coolTime": 0.4,
         "projectileInfo": {
-            "prefab": "Prefab/Projectile/projectile",
+            "prefab": "Prefab/HomingProjectile",
             "count": 1,
             "speed": 10,
             "debuffInfo": {

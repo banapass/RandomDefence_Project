@@ -13,7 +13,7 @@ namespace framework
     {
         private static Dictionary<string, UObject> resDict = new Dictionary<string, UObject>();
 
-        public async static Task LoadComponentsByLabel<T>(string _label, bool _isCache, Action<string, Component> _onCompleted = null) where T : Component
+        public async static Task LoadComponentsByLabel<T>(string _label, bool _isCache, Action<string, Component> _onCompleted = null, Action _onProgress = null) where T : Component
         {
             var _handle = Addressables.LoadResourceLocationsAsync(_label);
             await _handle.Task;
@@ -23,6 +23,7 @@ namespace framework
                 T _object = await LoadComponent<T>(_in.PrimaryKey);
                 if (_isCache)
                     resDict.Add(_in.PrimaryKey, _object);
+
                 _onCompleted?.Invoke(_in.PrimaryKey, _object);
             }
         }
@@ -34,7 +35,6 @@ namespace framework
             foreach (var _obj in _handle.Result)
             {
                 T _result = await LoadObject<UObject>(_obj.PrimaryKey) as T;
-                Debug.Log(_obj.PrimaryKey);
                 resDict.Add(_obj.PrimaryKey, _result);
             }
 
@@ -47,7 +47,6 @@ namespace framework
 
             if (_handle.Status == AsyncOperationStatus.Succeeded)
             {
-
                 return _handle.Result.GetComponent<T>();
             }
             else
@@ -68,39 +67,11 @@ namespace framework
             }
             else
             {
-                Debug.Log($"Load Asset Failed : {_handle.OperationException}");
+                Debug.LogError($"Load Asset Failed : {_handle.OperationException}");
             }
 
             return null;
         }
-        // public static T GetRawComponent<T>(string _path, Action) where T : Component
-        // {
-        //     if (resDict == null) resDict = new Dictionary<string, UObject>();
-
-        //     if (resDict.ContainsKey(_path))
-        //     {
-        //         Debug.Log("INININI");
-        //         Component _result = resDict[_path] as Component;
-        //         return _result.GetComponent<T>();
-        //     }
-        //     else
-        //     {
-        //         var _op = Addressables.LoadAssetAsync<T>(_path);
-
-
-        //         if (_op.Status == AsyncOperationStatus.Succeeded)
-        //         {
-        //             resDict.Add(_path, _op.Result);
-        //             return _op.Result;
-        //         }
-        //         else
-        //         {
-        //             Debug.Log(_op.Status);
-        //             Debug.Log($"Resource Load Failed : {_op.OperationException}");
-        //             return null;
-        //         }
-        //     }
-        // }
 
         public static void GetObjectRes<T>(string _path, Action<T> _onCompleted) where T : UObject
         {
@@ -123,7 +94,7 @@ namespace framework
                     else
                     {
                         // Debug.Log(_handle.Status);
-                        Debug.Log($"Resource Load Failed : {_handle.OperationException}");
+                        Debug.LogError($"Resource Load Failed : {_handle.OperationException}");
                         _onCompleted?.Invoke(default);
                     }
                 };
@@ -141,12 +112,15 @@ namespace framework
             }
             else
             {
+                // resDict.Add(_path, null);
                 Addressables.LoadAssetAsync<GameObject>(_path).Completed += _handle =>
                 {
                     if (_handle.Status == AsyncOperationStatus.Succeeded)
                     {
                         T _component = _handle.Result.GetComponent<T>();
-                        resDict.Add(_path, _component);
+                        if (!resDict.ContainsKey(_path))
+                            resDict.Add(_path, _component);
+
                         _onCompleted?.Invoke(_component);
                     }
                     else
@@ -156,7 +130,6 @@ namespace framework
                         _onCompleted?.Invoke(default);
                     }
                 };
-
             }
         }
         public static void GetComponentAsset<T1, T2>(string _path, Action<T1, T2> _onCompleted, T2 _param) where T1 : Component

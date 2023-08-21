@@ -40,4 +40,9 @@ abstract public class ProjectileBase : MonoBehaviour, IObjectable
             _target.AddDebuff(_debuff);
         }
     }
+
+    protected float GetProjectileSpeed()
+    {
+        return unit.ProjectileInfo.speed;
+    }
 }

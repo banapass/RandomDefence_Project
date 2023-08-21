@@ -17,7 +17,7 @@ namespace framework
         [field: SerializeField, ReadOnly]
         public BaseUi CurrentPage { get; private set; }
 
-        public void Show(string _uiPath, bool _isPopup)
+        public void Show(string _uiPath, bool _isPopup, System.Action _onOpen = null)
         {
             if (uiDict.ContainsKey(_uiPath))
             {
@@ -34,6 +34,7 @@ namespace framework
                     _instUi.SetUIPath(_uiPath);
                     uiDict.Add(_uiPath, _instUi);
                     _instUi.OnOpen();
+                    _onOpen?.Invoke();
                 }
             });
 

@@ -83,15 +83,17 @@ public class WaveManager : Singleton<WaveManager>
     }
     private void SpawnMonster()
     {
-        Monster _newMonster = ObjectPoolManager.Instance.GetParts<Monster>(currWaveMonster.monsterId);
-        _newMonster.Init(currWaveMonster, boardManager.GetCurrentPath(), OnMonsterDeath);
-        spawnMonsters.Add(_newMonster);
-        remainSpawnCount--;
-
-        if (remainSpawnCount <= 0)
+        ObjectPoolManager.Instance.GetParts<Monster>(currWaveMonster.monsterId, _newMonster =>
         {
-            StopSpawning();
-        }
+            _newMonster.Init(currWaveMonster, boardManager.GetCurrentPath(), OnMonsterDeath);
+            spawnMonsters.Add(_newMonster);
+            remainSpawnCount--;
+
+            if (remainSpawnCount <= 0)
+            {
+                StopSpawning();
+            }
+        });
     }
     private void OnMonsterDeath(Monster _monster)
     {

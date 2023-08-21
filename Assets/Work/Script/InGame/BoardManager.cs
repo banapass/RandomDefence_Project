@@ -64,9 +64,6 @@ public class BoardManager : Singleton<BoardManager>
         if (!pathfinding.IsCanPlaceTile(_tile)) return;
 
         CreateUnitPlacementTile(_tile);
-
-        pathfinding.SynchronizeAt(tileMap, true);
-        pathfinding.FindPath();
     }
     private void CreateBoard(Vector2 _tileSize, EmptyTile _tileRes)
     {
@@ -134,6 +131,9 @@ public class BoardManager : Singleton<BoardManager>
             UnitPlacementTile _placementTile = Instantiate(_unitTile);
             _tile.SetInnerTile(_placementTile);
             unitPlacementTiles.Add(_placementTile);
+
+            pathfinding.SynchronizeAt(tileMap, true);
+            pathfinding.FindPath();
         });
 
 

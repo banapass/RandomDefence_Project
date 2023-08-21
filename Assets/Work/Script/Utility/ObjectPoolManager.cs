@@ -116,7 +116,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
             return null;
         }
     }
-    public T GetParts<T>(string _objName) where T : Component
+    public void GetParts<T>(string _objName, System.Action<T> _onComplete = null) where T : Component
     {
         if (poolList.ContainsKey(_objName))
         {
@@ -124,8 +124,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
             {
                 Component obj = poolList[_objName].pool.Dequeue();
                 obj.gameObject.SetActive(true);
-
-                return obj as T;
+                _onComplete?.Invoke(obj as T);
             }
             else
             {
@@ -135,7 +134,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
                 else
                     Debug.LogError("Object Key Setting Failed : IObjetable Is null}");
 
-                return newObj as T;
+                _onComplete?.Invoke(newObj as T);
             }
         }
         else
@@ -143,7 +142,18 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
             // Debug.LogError("GetObjectError : Object Key is Not Founded");
             // AddPool<T>(await framework.ResourceStorage.GetResource<T>(_objName), 5, _objName);
             // return GetParts<T>(_objName);
-            return null;
+
+            framework.ResourceStorage.GetComponentAsset<T>(_objName, _comp =>
+            {
+                AddPool<T>(_comp, 2, _objName);
+                GetParts<T>(_objName, _comp =>
+                {
+                    _onComplete?.Invoke(_comp);
+                });
+                // Component obj = poolList[_objName].pool.Dequeue();
+                // obj.gameObject.SetActive(true);
+
+            });
         }
     }
     public void ReturnParts(Component _obj, string _objName)

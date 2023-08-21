@@ -19,6 +19,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     private bool isDestination;
 
     private bool isDead;
+    public bool IsDead { get { return isDead; } }
 
     public event Action<Monster> OnDeath;
     public static event Action<MonsterHitInfo> OnTakeDamage;
@@ -62,9 +63,12 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         if (currHp <= 0)
             OnDie();
 
-        TextEffector _text = ObjectPoolManager.Instance.GetParts<TextEffector>(Constants.FLOATING_TEXT);
-        _text.transform.position = transform.position;
-        _text.Play(_damage);
+        ObjectPoolManager.Instance.GetParts<TextEffector>(Constants.FLOATING_TEXT, _text =>
+        {
+            _text.transform.position = transform.position;
+            _text.Play(_damage);
+        });
+
 
         OnTakeDamage?.Invoke(new MonsterHitInfo((int)_damage, transform.position));
     }
@@ -78,8 +82,11 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
         else OnArrivalLastDestination?.Invoke();
 
-        ParticleEffector _effector = ObjectPoolManager.Instance.GetParts<ParticleEffector>(Constants.MONSTER_DEAD_KEY);
-        _effector.transform.position = transform.position;
+        ObjectPoolManager.Instance.GetParts<ParticleEffector>(Constants.MONSTER_DEAD_KEY, _effector =>
+        {
+            _effector.transform.position = transform.position;
+        });
+
 
         ReturnAllDebuff();
         ObjectPoolManager.Instance.ReturnParts(this, ObjectID);
