@@ -8,22 +8,19 @@ using UniRx;
 public class IntroPage : BaseUi
 {
     [SerializeField] Button startBtn;
-    private void SetObserver()
-    {
-        startBtn.OnClickAsObservable()
-                .Subscribe(_observer => OnClickStart());
-    }
     public override void OnOpen()
     {
-        SetObserver();
-
-        UIManager.Instance.Hide(this);
+        startBtn.OnClickAsObservable()
+        .Subscribe(_observer =>
+        {
+            APP.Instance.EnterInGame();
+        });
     }
-    public override void OnClose(TweenCallback<BaseUi> _onComplete)
-    {
-        transform.DOScale(0, 1.5f)
-        .OnComplete(() => _onComplete(this));
-    }
+    // public override void OnClose(TweenCallback<BaseUi> _onComplete)
+    // {
+    //     // transform.DOScale(0, 1.5f)
+    //     // .OnComplete(() => _onComplete(this));
+    // }
 
     private void OnClickStart()
     {

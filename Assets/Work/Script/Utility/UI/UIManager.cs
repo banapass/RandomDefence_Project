@@ -8,6 +8,7 @@ namespace framework
     public class UIManager : Singleton<UIManager>
     {
         private Dictionary<string, BaseUi> uiDict = new Dictionary<string, BaseUi>();
+        private Queue<BaseUi> popupQueue = new Queue<BaseUi>();
         [SerializeField] Transform pageCanvas;
         [SerializeField] RectTransform pageRect;
         [SerializeField] Transform popupCanvas;
@@ -24,9 +25,17 @@ namespace framework
                 Debug.LogError("이미 생성된 UI를 보여주려고 하고있습니다.");
                 return;
             }
+
             ResourceStorage.GetComponentAsset<BaseUi>(_uiPath, _rawUi =>
             {
                 Transform _targetParent = _isPopup ? popupRect : pageRect;
+
+                if (!_isPopup)
+                {
+                    CloseAllUI();
+                    // CloseCurrentPage();
+                }
+
 
                 if (_rawUi != null)
                 {
@@ -35,6 +44,11 @@ namespace framework
                     uiDict.Add(_uiPath, _instUi);
                     _instUi.OnOpen();
                     _onOpen?.Invoke();
+
+                    if (!_isPopup)
+                        CurrentPage = _instUi;
+                    else
+                        popupQueue.Enqueue(_instUi);
                 }
             });
 
@@ -59,8 +73,21 @@ namespace framework
         {
             if (CurrentPage == null) return;
 
+            uiDict.Remove(CurrentPage.UiPath);
             CurrentPage.OnClose(OnClosed);
             Destroy(CurrentPage.gameObject);
+        }
+        private void CloseAllUI()
+        {
+            foreach (var _ui in uiDict)
+            {
+                BaseUi _baseUi = _ui.Value;
+                if (_baseUi == null) continue;
+
+                Destroy(_baseUi.gameObject);
+            }
+            CurrentPage = null;
+            uiDict.Clear();
         }
         private void OnClosed(BaseUi _baseUi)
         {

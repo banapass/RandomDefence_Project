@@ -104,11 +104,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b86f9c229cfc3714e9286c9c7dcaf30b
-    m_Address: UI/Page/Intro
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 05c4c91a04c309644831883f2d007cf3
     m_Address: Atlas
     m_ReadOnly: 0
@@ -126,6 +121,21 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 69deafa306befe84685591ef46c5e287
     m_Address: Prefab/HomingProjectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b15852c129002a3448b7ed7bf76c4368
+    m_Address: UI/Page/Intro
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bcce10e6f56660b41825c8338fba674c
+    m_Address: Scene/Loading
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 13000c138b925a64d998c3068ebedfa0
+    m_Address: UI/Popup/Loading
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
