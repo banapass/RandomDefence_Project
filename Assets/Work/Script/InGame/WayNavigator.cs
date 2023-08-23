@@ -7,7 +7,7 @@ using UniRx.Triggers;
 public class WayNavigator : MonoBehaviour
 {
     private TrailRenderer trail;
-    private List<Vector3> path;
+    private List<Node> path;
     private int currPathIndex;
     private bool isDestination;
     private float addTime;
@@ -24,15 +24,15 @@ public class WayNavigator : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnChangedGameState += OnChangedGameState;
-        AStarPathfinding.OnChangedPath += OnChangedPath;
+        BoardManager.OnChangedPath += OnChangedPath;
     }
     private void OnDisable()
     {
         GameManager.OnChangedGameState -= OnChangedGameState;
-        AStarPathfinding.OnChangedPath -= OnChangedPath;
+        BoardManager.OnChangedPath -= OnChangedPath;
     }
 
-    public void SetPath(List<Vector3> _path)
+    public void SetPath(List<Node> _path)
     {
         path = _path;
     }
@@ -44,7 +44,7 @@ public class WayNavigator : MonoBehaviour
     public void StartNavigate()
     {
         trail.enabled = true;
-        transform.position = path[0];
+        transform.position = path[0].worldPosition;
         trail.Clear();
         currPathIndex = 0;
 
@@ -73,14 +73,14 @@ public class WayNavigator : MonoBehaviour
     {
         if (isDestination) return;
 
-        if (IsArrivalNextDestination(path[currPathIndex]))
+        if (IsArrivalNextDestination(path[currPathIndex].worldPosition))
         {
             currPathIndex++;
             isDestination = path.Count <= currPathIndex;
         }
         else
         {
-            MoveToPoint(path[currPathIndex]);
+            MoveToPoint(path[currPathIndex].worldPosition);
         }
 
     }
@@ -97,7 +97,7 @@ public class WayNavigator : MonoBehaviour
 
                 addTime = 0;
                 currPathIndex = 0;
-                transform.position = path[currPathIndex];
+                transform.position = path[currPathIndex].worldPosition;
                 trail.Clear();
                 isDestination = false;
 

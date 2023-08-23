@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class EmptyTile : BaseTile
 {
@@ -8,6 +9,12 @@ public class EmptyTile : BaseTile
     public Coord TileCoord { get; private set; }
     public override bool IsWalkable => inTile == null || inTile.IsWalkable;
     public bool IsPlaceable => inTile == null;
+    private Vector2 defaultSize;
+
+    private void Awake()
+    {
+        defaultSize = transform.localScale;
+    }
 
     public void SetInnerTile(BaseTile _tile)
     {
@@ -21,6 +28,17 @@ public class EmptyTile : BaseTile
     public void SetCoord(Coord _coord)
     {
         TileCoord = _coord;
+    }
+
+    public void PlayFadeOutTween()
+    {
+        transform.DOScale(Vector2.zero, 1.0f)
+        .SetEase(Ease.OutElastic);
+    }
+    public void PlayFadeInTween()
+    {
+        transform.DOScale(defaultSize, 1.0f)
+        .SetEase(Ease.InElastic);
     }
 
 }

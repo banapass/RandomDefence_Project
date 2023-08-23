@@ -8,8 +8,8 @@ public class AStarPathfinding
     private Node endNode;
     private Node[,] grid;
     private int gridSizeX, gridSizeY;
-    private List<Vector3> path;
-    public List<Vector3> Path { get { return path; } }
+    private List<Node> path;
+    public List<Node> Path { get { return path; } }
 
     public static event Action OnChangedPath;
 
@@ -92,7 +92,7 @@ public class AStarPathfinding
 
         return false;
     }
-    public List<Vector3> FindPath()
+    public List<Node> FindPath()
     {
         if (startNode == null || endNode == null)
         {
@@ -153,20 +153,20 @@ public class AStarPathfinding
         return null;
     }
 
-    List<Vector3> RetracePath(Node startNode, Node endNode)
+    List<Node> RetracePath(Node startNode, Node endNode)
     {
-        if (path == null) path = new List<Vector3>();
+        if (path == null) path = new List<Node>();
         else path.Clear();
 
         Node currentNode = endNode;
 
         while (currentNode != startNode)
         {
-            path.Add(currentNode.worldPosition);
+            path.Add(currentNode);
             currentNode = currentNode.parent;
         }
 
-        path.Add(startNode.worldPosition);
+        path.Add(startNode);
         path.Reverse();
         OnChangedPath?.Invoke();
 
@@ -215,23 +215,28 @@ public class AStarPathfinding
         return neighbors;
     }
 
-    Node NodeFromWorldPosition(Vector3 worldPosition)
-    {
-        int x = Mathf.FloorToInt(worldPosition.x);
-        int y = Mathf.FloorToInt(worldPosition.y);
+    // Node NodeFromWorldPosition(Vector3 worldPosition)
+    // {
+    //     int x = Mathf.FloorToInt(worldPosition.x);
+    //     int y = Mathf.FloorToInt(worldPosition.y);
 
-        if (x >= 0 && x < gridSizeX && y >= 0 && y < gridSizeY)
-        {
-            return grid[y, x];
-        }
-        return null;
-    }
+    //     if (x >= 0 && x < gridSizeX && y >= 0 && y < gridSizeY)
+    //     {
+    //         return grid[y, x];
+    //     }
+    //     return null;
+    // }
 
     int GetDistance(Node nodeA, Node nodeB)
     {
         int distX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
         int distY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
         return distX + distY;
+    }
+    public bool IsContainPath(Coord _coord)
+    {
+        Node _node = grid[_coord.y, _coord.x];
+        return path.Contains(_node);
     }
 
 }

@@ -11,6 +11,8 @@ public class BoardManager : Singleton<BoardManager>
     private List<UnitPlacementTile> unitPlacementTiles;
     AStarPathfinding pathfinding;
 
+    public static event Action OnChangedPath;
+
 
     // public static event Action OnPlacedNewTile;
     // List<Vector3> path;
@@ -52,18 +54,54 @@ public class BoardManager : Singleton<BoardManager>
     }
     private void OnEnable()
     {
+        GameManager.OnChangedGameState += OnChangedGameState;
         InputController.OnTriedPlaceNewTile += OnTriedPlaceNewTile;
     }
     private void OnDisable()
     {
+        GameManager.OnChangedGameState -= OnChangedGameState;
         InputController.OnTriedPlaceNewTile -= OnTriedPlaceNewTile;
     }
 
     private void OnTriedPlaceNewTile(EmptyTile _tile)
     {
         if (!pathfinding.IsCanPlaceTile(_tile)) return;
+        if (GameManager.Instance.IsBreakTime)
+        {
+            CreateUnitPlacementTile(_tile);
+        }
+        else
+        {
+            if (pathfinding.IsContainPath(_tile.TileCoord)) return;
+            CreateUnitPlacementTile(_tile);
+        }
+    }
+    private void OnChangedGameState(GameState _state)
+    {
+        FadeInOutPath(_state == GameState.Playing);
+        // if (_state == GameState.BreakTime)
+        // {
 
-        CreateUnitPlacementTile(_tile);
+        // }
+        // else if (_state == GameState.Playing)
+        // {
+
+        // }
+    }
+    private void FadeInOutPath(bool _fadeOut)
+    {
+        if (pathfinding == null) return;
+
+        List<Node> _currPath = pathfinding.Path;
+        for (int i = 0; i < _currPath.Count; i++)
+        {
+            Node _node = _currPath[i];
+            EmptyTile _tile = tileMap[_node.gridY, _node.gridX];
+
+            if (_fadeOut) _tile.PlayFadeOutTween();
+            else _tile.PlayFadeInTween();
+
+        }
     }
     private void CreateBoard(Vector2 _tileSize, EmptyTile _tileRes)
     {
@@ -128,12 +166,17 @@ public class BoardManager : Singleton<BoardManager>
     {
         framework.ResourceStorage.GetComponentAsset<UnitPlacementTile>("Prefab/Unitplacement", _unitTile =>
         {
+            bool _isContainPath = pathfinding.IsContainPath(_tile.TileCoord);
+
             UnitPlacementTile _placementTile = Instantiate(_unitTile);
             _tile.SetInnerTile(_placementTile);
             unitPlacementTiles.Add(_placementTile);
 
             pathfinding.SynchronizeAt(tileMap, true);
             pathfinding.FindPath();
+
+            if (_isContainPath)
+                OnChangedPath?.Invoke();
         });
 
 
@@ -164,10 +207,10 @@ public class BoardManager : Singleton<BoardManager>
 
         for (int i = 0; i < pathfinding.Path.Count; i++)
         {
-            Gizmos.DrawWireCube(pathfinding.Path[i], Vector3.one);
+            Gizmos.DrawWireCube(pathfinding.Path[i].worldPosition, Vector3.one);
         }
     }
-    public List<Vector3> GetCurrentPath() => pathfinding.Path;
+    public List<Node> GetCurrentPath() => pathfinding.Path;
     // private void OnDrawGizmos()
     // {
     //     Gizmos.DrawWireCube(transform.position, Vector2.one);

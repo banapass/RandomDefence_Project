@@ -11,7 +11,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     private MonsterInfo inMonsterInfo;
     [SerializeField, ReadOnly] private float currHp;
 
-    private List<Vector3> path;
+    private List<Node> path;
     [SerializeField] private List<Debuff> debuffs;
     private List<Debuff> finishedDebuffs;
 
@@ -26,13 +26,13 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     public static event Action OnArrivalLastDestination;
 
 
-    public void Init(MonsterInfo _monsterInfo, List<Vector3> _path, Action<Monster> _onDeath)
+    public void Init(MonsterInfo _monsterInfo, List<Node> _path, Action<Monster> _onDeath)
     {
         this.inMonsterInfo = _monsterInfo;
         this.currHp = inMonsterInfo.hp;
         this.path = _path;
         currentPathIndex = 0;
-        transform.position = path[currentPathIndex];
+        transform.position = path[currentPathIndex].worldPosition;
         isDead = false;
 
         if (path == null) Debug.LogError("Monster Init Failed : Path Is Null");
@@ -96,7 +96,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     public void FollowPath()
     {
 
-        if (IsArrivalNextDestination(path[currentPathIndex]))
+        if (IsArrivalNextDestination(path[currentPathIndex].worldPosition))
         {
             currentPathIndex++;
             isDestination = path.Count <= currentPathIndex;
@@ -105,7 +105,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         }
         else
         {
-            MoveToPoint(path[currentPathIndex]);
+            MoveToPoint(path[currentPathIndex].worldPosition);
         }
 
     }

@@ -23,7 +23,7 @@ public class InputController : Singleton<InputController>
 
         observers = new List<System.IDisposable>();
         var _placementObserver = this.UpdateAsObservable()
-                            .Where(_ => GameManager.Instance.IsBreakTime)
+                            // .Where(_ => GameManager.Instance.IsBreakTime)
                             .Where(_ => placementState == PlacementState.UnitPlacement)
                             .Where(_ => Input.GetMouseButtonDown(0))
                             .Select(_tile => GetEmptyTile())
