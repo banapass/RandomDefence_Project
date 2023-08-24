@@ -8,6 +8,7 @@ public class Constants
     public const string DEBUFF_KEY = "Debuff";
     public const int MAX_LIFE = 5;
     public const int START_GOLD = 300;
+    public const int UNIT_UPGRADE_COUNT = 3;
 
 
     public const string FLOATING_TEXT = "Prefab/Effect/FloatingText";

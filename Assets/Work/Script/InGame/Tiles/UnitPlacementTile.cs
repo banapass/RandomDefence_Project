@@ -6,27 +6,39 @@ public class UnitPlacementTile : BaseTile
 {
     public override bool IsWalkable => false;
     public bool HasUnit => unit != null;
+    public Unit InUnit => unit;
     private Unit unit;
     private SpriteRenderer sp;
+
+    public static event System.Action<UnitPlacementTile> OnPlacedNewUnit;
     private void Awake()
     {
         TryGetComponent<SpriteRenderer>(out sp);
     }
 
-    public void Init(Unit _unit)
+    public void SetUnit(Unit _unit)
     {
         if (unit != null) return;
+
         unit = _unit;
         unit.transform.position = transform.position;
         unit.ResetCoolTime();
 
         SetTileDisplaySprite(unit.Info.rarity);
-
+        OnPlacedNewUnit?.Invoke(this);
     }
     private void SetTileDisplaySprite(UnitRarity _rarity)
     {
         Sprite _sprite = AtlasManager.Instance.GetUnitRarityTileSprite(_rarity);
         sp.sprite = _sprite;
+    }
+    public void DeleteUnit()
+    {
+        if (!HasUnit) return;
+
+        SetTileDisplaySprite(UnitRarity.None);
+        Destroy(InUnit.gameObject);
+        unit = null;
     }
 
     private void Update()

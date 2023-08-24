@@ -117,6 +117,7 @@ public class WaveManager : Singleton<WaveManager>
         if (_isEnded)
         {
             Debug.Log("Game Ended");
+            GameManager.Instance.ChangeGameState(GameState.GameClear);
         }
         else
         {

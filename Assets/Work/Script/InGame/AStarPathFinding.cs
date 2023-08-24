@@ -11,7 +11,6 @@ public class AStarPathfinding
     private List<Node> path;
     public List<Node> Path { get { return path; } }
 
-    public static event Action OnChangedPath;
 
     public void Init()
     {
@@ -168,7 +167,6 @@ public class AStarPathfinding
 
         path.Add(startNode);
         path.Reverse();
-        OnChangedPath?.Invoke();
 
         return path;
     }

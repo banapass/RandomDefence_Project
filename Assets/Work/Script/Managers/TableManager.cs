@@ -133,6 +133,17 @@ public class TableManager : framework.Singleton<TableManager>
 
         return _selectedUnitList[Random.Range(0, _selectedUnitList.Count)];
     }
+    public UnitInfo GetRandomUnitInfoByRarity(UnitRarity _rarity)
+    {
+        if (!unitRarityMap.ContainsKey(_rarity))
+        {
+            Debug.LogError($"{_rarity}등급에 대한 유닛 정보가 존재하지 않습니다");
+        }
+
+        List<UnitInfo> _unitList = unitRarityMap[_rarity];
+
+        return _unitList[Random.Range(0, _unitList.Count)];
+    }
     private UnitRarity GetRandomRarity()
     {
         float _totalWeight = 0;

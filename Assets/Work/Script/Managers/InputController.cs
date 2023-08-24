@@ -14,6 +14,7 @@ public class InputController : Singleton<InputController>
 
     private PlacementState placementState = PlacementState.None;
     public static event Action<EmptyTile> OnTriedPlaceNewTile;
+    public static event Action<UnitPlacementTile> OnTriedNewUnit;
     public void Init()
     {
 
@@ -85,15 +86,8 @@ public class InputController : Singleton<InputController>
         if (_tile == null) return;
         if (_tile.HasUnit) return;
 
-        UnitInfo _selectedUnit = TableManager.Instance.GetRandomUnitInfo();
 
-        ResourceStorage.GetComponentAsset<Unit>("Prefab/Unit", _rawUnit =>
-        {
-            Unit _instUnit = Instantiate(_rawUnit);
-            _instUnit.Init(_selectedUnit);
-            _tile.Init(_instUnit);
-        });
-
+        OnTriedNewUnit?.Invoke(_tile);
     }
     private Vector3 GetMousePosition()
     {

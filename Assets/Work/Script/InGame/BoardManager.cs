@@ -9,32 +9,12 @@ public class BoardManager : Singleton<BoardManager>
     [SerializeField] Transform boardArea;
     [SerializeField] EmptyTile[,] tileMap;
     private List<UnitPlacementTile> unitPlacementTiles;
-    AStarPathfinding pathfinding;
+    private List<UnitPlacementTile> upgradeTargetUnitTiles;
+    private AStarPathfinding pathfinding;
 
     public static event Action OnChangedPath;
 
 
-    // public static event Action OnPlacedNewTile;
-    // List<Vector3> path;
-
-
-    // public bool IsBreakTime { get { return CurrentGameState == GameState.BreakTime; } }
-    // [field: SerializeField, ReadOnly] public GameState CurrentGameState { get; private set; }
-    // public static event Action<GameState> OnChangedGameState;
-
-    // void Start()
-    // {
-    //     placedTiles = new HashSet<UnitPlacementTile>();
-
-    //     CreateBoard(Constants.MAP_SIZE);
-    //     pathfinding = new AStarPathfinding();
-    //     pathfinding.Init();
-    //     pathfinding.SynchronizeAt(tileMap, true, true);
-    //     pathfinding.FindPath();
-
-    //     // ChangeGameState(GameState.BreakTime);
-    //     WaveManager.Instance.Init(this, TableManager.Instance.GetStageInfo("stage01"));
-    // }
     public void Init()
     {
         unitPlacementTiles = new List<UnitPlacementTile>();
@@ -56,11 +36,16 @@ public class BoardManager : Singleton<BoardManager>
     {
         GameManager.OnChangedGameState += OnChangedGameState;
         InputController.OnTriedPlaceNewTile += OnTriedPlaceNewTile;
+        InputController.OnTriedNewUnit += CreateNewUnit;
+        UnitPlacementTile.OnPlacedNewUnit += TryUpgradeUnit;
+
     }
     private void OnDisable()
     {
         GameManager.OnChangedGameState -= OnChangedGameState;
         InputController.OnTriedPlaceNewTile -= OnTriedPlaceNewTile;
+        InputController.OnTriedNewUnit -= CreateNewUnit;
+        UnitPlacementTile.OnPlacedNewUnit += TryUpgradeUnit;
     }
 
     private void OnTriedPlaceNewTile(EmptyTile _tile)
@@ -79,14 +64,6 @@ public class BoardManager : Singleton<BoardManager>
     private void OnChangedGameState(GameState _state)
     {
         FadeInOutPath(_state == GameState.Playing);
-        // if (_state == GameState.BreakTime)
-        // {
-
-        // }
-        // else if (_state == GameState.Playing)
-        // {
-
-        // }
     }
     private void FadeInOutPath(bool _fadeOut)
     {
@@ -102,6 +79,72 @@ public class BoardManager : Singleton<BoardManager>
             else _tile.PlayFadeInTween();
 
         }
+    }
+
+    private void TryUpgradeUnit(UnitPlacementTile _placedTile)
+    {
+        if (!IsUpgradableUnit(_placedTile.InUnit.Info.rarity)) return;
+
+        if (upgradeTargetUnitTiles == null) upgradeTargetUnitTiles = new List<UnitPlacementTile>();
+        else upgradeTargetUnitTiles.Clear();
+
+        upgradeTargetUnitTiles.Add(_placedTile);
+
+        UnitRarity _nextRarity = _placedTile.InUnit.Info.rarity + 1;
+
+
+        for (int i = 0; i < unitPlacementTiles.Count; i++)
+        {
+            UnitPlacementTile _tile = unitPlacementTiles[i];
+
+            if (!_tile.HasUnit) continue;
+            if (upgradeTargetUnitTiles.Contains(_tile)) continue;
+
+            bool _isSameUnit = _placedTile.InUnit.Info.unitId == _tile.InUnit.Info.unitId;
+
+            if (_isSameUnit)
+                upgradeTargetUnitTiles.Add(_tile);
+        }
+
+        if (upgradeTargetUnitTiles.Count >= Constants.UNIT_UPGRADE_COUNT)
+        {
+            for (int i = 0; i < upgradeTargetUnitTiles.Count; i++)
+                upgradeTargetUnitTiles[i].DeleteUnit();
+
+            CreateNewUnit(_placedTile, _nextRarity);
+        }
+        else
+        {
+            Debug.Log("Is Not Upgrade Frag");
+        }
+
+        upgradeTargetUnitTiles.Clear();
+    }
+    private bool IsUpgradableUnit(UnitRarity _rarity)
+    {
+        return _rarity + 1 <= UnitRarity.Legendary;
+    }
+    private void CreateNewUnit(UnitPlacementTile _tile)
+    {
+        UnitInfo _selectedUnit = TableManager.Instance.GetRandomUnitInfo();
+
+        ResourceStorage.GetComponentAsset<Unit>("Prefab/Unit", _rawUnit =>
+        {
+            Unit _instUnit = Instantiate(_rawUnit);
+            _instUnit.Init(_selectedUnit);
+            _tile.SetUnit(_instUnit);
+        });
+    }
+    private void CreateNewUnit(UnitPlacementTile _tile, UnitRarity _rarity)
+    {
+        UnitInfo _selectedUnit = TableManager.Instance.GetRandomUnitInfoByRarity(_rarity);
+
+        ResourceStorage.GetComponentAsset<Unit>("Prefab/Unit", _rawUnit =>
+        {
+            Unit _instUnit = Instantiate(_rawUnit);
+            _instUnit.Init(_selectedUnit);
+            _tile.SetUnit(_instUnit);
+        });
     }
     private void CreateBoard(Vector2 _tileSize, EmptyTile _tileRes)
     {
