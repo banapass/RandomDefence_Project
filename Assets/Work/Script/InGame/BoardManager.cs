@@ -113,10 +113,6 @@ public class BoardManager : Singleton<BoardManager>
 
             CreateNewUnit(_placedTile, _nextRarity);
         }
-        else
-        {
-            Debug.Log("Is Not Upgrade Frag");
-        }
 
         upgradeTargetUnitTiles.Clear();
     }
@@ -128,10 +124,11 @@ public class BoardManager : Singleton<BoardManager>
     {
         UnitInfo _selectedUnit = TableManager.Instance.GetRandomUnitInfo();
 
-        ResourceStorage.GetComponentAsset<Unit>("Prefab/Unit", _rawUnit =>
+        ResourceStorage.GetComponentAsset<Unit>(_selectedUnit.unitId, _rawUnit =>
         {
             Unit _instUnit = Instantiate(_rawUnit);
             _instUnit.Init(_selectedUnit);
+            _instUnit.SetScale(_tile.GetUnitSize());
             _tile.SetUnit(_instUnit);
         });
     }
@@ -139,10 +136,11 @@ public class BoardManager : Singleton<BoardManager>
     {
         UnitInfo _selectedUnit = TableManager.Instance.GetRandomUnitInfoByRarity(_rarity);
 
-        ResourceStorage.GetComponentAsset<Unit>("Prefab/Unit", _rawUnit =>
+        ResourceStorage.GetComponentAsset<Unit>(_selectedUnit.unitId, _rawUnit =>
         {
             Unit _instUnit = Instantiate(_rawUnit);
             _instUnit.Init(_selectedUnit);
+            _instUnit.SetScale(_tile.GetUnitSize());
             _tile.SetUnit(_instUnit);
         });
     }

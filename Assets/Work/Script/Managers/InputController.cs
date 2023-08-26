@@ -52,7 +52,6 @@ public class InputController : Singleton<InputController>
     private void OnChagePlacementState(PlacementState _state)
     {
         if (placementState == _state) return;
-        Debug.Log(_state);
         placementState = _state;
     }
     private EmptyTile GetEmptyTile()

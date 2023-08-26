@@ -14,12 +14,19 @@ public class Unit : MonoBehaviour
 
     [SerializeField, ReadOnly] protected LayerMask targetLayer;
 
-
+    private void Awake()
+    {
+        targetLayer = 1 << LayerMask.NameToLayer("Monster");
+    }
 
     public void Init(UnitInfo _unitInfo)
     {
         Info = _unitInfo;
-        currentCoolTime = Info.coolTime;
+        currentCoolTime = 0;
+    }
+    public void SetScale(Vector2 _size)
+    {
+        transform.localScale = _size;
     }
     public virtual bool OnAttack()
     {

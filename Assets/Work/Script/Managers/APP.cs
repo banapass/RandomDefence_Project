@@ -9,7 +9,6 @@ using UnityEngine.SceneManagement;
 public class APP : Singleton<APP>
 {
 
-
     private void Start()
     {
         Init();
@@ -29,7 +28,7 @@ public class APP : Singleton<APP>
 
         UIManager.Instance.Show(UiPath.LOADING, true, () =>
         {
-            LoadingManager.Instance.LoadScene("Scene/InGame", OnEnterInGame, "Effector", "Projectile");
+            LoadingManager.Instance.LoadScene("Scene/InGame", OnEnterInGame, "Effector", "Projectile", "Unit");
         });
 
         // StartCoroutine(ChangeScene(() =>

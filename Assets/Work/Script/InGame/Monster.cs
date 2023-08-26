@@ -78,9 +78,17 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         isDead = true;
 
         if (!isDestination)
+        {
+            Logger.Log("몬스터를 처치했습니다");
             OnDeath(this);
+        }
+        else
+        {
+            Logger.Log("몬스터가 최종 목적지에 도착했습니다");
 
-        else OnArrivalLastDestination?.Invoke();
+            OnDeath(this);
+            OnArrivalLastDestination?.Invoke();
+        }
 
         ObjectPoolManager.Instance.GetParts<ParticleEffector>(Constants.MONSTER_DEAD_KEY, _effector =>
         {

@@ -37,7 +37,7 @@ public class ObjectPool<T> where T : Component
             if (temp.gameObject.GetComponent<IObjectable>() != null)
                 temp.gameObject.GetComponent<IObjectable>().ObjectID = _key;
             else
-                Debug.LogError("[ObjectPoolManager/CreatePool] ObjectID Setting Error : IObjectable Is null");
+                Logger.LogError("[ObjectPoolManager/CreatePool] ObjectID Setting Error : IObjectable Is null");
 
             pool.Enqueue(temp);
             temp.gameObject.SetActive(false);
@@ -132,7 +132,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
                 if (newObj.GetComponent<IObjectable>() != null)
                     newObj.GetComponent<IObjectable>().ObjectID = _objName;
                 else
-                    Debug.LogError("Object Key Setting Failed : IObjetable Is null}");
+                    Logger.LogError("Object Key Setting Failed : IObjetable Is null}");
 
                 _onComplete?.Invoke(newObj as T);
             }
@@ -167,7 +167,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
         }
         else
         {
-            Debug.LogError($"ReturnObjectError : Object Key is Not Founded {_objName}");
+            Logger.LogError($"ReturnObjectError : Object Key is Not Founded {_objName}");
         }
     }
     private void OnDestroy()

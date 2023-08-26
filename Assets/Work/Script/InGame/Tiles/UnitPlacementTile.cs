@@ -40,6 +40,10 @@ public class UnitPlacementTile : BaseTile
         Destroy(InUnit.gameObject);
         unit = null;
     }
+    public Vector2 GetUnitSize()
+    {
+        return transform.localScale * 0.8f;
+    }
 
     private void Update()
     {

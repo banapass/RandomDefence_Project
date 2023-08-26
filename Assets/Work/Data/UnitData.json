@@ -6,7 +6,7 @@
         "range": 1,
         "coolTime": 0.4,
         "projectileInfo": {
-            "prefab": "Prefab/HomingProjectile",
+            "prefab": "unit001-projectile",
             "count": 1,
             "speed": 10,
             "debuffInfo": {
@@ -24,7 +24,7 @@
         "range": 1,
         "coolTime": 5,
         "projectileInfo": {
-            "prefab": "Prefab/Projectile/projectile",
+            "prefab": "unit002-projectile",
             "count": 1,
             "speed": 3
         }
@@ -36,7 +36,7 @@
         "range": 1,
         "coolTime": 2,
         "projectileInfo": {
-            "prefab": "Prefab/Projectile/projectile",
+            "prefab": "unit003-projectile",
             "count": 1,
             "speed": 3
         }
@@ -48,7 +48,7 @@
         "range": 1,
         "coolTime": 3,
         "projectileInfo": {
-            "prefab": "Prefab/Projectile/projectile",
+            "prefab": "unit004-projectile",
             "count": 1,
             "speed": 3
         }
@@ -60,9 +60,21 @@
         "atk": 100,
         "coolTime": 2,
         "projectileInfo": {
-            "prefab": "Prefab/Projectile/projectile",
+            "prefab": "unit005-projectile",
             "count": 1,
             "speed": 3
+        }
+    },
+    {
+        "unitId": "unit006",
+        "rarity": "Rare",
+        "range": 1,
+        "atk": 20,
+        "coolTime": 2,
+        "projectileInfo": {
+            "prefab": "unit006-projectile",
+            "count": 1,
+            "speed": 5
         }
     }
 ]
