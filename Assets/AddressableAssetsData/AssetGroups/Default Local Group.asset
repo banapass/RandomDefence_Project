@@ -211,6 +211,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - Projectile
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0329124b0c616348ad537b9556602b9
+    m_Address: unit004-effector
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 666a81586160cdf4a8f6fb30c36056ad, type: 2}
   m_SchemaSet:

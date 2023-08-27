@@ -40,6 +40,22 @@ abstract public class ProjectileBase : MonoBehaviour, IObjectable
             _target.AddDebuff(_debuff);
         }
     }
+    protected virtual void OnCollisionMonster(Monster _hitMonster)
+    {
+        _hitMonster.TakeDamage(unit.CalculateDamage());
+        TryApplyDebuff(_hitMonster);
+        TryShowEffect();
+    }
+    protected virtual void TryShowEffect()
+    {
+        if (unit == null) return;
+        if (string.IsNullOrEmpty(unit.ProjectileInfo.effector)) return;
+
+        ObjectPoolManager.Instance.GetParts<Effector>(unit.ProjectileInfo.effector, _effect =>
+        {
+            _effect.transform.position = transform.position;
+        });
+    }
 
     protected float GetProjectileSpeed()
     {

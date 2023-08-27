@@ -49,20 +49,22 @@
         "coolTime": 3,
         "projectileInfo": {
             "prefab": "unit004-projectile",
+            "effector": "unit004-effector",
             "count": 1,
-            "speed": 3
+            "speed": 3,
+            "radius": 2
         }
     },
     {
         "unitId": "unit005",
         "rarity": "Legendary",
         "range": 1,
-        "atk": 100,
-        "coolTime": 2,
+        "atk": 40,
+        "coolTime": 0.5,
         "projectileInfo": {
             "prefab": "unit005-projectile",
             "count": 1,
-            "speed": 3
+            "speed": 5
         }
     },
     {

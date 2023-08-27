@@ -352,6 +352,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 237252200216648070, guid: d64d350cde80d3a4185b5217d7600a4d, type: 3}
+      propertyPath: m_NormalizedViewPortRect.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 237252200216648070, guid: d64d350cde80d3a4185b5217d7600a4d, type: 3}
+      propertyPath: m_NormalizedViewPortRect.height
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4277707895129661359, guid: d64d350cde80d3a4185b5217d7600a4d, type: 3}
       propertyPath: m_RootOrder
       value: 1

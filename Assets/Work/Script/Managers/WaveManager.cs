@@ -101,7 +101,7 @@ public class WaveManager : Singleton<WaveManager>
         if (spawnMonsters.Contains(_monster))
             spawnMonsters.Remove(_monster);
         else
-            Debug.LogError("스폰된 몬스터 리스트에 추가되지않은 몬스터가 죽었습니다.");
+            Logger.LogError("스폰된 몬스터 리스트에 추가되지않은 몬스터가 죽었습니다.");
 
 
         if (remainSpawnCount > 0) return;
@@ -116,7 +116,7 @@ public class WaveManager : Singleton<WaveManager>
 
         if (_isEnded)
         {
-            Debug.Log("Game Ended");
+            Logger.Log("게임 클리어");
             GameManager.Instance.ChangeGameState(GameState.GameClear);
         }
         else

@@ -10,7 +10,7 @@ public class HomingProjectile : ProjectileBase
         transform.position = _unit.transform.position;
     }
 
-    private void Update()
+    protected void Update()
     {
         if (target.IsDead)
         {
@@ -20,12 +20,15 @@ public class HomingProjectile : ProjectileBase
 
         transform.position = Vector2.MoveTowards(transform.position, target.transform.position, GetProjectileSpeed() * Time.deltaTime);
     }
-    private void OnTriggerEnter2D(Collider2D other)
+    protected override void OnCollisionMonster(Monster _hitMonster)
+    {
+        base.OnCollisionMonster(_hitMonster);
+    }
+    protected void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.TryGetComponent<Monster>(out var _hitMonster)) return;
 
-        _hitMonster.TakeDamage(unit.CalculateDamage());
-        TryApplyDebuff(_hitMonster);
+        OnCollisionMonster(_hitMonster);
         ReturnPool();
     }
 }

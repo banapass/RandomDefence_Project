@@ -13,6 +13,7 @@ public class Unit : MonoBehaviour
     protected float currentCoolTime;
 
     [SerializeField, ReadOnly] protected LayerMask targetLayer;
+    public LayerMask TargetLayer => targetLayer;
 
     private void Awake()
     {
