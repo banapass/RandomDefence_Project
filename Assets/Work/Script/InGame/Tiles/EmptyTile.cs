@@ -29,16 +29,20 @@ public class EmptyTile : BaseTile
     {
         TileCoord = _coord;
     }
+    public void SetDefaultSize(Vector2 _defaultSize)
+    {
+        defaultSize = _defaultSize;
+    }
 
     public void PlayFadeOutTween()
     {
         transform.DOScale(Vector2.zero, 1.0f)
         .SetEase(Ease.OutElastic);
     }
-    public void PlayFadeInTween()
+    public Tween PlayFadeInTween(Ease _ease = Ease.InElastic)
     {
-        transform.DOScale(defaultSize, 1.0f)
-        .SetEase(Ease.InElastic);
+        return transform.DOScale(defaultSize, 1.0f)
+               .SetEase(_ease);
     }
 
 }

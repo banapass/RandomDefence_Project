@@ -39,6 +39,14 @@ public class WaveManager : Singleton<WaveManager>
         // MemoryPool<Debuff> _debuffPool = new MemoryPool<Debuff>();
         // _debuffPool.AddPool<SlowDebuff>(10);
     }
+    private void OnEnable()
+    {
+        Monster.OnDeath += OnMonsterDeath;
+    }
+    private void OnDisable()
+    {
+        Monster.OnDeath -= OnMonsterDeath;
+    }
     private void MonsterPooling()
     {
         var _monsterInfos = TableManager.Instance.GetAllMonsterInfo();
@@ -85,7 +93,7 @@ public class WaveManager : Singleton<WaveManager>
     {
         ObjectPoolManager.Instance.GetParts<Monster>(currWaveMonster.monsterId, _newMonster =>
         {
-            _newMonster.Init(currWaveMonster, boardManager.GetCurrentPath(), OnMonsterDeath);
+            _newMonster.Init(currWaveMonster, boardManager.GetCurrentPath());
             spawnMonsters.Add(_newMonster);
             remainSpawnCount--;
 

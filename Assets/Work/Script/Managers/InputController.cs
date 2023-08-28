@@ -24,13 +24,14 @@ public class InputController : Singleton<InputController>
 
         observers = new List<System.IDisposable>();
         var _placementObserver = this.UpdateAsObservable()
-                            // .Where(_ => GameManager.Instance.IsBreakTime)
+                            .Where(_ => GameManager.Instance.IsCanBuy(Constants.UNITPLACEMENT_PRICE))
                             .Where(_ => placementState == PlacementState.UnitPlacement)
                             .Where(_ => Input.GetMouseButtonDown(0))
                             .Select(_tile => GetEmptyTile())
                             .Subscribe(_tile => TryPlaceTile(_tile));
 
         var _unitPlaceObserver = this.UpdateAsObservable()
+                                 .Where(_ => GameManager.Instance.IsCanBuy(Constants.UNIT_PRICE))
                                  .Where(_ => placementState == PlacementState.Unit)
                                  .Where(_ => Input.GetMouseButtonDown(0))
                                  .Select(_unitTile => GetUnitPlacementTile())

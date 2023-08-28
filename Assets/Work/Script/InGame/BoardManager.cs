@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 using framework;
 
 public class BoardManager : Singleton<BoardManager>
@@ -27,7 +28,11 @@ public class BoardManager : Singleton<BoardManager>
             pathfinding.SynchronizeAt(tileMap, true, true);
             pathfinding.FindPath();
 
-            WaveManager.Instance.Init(this, TableManager.Instance.GetStageInfo("stage01"));
+            PlayBoardSequences(() =>
+            {
+                WaveManager.Instance.Init(this, TableManager.Instance.GetStageInfo("stage01"));
+            });
+
         });
         // ChangeGameState(GameState.BreakTime);
 
@@ -60,6 +65,8 @@ public class BoardManager : Singleton<BoardManager>
             if (pathfinding.IsContainPath(_tile.TileCoord)) return;
             CreateUnitPlacementTile(_tile);
         }
+
+        GameManager.Instance.UseGold(Constants.UNITPLACEMENT_PRICE);
     }
     private void OnChangedGameState(GameState _state)
     {
@@ -131,6 +138,7 @@ public class BoardManager : Singleton<BoardManager>
             _instUnit.SetScale(_tile.GetUnitSize());
             _tile.SetUnit(_instUnit);
         });
+        GameManager.Instance.UseGold(Constants.UNIT_PRICE);
     }
     private void CreateNewUnit(UnitPlacementTile _tile, UnitRarity _rarity)
     {
@@ -158,12 +166,16 @@ public class BoardManager : Singleton<BoardManager>
 
         // EmptyTile _rawTile = ResourceStorage.GetResource<EmptyTile>("Prefab/Tile");
 
+        int _createCount = 0;
+
+
+
         for (int y = 0; y < _tileSize.y; y++)
         {
             for (int x = 0; x < _tileSize.x; x++)
             {
                 var _tile = Instantiate(_tileRes, transform);
-                _tile.transform.localScale = _resolusionSize;
+                _tile.transform.localScale = Vector2.zero;
 
                 Vector2 _nextPos = new Vector2(x, y) * _resolusionSize;
                 if (!_isOddNumberX || !_isOddNumberY) _nextPos += Vector2.one * (_resolusionSize * 0.5f);
@@ -172,37 +184,36 @@ public class BoardManager : Singleton<BoardManager>
                 _tile.name = string.Format($"({x} / {y})");
                 _tile.transform.position = _startPos + _nextPos;
                 _tile.SetCoord(new Coord(x, y));
+                _tile.SetDefaultSize(_resolusionSize);
+
+
+
+                _createCount++;
+
                 tileMap[y, x] = _tile;
             }
         }
 
-#if UNITY_EDITOR
-        // Unit Batch Debug
-        // UnitBatchTest(tileMap[0, 1]);
-        // UnitBatchTest(tileMap[1, 2]);
-#endif
 
     }
-#if UNITY_EDITOR
-    private void UnitBatchTest(EmptyTile _tile)
+    private void PlayBoardSequences(Action _onComplete = null)
     {
-        // UnitPlacementTile _placementTile = Instantiate(framework.ResourceStorage.GetResource<UnitPlacementTile>("Prefab/Unitplacement"));
-        // Unit _unit = Instantiate(framework.ResourceStorage.GetResource<Unit>("Prefab/Unit"));
-        // UnitInfo _info = TableManager.Instance.GetRandomUnitInfo();
-        // _unit.Init(_info);
+        Sequence _boardSeq = DOTween.Sequence();
 
+        int _count = 0;
+        for (int y = 0; y < tileMap.GetLength(0); y++)
+        {
+            for (int x = 0; x < tileMap.GetLength(1); x++)
+            {
+                EmptyTile _tile = tileMap[y, x];
+                _boardSeq.Insert(0.01f * _count, _tile.PlayFadeInTween(Ease.OutCubic));
+                _count++;
+            }
+        }
 
-        // _tile.SetInnerTile(_placementTile);
-        // _placementTile.Init(_unit);
+        _boardSeq.OnComplete(() => _onComplete?.Invoke());
+        _boardSeq.Play();
     }
-#endif
-    // public void ChangeGameState(GameState _gameState)
-    // {
-    //     if (CurrentGameState == _gameState) return;
-
-    //     CurrentGameState = _gameState;
-    //     OnChangedGameState?.Invoke(_gameState);
-    // }
     private void CreateUnitPlacementTile(EmptyTile _tile)
     {
         framework.ResourceStorage.GetComponentAsset<UnitPlacementTile>("Prefab/Unitplacement", _unitTile =>

@@ -30,3 +30,8 @@ public enum DebuffType
 {
     None = 0, Slow
 }
+
+public enum CostType
+{
+    Wall, Unit
+}

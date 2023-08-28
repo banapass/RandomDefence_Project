@@ -21,12 +21,12 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     private bool isDead;
     public bool IsDead { get { return isDead; } }
 
-    public event Action<Monster> OnDeath;
+    public static event Action<Monster> OnDeath;
     public static event Action<MonsterHitInfo> OnTakeDamage;
     public static event Action OnArrivalLastDestination;
 
 
-    public void Init(MonsterInfo _monsterInfo, List<Node> _path, Action<Monster> _onDeath)
+    public void Init(MonsterInfo _monsterInfo, List<Node> _path)
     {
         this.inMonsterInfo = _monsterInfo;
         this.currHp = inMonsterInfo.hp;
@@ -37,8 +37,8 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
         if (path == null) Debug.LogError("Monster Init Failed : Path Is Null");
 
-        if (OnDeath == null)
-            OnDeath = _onDeath;
+        // if (OnDeath == null)
+        //     OnDeath = _onDeath;
 
 
         if (debuffs == null) debuffs = new List<Debuff>();

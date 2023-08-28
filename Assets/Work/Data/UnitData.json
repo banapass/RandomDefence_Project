@@ -60,11 +60,17 @@
         "rarity": "Legendary",
         "range": 1,
         "atk": 40,
-        "coolTime": 0.5,
+        "coolTime": 0.25,
         "projectileInfo": {
             "prefab": "unit005-projectile",
             "count": 1,
-            "speed": 5
+            "speed": 5,
+            "debuffInfo": {
+                "chanceOfDebuff": 0.4,
+                "intensity": 0.3,
+                "duration": 2,
+                "debuffType": "Slow"
+            }
         }
     },
     {

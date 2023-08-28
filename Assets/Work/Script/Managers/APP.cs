@@ -8,9 +8,9 @@ using UnityEngine.SceneManagement;
 
 public class APP : Singleton<APP>
 {
-
     private void Start()
     {
+        AppSetting();
         Init();
     }
     public async void Init()
@@ -22,6 +22,10 @@ public class APP : Singleton<APP>
         MemoryPoolManager.Instance.Init();
 
         UIManager.Instance.Show(UiPath.INTRO, false);
+    }
+    private void AppSetting()
+    {
+        Application.targetFrameRate = 60;
     }
     public void EnterInGame()
     {

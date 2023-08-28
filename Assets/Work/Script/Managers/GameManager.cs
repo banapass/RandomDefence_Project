@@ -21,10 +21,12 @@ public class GameManager : Singleton<GameManager>
     private void OnEnable()
     {
         Monster.OnArrivalLastDestination += TakeDamage;
+        Monster.OnDeath += OnMonsterDeath;
     }
     private void OnDisable()
     {
         Monster.OnArrivalLastDestination -= TakeDamage;
+        Monster.OnDeath -= OnMonsterDeath;
     }
 
     public void GameStart()
@@ -71,6 +73,15 @@ public class GameManager : Singleton<GameManager>
     {
         currGold += _cost;
         OnChangedGold?.Invoke(currGold);
+    }
+
+    public bool IsCanBuy(int _useGold)
+    {
+        return currGold >= _useGold;
+    }
+    public void OnMonsterDeath(Monster _monster)
+    {
+        GainGold(10);
     }
 
 }
