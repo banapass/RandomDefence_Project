@@ -24,9 +24,14 @@ public class ObjectPool<T> where T : Component
 {
     public Queue<T> pool = new Queue<T>();
     public ObjectSet<T> objectSet;
+
+    private Transform parent;
+    public Transform Parent { get { return parent; } }
+
     public void CreatePool(ObjectSet<T> _objectSet, Transform _parent = null, string _key = null)
     {
         objectSet = _objectSet;
+        parent = _parent;
 
         for (int i = 0; i < objectSet.createCount; i++)
         {
@@ -50,6 +55,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
     Dictionary<string, ObjectPool<Component>> poolList = new Dictionary<string, ObjectPool<Component>>();
     [SerializeField] List<ObjectSet<Component>> objectSetsList = new List<ObjectSet<Component>>(); // 인스펙터에서 직접 설정
 
+    private Transform uiParent;
 
     // 인스펙터에서 직접 설정한 Pool이 있을 시 호출
     public void Init()
@@ -66,6 +72,10 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
             poolList.Add(objectSetsList[i].createObj.name, objectPool);
         }
     }
+    public void SetUIParent(Transform _uiParent)
+    {
+        uiParent = _uiParent;
+    }
 
     // 오브젝트의 Name을 Key값으로 Pool 등록
     public void AddPool<T>(T _obj, int _createCount) where T : Component
@@ -78,13 +88,15 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
         poolList.Add(_objSet.createObj.name, objectPool);
     }
     // Key값을 직접 매개변수로 Pool 등록
-    public void AddPool<T>(T _obj, int _createCount, string _key) where T : Component
+    public void AddPool<T>(T _obj, int _createCount, string _key, Transform _parent = null) where T : Component
     {
         if (poolList.ContainsKey(_key)) return;
 
+        Transform _targetParent = _parent == null ? this.transform : _parent;
+
         ObjectPool<Component> objectPool = new ObjectPool<Component>();
         ObjectSet<Component> _objSet = new ObjectSet<Component>(_obj, _createCount);
-        objectPool.CreatePool(_objSet, this.transform, _key);
+        objectPool.CreatePool(_objSet, _targetParent, _key);
 
         poolList.Add(_key, objectPool as ObjectPool<Component>);
     }
@@ -116,7 +128,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
             return null;
         }
     }
-    public void GetParts<T>(string _objName, System.Action<T> _onComplete = null) where T : Component
+    public void GetParts<T>(string _objName, bool _isUi = false, System.Action<T> _onComplete = null) where T : Component
     {
         if (poolList.ContainsKey(_objName))
         {
@@ -128,7 +140,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
             }
             else
             {
-                Component newObj = Instantiate(poolList[_objName].objectSet.createObj, transform);
+                Component newObj = Instantiate(poolList[_objName].objectSet.createObj, poolList[_objName].Parent);
                 if (newObj.GetComponent<IObjectable>() != null)
                     newObj.GetComponent<IObjectable>().ObjectID = _objName;
                 else
@@ -145,8 +157,9 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
 
             framework.ResourceStorage.GetComponentAsset<T>(_objName, _comp =>
             {
-                AddPool<T>(_comp, 2, _objName);
-                GetParts<T>(_objName, _comp =>
+                Transform _targetParent = _isUi ? uiParent : this.transform;
+                AddPool<T>(_comp, 2, _objName, _targetParent);
+                GetParts<T>(_objName, _isUi, _comp =>
                 {
                     _onComplete?.Invoke(_comp);
                 });

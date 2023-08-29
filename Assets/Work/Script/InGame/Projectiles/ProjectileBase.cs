@@ -51,7 +51,7 @@ abstract public class ProjectileBase : MonoBehaviour, IObjectable
         if (unit == null) return;
         if (string.IsNullOrEmpty(unit.ProjectileInfo.effector)) return;
 
-        ObjectPoolManager.Instance.GetParts<Effector>(unit.ProjectileInfo.effector, _effect =>
+        ObjectPoolManager.Instance.GetParts<Effector>(unit.ProjectileInfo.effector, _onComplete: _effect =>
         {
             _effect.transform.position = transform.position;
         });

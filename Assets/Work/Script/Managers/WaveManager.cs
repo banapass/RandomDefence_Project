@@ -25,19 +25,18 @@ public class WaveManager : Singleton<WaveManager>
         currRound = -1;
 
         MonsterPooling();
-
+        StartWayNavigate();
+        // MemoryPool<Debuff> _debuffPool = new MemoryPool<Debuff>();
+        // _debuffPool.AddPool<SlowDebuff>(10);
+    }
+    public void StartWayNavigate()
+    {
         ResourceStorage.GetComponentAsset<WayNavigator>("Prefab/Effect/WayNavigator", _way =>
         {
             wayNavigator = Instantiate(_way);
             wayNavigator.SetPath(boardManager.GetCurrentPath());
             wayNavigator.StartNavigate();
         });
-
-
-
-
-        // MemoryPool<Debuff> _debuffPool = new MemoryPool<Debuff>();
-        // _debuffPool.AddPool<SlowDebuff>(10);
     }
     private void OnEnable()
     {
@@ -63,6 +62,7 @@ public class WaveManager : Singleton<WaveManager>
     public void StartNextRound()
     {
         if (!GameManager.Instance.IsBreakTime) return;
+        if (currStageInfo.rounds == null) return;
         if (spawning == null)
             spawning = Spawning();
 
@@ -91,7 +91,7 @@ public class WaveManager : Singleton<WaveManager>
     }
     private void SpawnMonster()
     {
-        ObjectPoolManager.Instance.GetParts<Monster>(currWaveMonster.monsterId, _newMonster =>
+        ObjectPoolManager.Instance.GetParts<Monster>(currWaveMonster.monsterId, _onComplete: _newMonster =>
         {
             _newMonster.Init(currWaveMonster, boardManager.GetCurrentPath());
             spawnMonsters.Add(_newMonster);

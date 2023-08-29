@@ -37,7 +37,7 @@ public class Unit : MonoBehaviour
 
         if (_col.TryGetComponent<Monster>(out var _monster))
         {
-            ObjectPoolManager.Instance.GetParts<ProjectileBase>(Info.projectileInfo.prefab, _projectile =>
+            ObjectPoolManager.Instance.GetParts<ProjectileBase>(Info.projectileInfo.prefab, _onComplete: _projectile =>
             {
                 _projectile.Init(this, _monster);
             });

@@ -9,11 +9,13 @@ namespace framework
     {
         private Dictionary<string, BaseUi> uiDict = new Dictionary<string, BaseUi>();
         private Queue<BaseUi> popupQueue = new Queue<BaseUi>();
+
         [SerializeField] Transform pageCanvas;
         [SerializeField] RectTransform pageRect;
         [SerializeField] Transform popupCanvas;
         [SerializeField] RectTransform popupRect;
 
+        public Transform UIParent { get { return pageCanvas; } }
 
         [field: SerializeField, ReadOnly]
         public BaseUi CurrentPage { get; private set; }

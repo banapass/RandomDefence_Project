@@ -1,19 +1,19 @@
 [
     {
         "monsterId": "1001",
-        "hp": 100,
+        "hp": 50,
         "speed": 1.5,
         "prefabPath": "Prefab/Monster/Monster01"
     },
     {
         "monsterId": "1002",
-        "hp": 120,
+        "hp": 100,
         "speed": 0.5,
         "prefabPath": "Prefab/Monster/Monster02"
     },
     {
         "monsterId": "1003",
-        "hp": 140,
+        "hp": 150,
         "speed": 1,
         "prefabPath": "Prefab/Monster/Monster03"
     },

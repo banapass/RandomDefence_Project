@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using framework;
+using UnityEngine.UI;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
@@ -51,10 +52,18 @@ public class APP : Singleton<APP>
     {
         UIManager.Instance.Show(UiPath.INGAME, false, () =>
         {
+            ObjectPoolManager.Instance.SetUIParent(UIManager.Instance.UIParent);
             GameManager.Instance.GameStart();
             BoardManager.Instance.Init();
             GameManager.Instance.ChangeGameState(GameState.BreakTime);
             InputController.Instance.Init();
+
+            // ResourceStorage.GetComponentAsset<Slider>(Constants.MONSTER_HPBAR, _res =>
+            // {
+            //     ObjectPoolManager.Instance.AddPool<Slider>(_res, 10, Constants.MONSTER_HPBAR, UIManager.Instance.CurrentPage.transform);
+            // });
+
+
         });
     }
     public async Task ResourcesLoad()

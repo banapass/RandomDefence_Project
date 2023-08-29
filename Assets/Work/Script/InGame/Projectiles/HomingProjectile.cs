@@ -7,6 +7,11 @@ public class HomingProjectile : ProjectileBase
     public override void Init(Unit _unit, Monster _monster)
     {
         base.Init(_unit, _monster);
+        if (_unit == null)
+        {
+            ReturnPool();
+            return;
+        }
         transform.position = _unit.transform.position;
     }
 

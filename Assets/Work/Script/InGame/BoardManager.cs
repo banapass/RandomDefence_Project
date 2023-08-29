@@ -28,9 +28,11 @@ public class BoardManager : Singleton<BoardManager>
             pathfinding.SynchronizeAt(tileMap, true, true);
             pathfinding.FindPath();
 
+
             PlayBoardSequences(() =>
             {
                 WaveManager.Instance.Init(this, TableManager.Instance.GetStageInfo("stage01"));
+                // WaveManager.Instance.StartWayNavigate();
             });
 
         });

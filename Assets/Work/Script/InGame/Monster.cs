@@ -10,16 +10,19 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
     private MonsterInfo inMonsterInfo;
     [SerializeField, ReadOnly] private float currHp;
+    private MonsterHpSlider hpSlider;
 
     private List<Node> path;
-    [SerializeField] private List<Debuff> debuffs;
+    private List<Debuff> debuffs;
     private List<Debuff> finishedDebuffs;
 
     private int currentPathIndex;
     private bool isDestination;
 
+
     private bool isDead;
     public bool IsDead { get { return isDead; } }
+
 
     public static event Action<Monster> OnDeath;
     public static event Action<MonsterHitInfo> OnTakeDamage;
@@ -37,8 +40,15 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
         if (path == null) Debug.LogError("Monster Init Failed : Path Is Null");
 
-        // if (OnDeath == null)
-        //     OnDeath = _onDeath;
+        if (hpSlider == null)
+        {
+            ObjectPoolManager.Instance.GetParts<MonsterHpSlider>(Constants.MONSTER_HPBAR, true, _slider =>
+            {
+                hpSlider = _slider;
+                hpSlider.UpdateSlider(GetHPPercent());
+                hpSlider.UpdatePosition(GetHPBarPosition());
+            });
+        }
 
 
         if (debuffs == null) debuffs = new List<Debuff>();
@@ -59,16 +69,16 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         if (isDead) return;
 
         currHp -= _damage;
+        hpSlider.UpdateSlider(GetHPPercent());
 
         if (currHp <= 0)
             OnDie();
 
-        ObjectPoolManager.Instance.GetParts<TextEffector>(Constants.FLOATING_TEXT, _text =>
+        ObjectPoolManager.Instance.GetParts<TextEffector>(Constants.FLOATING_TEXT, _onComplete: _text =>
         {
             _text.transform.position = transform.position;
             _text.Play(_damage);
         });
-
 
         OnTakeDamage?.Invoke(new MonsterHitInfo((int)_damage, transform.position));
     }
@@ -90,10 +100,16 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
             OnArrivalLastDestination?.Invoke();
         }
 
-        ObjectPoolManager.Instance.GetParts<ParticleEffector>(Constants.MONSTER_DEAD_KEY, _effector =>
+        ObjectPoolManager.Instance.GetParts<ParticleEffector>(Constants.MONSTER_DEAD_KEY, _onComplete: _effector =>
         {
             _effector.transform.position = transform.position;
         });
+
+        if (hpSlider != null)
+        {
+            hpSlider.ReturnPool();
+            hpSlider = null;
+        }
 
 
         ReturnAllDebuff();
@@ -128,9 +144,22 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     public void MoveToPoint(Vector3 _target)
     {
         transform.position = Vector2.MoveTowards(transform.position, _target, Time.deltaTime * CalculateSpeed());
+
+        if (hpSlider == null) return;
+        hpSlider.UpdatePosition(GetHPBarPosition());
     }
     #endregion
+    private float GetHPPercent()
+    {
+        return currHp / this.inMonsterInfo.hp;
+    }
+    private Vector2 GetHPBarPosition()
+    {
+        Vector2 _currPos = transform.position;
+        _currPos.y = _currPos.y - transform.localScale.y * 0.5f;
 
+        return _currPos;
+    }
     private float CalculateSpeed()
     {
         float _slowIntensity = 0;
