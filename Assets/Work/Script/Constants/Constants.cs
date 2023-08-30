@@ -13,6 +13,7 @@ public class Constants
     public const int UNIT_UPGRADE_COUNT = 3;
 
 
+    public const string UNITPLACEMENT_PATH = "Prefab/Unitplacement";
     public const string FLOATING_TEXT = "Prefab/Effect/FloatingText";
     public const string MONSTER_DEAD_KEY = "DeadEffect";
     public const string MONSTER_HPBAR = "Monster_Hpbar";

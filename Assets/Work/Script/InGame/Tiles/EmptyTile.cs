@@ -5,25 +5,31 @@ using DG.Tweening;
 
 public class EmptyTile : BaseTile
 {
-    private BaseTile inTile;
+    private PlacementTile inTile;
     public Coord TileCoord { get; private set; }
     public override bool IsWalkable => inTile == null || inTile.IsWalkable;
     public bool IsPlaceable => inTile == null;
     private Vector2 defaultSize;
 
-    private void Awake()
-    {
-        defaultSize = transform.localScale;
-    }
-
-    public void SetInnerTile(BaseTile _tile)
+    public void SetInnerTile(PlacementTile _tile)
     {
         if (!IsPlaceable) return;
         if (inTile != null) Destroy(inTile.gameObject);
 
-        _tile.transform.position = transform.position;
+        _tile.Init(this);
+        _tile.transform.position = transform.position - Vector3.forward;
         _tile.transform.localScale = transform.localScale;
+
         inTile = _tile;
+    }
+    public void RemoveInnerTile()
+    {
+        if (IsPlaceable) return;
+
+        inTile = null;
+
+        if (BoardManager.Instance.CheckPathImpactOnTileRemoval(this))
+            BoardManager.Instance.UpdatePath();
     }
     public void SetCoord(Coord _coord)
     {

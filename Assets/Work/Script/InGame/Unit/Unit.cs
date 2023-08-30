@@ -4,26 +4,30 @@ using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 
-public class Unit : MonoBehaviour
+public class Unit : MonoBehaviour , ISellable
 {
     [field: SerializeField]
     public UnitInfo Info { get; protected set; }
     public ProjectileInfo ProjectileInfo => Info.projectileInfo;
+    protected UnitPlacementTile placedTile;
     public bool HasDebuff => ProjectileInfo.debuffInfo != null;
     protected float currentCoolTime;
 
     [SerializeField, ReadOnly] protected LayerMask targetLayer;
     public LayerMask TargetLayer => targetLayer;
 
+    public int Price { get; set; } = 50;
+
     private void Awake()
     {
         targetLayer = 1 << LayerMask.NameToLayer("Monster");
     }
 
-    public void Init(UnitInfo _unitInfo)
+    public void Init(UnitInfo _unitInfo,UnitPlacementTile _placedTile)
     {
         Info = _unitInfo;
         currentCoolTime = 0;
+        placedTile = _placedTile;
     }
     public void SetScale(Vector2 _size)
     {
@@ -68,6 +72,16 @@ public class Unit : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position, Vector2.one * Info.CalculateRange());
+    }
+
+    public void Sell()
+    {
+        if (placedTile == null) return;
+
+        placedTile.DeleteUnit();
+        placedTile = null;
+
+        GameManager.Instance.GainGold(Price);
     }
 #endif
 }

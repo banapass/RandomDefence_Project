@@ -13,5 +13,10 @@ public class Logger
         Debug.Log($"<color=#FF5656>[ERROR]</color> : {_msg}");
     }
 
+    public static void LogWarning(object _msg)
+    {
+        Debug.Log($"<color=#F0CB2A>[Warning]</color> : {_msg}");
+    }
+
 #endif
 }

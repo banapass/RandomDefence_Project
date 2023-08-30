@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,21 @@ public class AStarPathfinding
         grid = new Node[gridSizeY, gridSizeX];
         InitializeGrid();
         SetStartEndPoint();
+    }
+    private IEnumerator StartAndEndPointSelecte()
+    {
+        WaitForSeconds _sec = new WaitForSeconds(0.1f);
+        int _count = 0;
+
+        while (_count < 8)
+        {
+            SetStartEndPoint();
+            Vector2 _startPos = startNode.worldPosition;
+            Vector2 _endPos = endNode.worldPosition;
+
+            _count++;
+            yield return _sec;
+        }
     }
     private void SetStartEndPoint()
     {
@@ -77,7 +93,7 @@ public class AStarPathfinding
 
     public bool IsCanPlaceTile(EmptyTile _tile)
     {
-        if (startNode.gridX == _tile.TileCoord.x && startNode.gridY == _tile.TileCoord.y) return false;
+        if (startNode.coord.x== _tile.TileCoord.x && startNode.coord.y == _tile.TileCoord.y) return false;
 
         Queue<Node> _openSet = new Queue<Node>();
         List<Node> _visited = new List<Node>();
@@ -113,7 +129,7 @@ public class AStarPathfinding
         if (startNode == null || endNode == null)
         {
             SetStartEndPoint();
-            Debug.LogError("Start or end node is null!");
+            Logger.LogError("Start or end node is null!");
             return path;
         }
 
@@ -200,8 +216,8 @@ public class AStarPathfinding
                 //     continue;
                 if (x == 0 || y == 0)
                 {
-                    int checkX = node.gridX + x;
-                    int checkY = node.gridY + y;
+                    int checkX = node.coord.x + x;
+                    int checkY = node.coord.y + y;
 
                     if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
                     {
@@ -244,8 +260,8 @@ public class AStarPathfinding
 
     int GetDistance(Node nodeA, Node nodeB)
     {
-        int distX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
-        int distY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
+        int distX = Mathf.Abs(nodeA.coord.x - nodeB.coord.x);
+        int distY = Mathf.Abs(nodeA.coord.y - nodeB.coord.y);
         return distX + distY;
     }
     public bool IsContainPath(Coord _coord)

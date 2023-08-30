@@ -4,7 +4,8 @@ public class Node
 {
     public bool walkable;
     public Vector3 worldPosition;
-    public int gridX, gridY;
+    //public int gridX, gridY;
+    public Coord coord;
     public int gCost, hCost;
     public Node parent;
 
@@ -12,8 +13,9 @@ public class Node
     {
         this.walkable = walkable;
         this.worldPosition = worldPosition;
-        this.gridX = gridX;
-        this.gridY = gridY;
+        //this.gridX = gridX;
+        //this.gridY = gridY;
+        coord = new Coord(gridX, gridY);
     }
 
     public int fCost

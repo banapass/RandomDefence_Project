@@ -12,7 +12,7 @@ public enum GameState
 
 public enum PlacementState
 {
-    None, UnitPlacement, Unit
+    None, UnitPlacement, Unit , Sell
 }
 
 [System.Serializable]

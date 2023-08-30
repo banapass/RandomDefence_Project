@@ -6,6 +6,7 @@ using UnityEngine;
 public interface IObjectable
 {
     public string ObjectID { get; set; }
+    public void ReturnPool();
 }
 
 [System.Serializable]
@@ -128,21 +129,21 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
             return null;
         }
     }
-    public void GetParts<T>(string _objName, bool _isUi = false, System.Action<T> _onComplete = null) where T : Component
+    public void GetParts<T>(string _key, bool _isUi = false, System.Action<T> _onComplete = null) where T : Component
     {
-        if (poolList.ContainsKey(_objName))
+        if (poolList.ContainsKey(_key))
         {
-            if (poolList[_objName].pool.Count > 0)
+            if (poolList[_key].pool.Count > 0)
             {
-                Component obj = poolList[_objName].pool.Dequeue();
+                Component obj = poolList[_key].pool.Dequeue();
                 obj.gameObject.SetActive(true);
                 _onComplete?.Invoke(obj as T);
             }
             else
             {
-                Component newObj = Instantiate(poolList[_objName].objectSet.createObj, poolList[_objName].Parent);
+                Component newObj = Instantiate(poolList[_key].objectSet.createObj, poolList[_key].Parent);
                 if (newObj.GetComponent<IObjectable>() != null)
-                    newObj.GetComponent<IObjectable>().ObjectID = _objName;
+                    newObj.GetComponent<IObjectable>().ObjectID = _key;
                 else
                     Logger.LogError("Object Key Setting Failed : IObjetable Is null}");
 
@@ -155,11 +156,11 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
             // AddPool<T>(await framework.ResourceStorage.GetResource<T>(_objName), 5, _objName);
             // return GetParts<T>(_objName);
 
-            framework.ResourceStorage.GetComponentAsset<T>(_objName, _comp =>
+            framework.ResourceStorage.GetComponentAsset<T>(_key, _comp =>
             {
                 Transform _targetParent = _isUi ? uiParent : this.transform;
-                AddPool<T>(_comp, 2, _objName, _targetParent);
-                GetParts<T>(_objName, _isUi, _comp =>
+                AddPool<T>(_comp, 2, _key, _targetParent);
+                GetParts<T>(_key, _isUi, _comp =>
                 {
                     _onComplete?.Invoke(_comp);
                 });

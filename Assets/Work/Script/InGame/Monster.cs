@@ -39,24 +39,10 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         currentPathIndex = 0;
         transform.position = path[currentPathIndex].worldPosition;
 
-        if (path == null) Debug.LogError("Monster Init Failed : Path Is Null");
+        if (path == null) Logger.LogError("Monster Init Failed : Path Is Null");
 
-        if (hpSlider == null)
-        {
-            ObjectPoolManager.Instance.GetParts<MonsterHpSlider>(Constants.MONSTER_HPBAR, true, _slider =>
-            {
-                hpSlider = _slider;
-                hpSlider.UpdateSlider(GetHPPercent());
-                hpSlider.UpdatePosition(GetHPBarPosition());
-            });
-        }
-
-
-        if (debuffs == null) debuffs = new List<Debuff>();
-        else debuffs.Clear();
-
-        if (finishedDebuffs == null) finishedDebuffs = new List<Debuff>();
-        else finishedDebuffs.Clear();
+        SetUpHpSlider();
+        InitDebuffs();
     }
     private void Update()
     {
@@ -64,7 +50,30 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         if (isDestination) return;
         FollowPath();
         UpdateDebuff(Time.deltaTime);
+        UpdateHpSliderPosition();
+    }
+    private void SetUpHpSlider()
+    {
+        if (hpSlider != null) return;
 
+        ObjectPoolManager.Instance.GetParts<MonsterHpSlider>(Constants.MONSTER_HPBAR, true, _slider =>
+        {
+            hpSlider = _slider;
+            hpSlider.UpdateSlider(GetHPPercent());
+            hpSlider.UpdatePosition(GetHPBarPosition());
+        });
+
+    }
+    private void InitDebuffs()
+    {
+        if (debuffs == null) debuffs = new List<Debuff>();
+        else debuffs.Clear();
+
+        if (finishedDebuffs == null) finishedDebuffs = new List<Debuff>();
+        else finishedDebuffs.Clear();
+    }
+    private void UpdateHpSliderPosition()
+    {
         if (hpSlider == null) return;
         hpSlider.UpdatePosition(GetHPBarPosition());
     }
@@ -115,11 +124,10 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
             hpSlider = null;
         }
 
-
         ReturnAllDebuff();
-        ObjectPoolManager.Instance.ReturnParts(this, ObjectID);
-
+        ReturnPool();
     }
+
     #region Move 관련
     public void FollowPath()
     {
@@ -154,6 +162,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     }
 
     #endregion
+    
     private float GetHPPercent()
     {
         return currHp / this.inMonsterInfo.hp;
@@ -241,4 +250,8 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
     #endregion
 
+    public void ReturnPool()
+    {
+        ObjectPoolManager.Instance.ReturnParts(this, ObjectID);
+    }
 }

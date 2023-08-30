@@ -44,7 +44,9 @@ public class BoardManager : Singleton<BoardManager>
         GameManager.OnChangedGameState += OnChangedGameState;
         InputController.OnTriedPlaceNewTile += OnTriedPlaceNewTile;
         InputController.OnTriedNewUnit += CreateNewUnit;
+        InputController.OnTriedSell += OnTriedSell;
         UnitPlacementTile.OnPlacedNewUnit += TryUpgradeUnit;
+
 
     }
     private void OnDisable()
@@ -52,7 +54,8 @@ public class BoardManager : Singleton<BoardManager>
         GameManager.OnChangedGameState -= OnChangedGameState;
         InputController.OnTriedPlaceNewTile -= OnTriedPlaceNewTile;
         InputController.OnTriedNewUnit -= CreateNewUnit;
-        UnitPlacementTile.OnPlacedNewUnit += TryUpgradeUnit;
+        InputController.OnTriedSell -= OnTriedSell;
+        UnitPlacementTile.OnPlacedNewUnit -= TryUpgradeUnit;
     }
 
     private void OnTriedPlaceNewTile(EmptyTile _tile)
@@ -82,7 +85,7 @@ public class BoardManager : Singleton<BoardManager>
         for (int i = 0; i < _currPath.Count; i++)
         {
             Node _node = _currPath[i];
-            EmptyTile _tile = tileMap[_node.gridY, _node.gridX];
+            EmptyTile _tile = tileMap[_node.coord.y, _node.coord.x];
 
             if (_fadeOut) _tile.PlayFadeOutTween();
             else _tile.PlayFadeInTween();
@@ -136,7 +139,7 @@ public class BoardManager : Singleton<BoardManager>
         ResourceStorage.GetComponentAsset<Unit>(_selectedUnit.unitId, _rawUnit =>
         {
             Unit _instUnit = Instantiate(_rawUnit);
-            _instUnit.Init(_selectedUnit);
+            _instUnit.Init(_selectedUnit,_tile);
             _instUnit.SetScale(_tile.GetUnitSize());
             _tile.SetUnit(_instUnit);
         });
@@ -149,7 +152,7 @@ public class BoardManager : Singleton<BoardManager>
         ResourceStorage.GetComponentAsset<Unit>(_selectedUnit.unitId, _rawUnit =>
         {
             Unit _instUnit = Instantiate(_rawUnit);
-            _instUnit.Init(_selectedUnit);
+            _instUnit.Init(_selectedUnit,_tile);
             _instUnit.SetScale(_tile.GetUnitSize());
             _tile.SetUnit(_instUnit);
 
@@ -219,22 +222,22 @@ public class BoardManager : Singleton<BoardManager>
     }
     private void CreateUnitPlacementTile(EmptyTile _tile)
     {
-        framework.ResourceStorage.GetComponentAsset<UnitPlacementTile>("Prefab/Unitplacement", _unitTile =>
+        framework.ResourceStorage.GetComponentAsset<UnitPlacementTile>(Constants.UNITPLACEMENT_PATH, _unitTile =>
         {
             bool _isContainPath = pathfinding.IsContainPath(_tile.TileCoord);
 
-            UnitPlacementTile _placementTile = Instantiate(_unitTile);
-            _tile.SetInnerTile(_placementTile);
-            unitPlacementTiles.Add(_placementTile);
+            ObjectPoolManager.Instance.GetParts<UnitPlacementTile>(Constants.UNITPLACEMENT_PATH, _onComplete:_placementTile =>
+            {
+                _tile.SetInnerTile(_placementTile);
+                unitPlacementTiles.Add(_placementTile);
 
-            pathfinding.SynchronizeAt(tileMap, true);
-            pathfinding.FindPath();
+                pathfinding.SynchronizeAt(tileMap, true);
+                pathfinding.FindPath();
 
-            if (_isContainPath)
-                OnChangedPath?.Invoke();
+                if (_isContainPath)
+                    OnChangedPath?.Invoke();
+            });
         });
-
-
     }
 
     private bool CanPlaceUnit()
@@ -246,6 +249,44 @@ public class BoardManager : Singleton<BoardManager>
         }
 
         return false;
+    }
+    public bool CheckPathImpactOnTileRemoval(EmptyTile _tile)
+    {
+        List<Node> _path = pathfinding.Path;
+
+        for(int i = _path.Count - 1; i >= 0; i--) 
+        {
+            for (int j = 0; j < Coord.DIRECTIONS.Length; j++)
+            {
+                Coord _removeCoord = _tile.TileCoord;
+                Coord _nextCoord = _removeCoord + Coord.DIRECTIONS[j];
+
+                if (_path[i].coord == _nextCoord) return true;
+            }
+            //bool _isContainsCoord = _removeCoord.x == _path[i].coord.x && _removeCoord.y == _path[i].coord.y;
+        }
+        //for (int i = 0; i  < unitPlacementTiles.Count; i++)
+        //{
+        //    for(int j = 0; j < Coord.DIRECTIONS.Length;j++)
+        //    {
+        //        Coord _currCoord = unitPlacementTiles[i].GetCoord();
+        //        Coord _nextCoord = _currCoord + Coord.DIRECTIONS[j];
+
+        //        if (_nextCoord == _tile.TileCoord) return true;
+        //    }
+        //}
+        return false;
+    }
+    public void OnTriedSell(ISellable _sellable)
+    {
+        _sellable.Sell();
+    }
+    public void UpdatePath()
+    {
+        pathfinding.SynchronizeAt(tileMap, true);
+        pathfinding.FindPath();
+
+        OnChangedPath?.Invoke();
     }
     public List<Node> GetCurrentPath() => pathfinding.Path;
 

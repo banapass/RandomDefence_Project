@@ -13,8 +13,10 @@ public class InputController : Singleton<InputController>
     private LayerMask tileLayer, unitPlacementLayer;
 
     private PlacementState placementState = PlacementState.None;
+
     public static event Action<EmptyTile> OnTriedPlaceNewTile;
     public static event Action<UnitPlacementTile> OnTriedNewUnit;
+    public static event Action<ISellable> OnTriedSell;
     public void Init()
     {
 
@@ -23,6 +25,7 @@ public class InputController : Singleton<InputController>
         unitPlacementLayer = 1 << LayerMask.NameToLayer("UnitPlacement");
 
         observers = new List<System.IDisposable>();
+
         var _placementObserver = this.UpdateAsObservable()
                             .Where(_ => GameManager.Instance.IsCanBuy(Constants.UNITPLACEMENT_PRICE))
                             .Where(_ => placementState == PlacementState.UnitPlacement)
@@ -37,11 +40,36 @@ public class InputController : Singleton<InputController>
                                  .Select(_unitTile => GetUnitPlacementTile())
                                  .Subscribe(_unitTile => TryPlaceNewUnit(_unitTile));
 
+        var _sellObserver = this.UpdateAsObservable()
+                            .Where(_ => GameManager.Instance.IsBreakTime)
+                            .Where(_ => placementState == PlacementState.Sell)
+                            .Where(_ => Input.GetMouseButtonDown(0))
+                            .Select(_sellable => GetSellableTarget())
+                            .Where(_sellable => _sellable != null)
+                            .Subscribe(_sellable => OnTriedSell?.Invoke(_sellable));
 
 
+        observers.Add(_sellObserver);
         observers.Add(_placementObserver);
         observers.Add(_unitPlaceObserver);
     }
+
+    private ISellable GetSellableTarget()
+    {
+        ISellable _result = null;
+
+        Vector2 _mousePos = GetMousePosition();
+
+        var _hitInfo = Physics2D.Raycast(_mousePos, Vector3.forward, float.MaxValue);
+        var _hitInfoTwo = Physics2D.Linecast(_mousePos, _mousePos);
+
+        if (_hitInfoTwo)
+            _result = _hitInfoTwo.collider.GetComponent<ISellable>();
+        
+
+        return _result;
+    }
+
     private void OnEnable()
     {
         InGamePage.OnChangePlacementState += OnChagePlacementState;

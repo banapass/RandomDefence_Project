@@ -26,18 +26,9 @@ public class FloatingText : MonoBehaviour, IObjectable
     {
         textMesh.text = string.Format(DAMAGE_FORMET, _damage);
 
-        // if (sequence == null) SetSequence();
-        // sequence?.Play();
-
-        // transform.localScale = Vector2.one * DEFAULT_SCALE;
-        // transform
-        // .DOScale(DEFAULT_SCALE * 1.5f, 0.5f)
-        // .SetEase(Ease.OutElastic)
-        // .OnComplete(() => ObjectPoolManager.Instance.ReturnParts(this, ObjectID));
-
         transform.DOMove(transform.position + Vector3.up * 1.5f, 1f)
         .SetEase(Ease.OutCirc)
-        .OnComplete(() => ObjectPoolManager.Instance.ReturnParts(this, ObjectID));
+        .OnComplete(() => ReturnPool());
 
 
     }
@@ -63,5 +54,9 @@ public class FloatingText : MonoBehaviour, IObjectable
         // sequence.SetAutoKill(false);
     }
 
+    public void ReturnPool()
+    {
+        ObjectPoolManager.Instance.ReturnParts(this, ObjectID);
+    }
 }
 

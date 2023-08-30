@@ -13,6 +13,7 @@ public class InGamePage : BaseUi
     [SerializeField] Button unitPlacementBtn;
     [SerializeField] Button unitBtn;
     [SerializeField] Button nextRoundBtn;
+    [SerializeField] Button sellBtn;
 
     [Header("Text")]
     [SerializeField] TextMeshProUGUI gold_txt;
@@ -33,6 +34,9 @@ public class InGamePage : BaseUi
 
         unitBtn.OnClickAsObservable()
         .Subscribe(_observer => OnChangePlacementState?.Invoke(PlacementState.Unit));
+
+        sellBtn.OnClickAsObservable()
+        .Subscribe(_observer => OnChangePlacementState?.Invoke(PlacementState.Sell));
 
     }
 

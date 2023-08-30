@@ -14,7 +14,7 @@ abstract public class ProjectileBase : MonoBehaviour, IObjectable
         target = _monster;
     }
 
-    protected void ReturnPool()
+    public void ReturnPool()
     {
         ObjectPoolManager.Instance.ReturnParts(this, ObjectID);
     }

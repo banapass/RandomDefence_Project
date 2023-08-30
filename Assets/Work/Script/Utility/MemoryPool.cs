@@ -35,7 +35,7 @@ public class MemoryPool<T> where T : class, IMemoryPool
 
         if (!poolDict.ContainsKey(_key))
         {
-            Logger.LogError("풀안에 존재하지 않는 키값 입니다 새로운 풀을 생성합니다");
+            Logger.LogWarning("풀안에 존재하지 않는 키값 입니다 새로운 풀을 생성합니다");
             AddPool<Child>(_key, 1);
             // return default(Child);
         }
