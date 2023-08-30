@@ -29,14 +29,15 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     public static event Action OnArrivalLastDestination;
 
 
-    public void Init(MonsterInfo _monsterInfo, List<Node> _path)
+    public void Init(MonsterInfo _monsterInfo)
     {
         this.inMonsterInfo = _monsterInfo;
         this.currHp = inMonsterInfo.hp;
-        this.path = _path;
+        this.path = BoardManager.Instance.GetCurrentPath();
+
+        isDead = false;
         currentPathIndex = 0;
         transform.position = path[currentPathIndex].worldPosition;
-        isDead = false;
 
         if (path == null) Debug.LogError("Monster Init Failed : Path Is Null");
 
@@ -63,6 +64,9 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         if (isDestination) return;
         FollowPath();
         UpdateDebuff(Time.deltaTime);
+
+        if (hpSlider == null) return;
+        hpSlider.UpdatePosition(GetHPBarPosition());
     }
     public void TakeDamage(float _damage)
     {
@@ -133,26 +137,28 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         }
 
     }
+
     private bool IsArrivalNextDestination(Vector3 _nextPos)
     {
         return GetDistance(_nextPos) <= 0.001f;
     }
+
     private float GetDistance(Vector3 _nextPos)
     {
         return (_nextPos - transform.position).sqrMagnitude;
     }
+
     public void MoveToPoint(Vector3 _target)
     {
         transform.position = Vector2.MoveTowards(transform.position, _target, Time.deltaTime * CalculateSpeed());
-
-        if (hpSlider == null) return;
-        hpSlider.UpdatePosition(GetHPBarPosition());
     }
+
     #endregion
     private float GetHPPercent()
     {
         return currHp / this.inMonsterInfo.hp;
     }
+
     private Vector2 GetHPBarPosition()
     {
         Vector2 _currPos = transform.position;

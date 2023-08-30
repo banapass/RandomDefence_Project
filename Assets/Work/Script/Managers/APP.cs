@@ -36,6 +36,7 @@ public class APP : Singleton<APP>
             LoadingManager.Instance.LoadScene("Scene/InGame", OnEnterInGame, "Effector", "Projectile", "Unit");
         });
 
+
         // StartCoroutine(ChangeScene(() =>
         // {
         //     // UIManager.Instance.Show(UiPath.INGAME, false, OnEnterInGame);

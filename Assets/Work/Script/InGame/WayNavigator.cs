@@ -32,9 +32,9 @@ public class WayNavigator : MonoBehaviour
         BoardManager.OnChangedPath -= OnChangedPath;
     }
 
-    public void SetPath(List<Node> _path)
+    public void UpdatePath()
     {
-        path = _path;
+        path = BoardManager.Instance.GetCurrentPath();
     }
     private void OnChangedPath()
     {

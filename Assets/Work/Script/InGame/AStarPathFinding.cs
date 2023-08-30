@@ -23,8 +23,25 @@ public class AStarPathfinding
     }
     private void SetStartEndPoint()
     {
-        startNode = grid[0, 0];
-        endNode = grid[gridSizeY - 1, gridSizeX - 1];
+        Coord _startCoord = GetRandomCoord();
+        Coord _endCoord = GetRandomCoord();
+
+        if (_startCoord == _endCoord)
+        {
+            SetStartEndPoint();
+            return;
+        }
+
+        startNode = grid[_startCoord.y, _startCoord.x];
+        endNode = grid[_endCoord.y, _endCoord.x];
+    }
+    private Coord GetRandomCoord()
+    {
+        int _selectedX = UnityEngine.Random.Range(0, grid.GetLength(1));
+        int _selectedY = UnityEngine.Random.Range(0, grid.GetLength(0));
+
+        return new Coord(_selectedX, _selectedY);
+
     }
     public void InitializeGrid(BaseTile[,] _tilemap)
     {

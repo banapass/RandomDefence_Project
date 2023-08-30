@@ -31,7 +31,7 @@ public class BoardManager : Singleton<BoardManager>
 
             PlayBoardSequences(() =>
             {
-                WaveManager.Instance.Init(this, TableManager.Instance.GetStageInfo("stage01"));
+                WaveManager.Instance.Init(TableManager.Instance.GetStageInfo("stage01"));
                 // WaveManager.Instance.StartWayNavigate();
             });
 
@@ -140,7 +140,7 @@ public class BoardManager : Singleton<BoardManager>
             _instUnit.SetScale(_tile.GetUnitSize());
             _tile.SetUnit(_instUnit);
         });
-        GameManager.Instance.UseGold(Constants.UNIT_PRICE);
+
     }
     private void CreateNewUnit(UnitPlacementTile _tile, UnitRarity _rarity)
     {
@@ -152,6 +152,7 @@ public class BoardManager : Singleton<BoardManager>
             _instUnit.Init(_selectedUnit);
             _instUnit.SetScale(_tile.GetUnitSize());
             _tile.SetUnit(_instUnit);
+
         });
     }
     private void CreateBoard(Vector2 _tileSize, EmptyTile _tileRes)
@@ -235,13 +236,7 @@ public class BoardManager : Singleton<BoardManager>
 
 
     }
-    public void TryPlaceNewUnit()
-    {
-        if (!CanPlaceUnit()) return;
-        // unitPlacementTiles
 
-
-    }
     private bool CanPlaceUnit()
     {
         for (int i = unitPlacementTiles.Count - 1; i >= 0; i--)
@@ -252,6 +247,10 @@ public class BoardManager : Singleton<BoardManager>
 
         return false;
     }
+    public List<Node> GetCurrentPath() => pathfinding.Path;
+
+
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
@@ -264,7 +263,7 @@ public class BoardManager : Singleton<BoardManager>
             Gizmos.DrawWireCube(pathfinding.Path[i].worldPosition, Vector3.one);
         }
     }
-    public List<Node> GetCurrentPath() => pathfinding.Path;
+#endif
     // private void OnDrawGizmos()
     // {
     //     Gizmos.DrawWireCube(transform.position, Vector2.one);

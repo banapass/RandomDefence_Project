@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Debuff
+public class Debuff : IMemoryPool
 {
+    public string Key { get; set; }
+
     [field: SerializeField]
     public DebuffInfo Info { get; protected set; }
     public Unit Attacker { get; protected set; }
@@ -34,5 +36,9 @@ public class Debuff
     public void ResetTime()
     {
         elapsedTime = Info.duration;
+    }
+    public void Release()
+    {
+
     }
 }

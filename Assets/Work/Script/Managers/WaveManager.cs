@@ -5,7 +5,7 @@ using framework;
 
 public class WaveManager : Singleton<WaveManager>
 {
-    private BoardManager boardManager;
+    // private BoardManager boardManager;
     private StageInfo currStageInfo;
     private MonsterInfo currWaveMonster;
     private List<Monster> spawnMonsters;
@@ -16,11 +16,11 @@ public class WaveManager : Singleton<WaveManager>
     private int remainSpawnCount = 0;
     IEnumerator spawning;
 
-    public void Init(BoardManager _board, StageInfo _stageInfo)
+    public void Init(StageInfo _stageInfo)
     {
         spawnMonsters = new List<Monster>();
 
-        this.boardManager = _board;
+        // this.boardManager = _board;
         currStageInfo = _stageInfo;
         currRound = -1;
 
@@ -34,7 +34,7 @@ public class WaveManager : Singleton<WaveManager>
         ResourceStorage.GetComponentAsset<WayNavigator>("Prefab/Effect/WayNavigator", _way =>
         {
             wayNavigator = Instantiate(_way);
-            wayNavigator.SetPath(boardManager.GetCurrentPath());
+            wayNavigator.UpdatePath();
             wayNavigator.StartNavigate();
         });
     }
@@ -93,7 +93,7 @@ public class WaveManager : Singleton<WaveManager>
     {
         ObjectPoolManager.Instance.GetParts<Monster>(currWaveMonster.monsterId, _onComplete: _newMonster =>
         {
-            _newMonster.Init(currWaveMonster, boardManager.GetCurrentPath());
+            _newMonster.Init(currWaveMonster);
             spawnMonsters.Add(_newMonster);
             remainSpawnCount--;
 

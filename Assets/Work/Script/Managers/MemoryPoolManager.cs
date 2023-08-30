@@ -6,39 +6,28 @@ using framework;
 
 public class MemoryPoolManager : Singleton<MemoryPoolManager>
 {
-    private MemoryPool<Debuff> debuffPool;
-    private Dictionary<string, MemoryPool<object>> memoryDict;
+    private MemoryPool<IMemoryPool> memoryPool;
 
     public void Init()
     {
-        memoryDict = new Dictionary<string, MemoryPool<object>>();
-        debuffPool = new MemoryPool<Debuff>();
-        debuffPool.AddPool<Debuff>(Constants.DEBUFF_KEY, 10);
-
-
+        memoryPool = new MemoryPool<IMemoryPool>();
     }
 
-    public T Get<T>(string _key) where T : class, new()
+    public T Get<T>(string _key) where T : class, IMemoryPool, new()
     {
-        if (memoryDict.ContainsKey(_key))
-        {
-            return memoryDict[_key].Get<T>(_key);
-        }
-        else
-        {
+        return memoryPool.Get<T>(_key);
+    }
 
-            MemoryPool<T> _newPool = new MemoryPool<T>();
-            _newPool.AddPool<T>(_key, 5);
-            memoryDict.Add(_key, _newPool as MemoryPool<object>);
-            return _newPool.Get<T>(_key);
-        }
+    public void Release<T>(T _target) where T : class, IMemoryPool
+    {
+        memoryPool.Release(_target.Key, _target);
     }
     public Debuff GetDebuff()
     {
-        return debuffPool.Get<Debuff>(Constants.DEBUFF_KEY);
+        return Get<Debuff>(Constants.DEBUFF_KEY);
     }
-    public void ReleaseDebuff(Debuff _debuff)
+    public void ReleaseDebuff(IMemoryPool _debuff)
     {
-        debuffPool.Release(Constants.DEBUFF_KEY, _debuff);
+        Release(_debuff);
     }
 }

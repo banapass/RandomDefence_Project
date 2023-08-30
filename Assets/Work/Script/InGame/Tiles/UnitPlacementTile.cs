@@ -18,7 +18,11 @@ public class UnitPlacementTile : BaseTile
 
     public void SetUnit(Unit _unit)
     {
-        if (unit != null) return;
+        if (unit != null)
+        {
+            Destroy(_unit.gameObject);
+            return;
+        }
 
         unit = _unit;
         unit.transform.position = transform.position;
@@ -26,6 +30,8 @@ public class UnitPlacementTile : BaseTile
 
         SetTileDisplaySprite(unit.Info.rarity);
         OnPlacedNewUnit?.Invoke(this);
+
+        GameManager.Instance.UseGold(Constants.UNIT_PRICE);
     }
     private void SetTileDisplaySprite(UnitRarity _rarity)
     {
