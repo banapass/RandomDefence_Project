@@ -4,11 +4,12 @@ using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 
-public class Unit : MonoBehaviour , ISellable
+public class Unit : MonoBehaviour , ISellable , IObjectable
 {
     [field: SerializeField]
     public UnitInfo Info { get; protected set; }
     public ProjectileInfo ProjectileInfo => Info.projectileInfo;
+
     protected UnitPlacementTile placedTile;
     public bool HasDebuff => ProjectileInfo.debuffInfo != null;
     protected float currentCoolTime;
@@ -17,6 +18,8 @@ public class Unit : MonoBehaviour , ISellable
     public LayerMask TargetLayer => targetLayer;
 
     public int Price { get; set; } = 50;
+    public string ObjectID { get; set; }
+
 
     private void Awake()
     {
@@ -82,6 +85,11 @@ public class Unit : MonoBehaviour , ISellable
         placedTile = null;
 
         GameManager.Instance.GainGold(Price);
+    }
+
+    public void ReturnPool()
+    {
+        ObjectPoolManager.Instance.ReturnParts(this, ObjectID);
     }
 #endif
 }

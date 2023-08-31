@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UnitPlacementTile : PlacementTile
 {
+    public override PlacementTileType Type => PlacementTileType.Unit;
     public bool HasUnit => unit != null;
     public Unit InUnit => unit;
 
@@ -52,7 +53,7 @@ public class UnitPlacementTile : PlacementTile
         if (!HasUnit) return;
 
         SetTileDisplaySprite(UnitRarity.None);
-        Destroy(InUnit.gameObject);
+        InUnit.ReturnPool();
         unit = null;
     }
 

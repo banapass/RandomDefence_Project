@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class Logger
@@ -20,3 +21,4 @@ public class Logger
 
 #endif
 }
+

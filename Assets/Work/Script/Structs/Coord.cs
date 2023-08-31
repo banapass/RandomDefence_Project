@@ -53,7 +53,7 @@ public struct Coord
     }
     public static bool operator !=(Coord _coord1, Coord _coord2)
     {
-        return _coord1 != _coord2;
+        return _coord1.x != _coord2.x && _coord1.y != _coord2.y;
     }
 
     public static Coord operator +(Coord _coord1, Coord _coord2)

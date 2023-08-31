@@ -40,7 +40,31 @@ namespace framework
 
         }
 
-        private static async Task<T> LoadComponent<T>(string _path) where T : Component
+        public static async Task<GameObject> LoadGameObject(string _path)
+        {
+            if (resDict.ContainsKey(_path))
+            {
+                return resDict[_path] as GameObject;
+            }
+
+
+            var _handle = Addressables.LoadAssetAsync<GameObject>(_path);
+            await _handle.Task;
+
+            if (_handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                if (!resDict.ContainsKey(_path))
+                    resDict.Add(_path, _handle.Result);
+
+                return _handle.Result;
+            }
+            else
+            {
+                Debug.Log($"Load Asset Failed : {_handle.OperationException}");
+            }
+            return null;
+        }
+        public static async Task<T> LoadComponent<T>(string _path) where T : Component
         {
             var _handle = Addressables.LoadAssetAsync<GameObject>(_path);
             await _handle.Task;

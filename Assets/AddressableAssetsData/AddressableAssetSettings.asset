@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: ddb1524923198094283f1a8f992e378d
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: f72d401107e52a8e74af90b3e29ebd9d
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -92,6 +92,7 @@ MonoBehaviour:
     - Projectile
     - Effector
     - Unit
+    - Monster
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 85e8b82e0ba913e47bd405ceb30f861c, type: 2}

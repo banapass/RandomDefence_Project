@@ -35,3 +35,7 @@ public enum CostType
 {
     Wall, Unit
 }
+public enum PlacementTileType
+{
+    None , Unit
+}

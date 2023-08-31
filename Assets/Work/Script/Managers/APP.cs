@@ -33,7 +33,7 @@ public class APP : Singleton<APP>
 
         UIManager.Instance.Show(UiPath.LOADING, true, () =>
         {
-            LoadingManager.Instance.LoadScene("Scene/InGame", OnEnterInGame, "Effector", "Projectile", "Unit");
+            LoadingManager.Instance.LoadScene("Scene/InGame", OnEnterInGame, "Effector", "Projectile", "Unit","Pooling");
         });
 
 

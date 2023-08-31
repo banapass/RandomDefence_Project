@@ -7,6 +7,10 @@ public class AStarPathfinding
 {
     private Node startNode;
     private Node endNode;
+
+    public Node StartNode => startNode;
+    public Node EndNode => endNode;
+
     private Node[,] grid;
     private int gridSizeX, gridSizeY;
     private List<Node> path;
@@ -20,7 +24,7 @@ public class AStarPathfinding
         gridSizeY = mapSize.y;
         grid = new Node[gridSizeY, gridSizeX];
         InitializeGrid();
-        SetStartEndPoint();
+        //ShuffleStartEndPoint();
     }
     private IEnumerator StartAndEndPointSelecte()
     {
@@ -29,7 +33,7 @@ public class AStarPathfinding
 
         while (_count < 8)
         {
-            SetStartEndPoint();
+            ShuffleStartEndPoint();
             Vector2 _startPos = startNode.worldPosition;
             Vector2 _endPos = endNode.worldPosition;
 
@@ -37,14 +41,24 @@ public class AStarPathfinding
             yield return _sec;
         }
     }
-    private void SetStartEndPoint()
+    public void ShuffleStartEndPoint()
     {
         Coord _startCoord = GetRandomCoord();
         Coord _endCoord = GetRandomCoord();
 
         if (_startCoord == _endCoord)
         {
-            SetStartEndPoint();
+            ShuffleStartEndPoint();
+            return;
+        }
+
+        for(int i = 0; i < Coord.DIRECTIONS.Length; i++)
+        {
+            Coord _nextCoord = _startCoord + Coord.DIRECTIONS[i];
+
+            if (_endCoord != _nextCoord) continue;
+
+            ShuffleStartEndPoint();
             return;
         }
 
@@ -128,7 +142,7 @@ public class AStarPathfinding
     {
         if (startNode == null || endNode == null)
         {
-            SetStartEndPoint();
+            ShuffleStartEndPoint();
             Logger.LogError("Start or end node is null!");
             return path;
         }
@@ -151,7 +165,6 @@ public class AStarPathfinding
                 }
             }
 
-            // path.Add(currentNode.worldPosition);
             openSet.Remove(currentNode);
             closedSet.Add(currentNode);
 

@@ -14,7 +14,7 @@ public class EmptyTile : BaseTile
     public void SetInnerTile(PlacementTile _tile)
     {
         if (!IsPlaceable) return;
-        if (inTile != null) Destroy(inTile.gameObject);
+        if (inTile != null) inTile.ReturnPool();
 
         _tile.Init(this);
         _tile.transform.position = transform.position - Vector3.forward;
@@ -26,6 +26,7 @@ public class EmptyTile : BaseTile
     {
         if (IsPlaceable) return;
 
+        BoardManager.Instance.RemovePlacementTile(inTile);
         inTile = null;
 
         if (BoardManager.Instance.CheckPathImpactOnTileRemoval(this))

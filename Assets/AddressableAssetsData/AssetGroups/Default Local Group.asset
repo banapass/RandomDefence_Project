@@ -41,22 +41,26 @@ MonoBehaviour:
   - m_GUID: aecfd61bcb2b46549957d3814f95d1cb
     m_Address: Prefab/Monster/Monster02
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Monster
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e2cd4d2c33645c74bb45f7ef5a555e1f
     m_Address: Prefab/Monster/Monster03
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Monster
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6efd397c39f89e44c9bc0a449030867e
     m_Address: Prefab/Monster/Monster01
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Monster
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f6b1e28755e8b3945b87b0aec32f666b
     m_Address: Prefab/Monster/Monster04
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Monster
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4e0cae43f90bf8145979c165eecebcc1
     m_Address: DeadEffect
@@ -214,12 +218,25 @@ MonoBehaviour:
   - m_GUID: e0329124b0c616348ad537b9556602b9
     m_Address: unit004-effector
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Effector
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fbd55a8913289e44fb55e46985337a9b
     m_Address: Monster_Hpbar
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1cfb427a639bc1418a02630e00b8e32
+    m_Address: Destination
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Pooling
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f6e0d23f6c75524c8c2902a938c618b
+    m_Address: SpawnPoint
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Pooling
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 666a81586160cdf4a8f6fb30c36056ad, type: 2}

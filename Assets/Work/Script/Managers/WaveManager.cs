@@ -20,14 +20,11 @@ public class WaveManager : Singleton<WaveManager>
     {
         spawnMonsters = new List<Monster>();
 
-        // this.boardManager = _board;
         currStageInfo = _stageInfo;
         currRound = -1;
 
         MonsterPooling();
         StartWayNavigate();
-        // MemoryPool<Debuff> _debuffPool = new MemoryPool<Debuff>();
-        // _debuffPool.AddPool<SlowDebuff>(10);
     }
     public void StartWayNavigate()
     {

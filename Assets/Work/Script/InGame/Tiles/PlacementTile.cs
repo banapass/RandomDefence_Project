@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlacementTile : BaseTile, IObjectable, ISellable
 {
+    public virtual PlacementTileType Type => PlacementTileType.None;
     public override bool IsWalkable => false;
     public int Price { get; set ; }
     public string ObjectID { get ; set ; }

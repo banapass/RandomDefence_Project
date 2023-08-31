@@ -9,7 +9,6 @@ public class GameManager : Singleton<GameManager>
     private int currHeart;
     private int currGold;
 
-
     public bool IsBreakTime { get { return CurrentGameState == GameState.BreakTime; } }
     [field: SerializeField, ReadOnly] public GameState CurrentGameState { get; private set; }
 

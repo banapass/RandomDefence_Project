@@ -4,21 +4,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using framework;
+using System.Linq;
+using UnityEditor.AddressableAssets.GUI;
+using System.Threading.Tasks;
 
 public class BoardManager : Singleton<BoardManager>
 {
     [SerializeField] Transform boardArea;
     [SerializeField] EmptyTile[,] tileMap;
-    private List<UnitPlacementTile> unitPlacementTiles;
+    private List<PlacementTile> placementTiles;
     private List<UnitPlacementTile> upgradeTargetUnitTiles;
     private AStarPathfinding pathfinding;
+
+    private GameObject startPoint;
+    private GameObject endPoint;
+
+    private bool isVaildBoard = false;
 
     public static event Action OnChangedPath;
 
 
-    public void Init()
+    public async void Init()
     {
-        unitPlacementTiles = new List<UnitPlacementTile>();
+        placementTiles = new List<PlacementTile>();
+
+
+        await CreateStartEndPoint();
 
         ResourceStorage.GetComponentAsset<EmptyTile>("Prefab/Tile", _tile =>
         {
@@ -26,18 +37,50 @@ public class BoardManager : Singleton<BoardManager>
             pathfinding = new AStarPathfinding();
             pathfinding.Init();
             pathfinding.SynchronizeAt(tileMap, true, true);
-            pathfinding.FindPath();
-
 
             PlayBoardSequences(() =>
             {
-                WaveManager.Instance.Init(TableManager.Instance.GetStageInfo("stage01"));
-                // WaveManager.Instance.StartWayNavigate();
+                StartCoroutine(ShuffleStartEndPoint(12, 0.2f, OnSelectedStartEndPoint));
             });
 
         });
-        // ChangeGameState(GameState.BreakTime);
+    }
+    private IEnumerator ShuffleStartEndPoint(int _suffleCount , float _delayTime , Action _onComplete = null)
+    {
+        int _count = 0;
+        WaitForSeconds _delay = new WaitForSeconds(_delayTime);
 
+        while(_count < _suffleCount)
+        {
+            pathfinding.ShuffleStartEndPoint();
+            startPoint.transform.position = pathfinding.StartNode.worldPosition;
+            endPoint.transform.position = pathfinding.EndNode.worldPosition;
+
+            _count++;
+
+            yield return _delay;
+            
+        }
+        _onComplete?.Invoke();
+    }
+    private async Task CreateStartEndPoint()
+    {
+        startPoint = await ResourceStorage.LoadGameObject("SpawnPoint");
+        endPoint = await ResourceStorage.LoadGameObject("Destination");
+
+        startPoint = Instantiate(startPoint);
+        endPoint = Instantiate(endPoint);
+
+        //startPoint.SetActive(false);
+        //endPoint.SetActive(false);
+    }
+    private void OnSelectedStartEndPoint()
+    {
+        pathfinding.SynchronizeAt(tileMap, true, true);
+        pathfinding.FindPath();
+        isVaildBoard = true;
+
+        WaveManager.Instance.Init(TableManager.Instance.GetStageInfo("stage01"));
     }
     private void OnEnable()
     {
@@ -60,6 +103,7 @@ public class BoardManager : Singleton<BoardManager>
 
     private void OnTriedPlaceNewTile(EmptyTile _tile)
     {
+        if (!isVaildBoard) return;
         if (!pathfinding.IsCanPlaceTile(_tile)) return;
         if (GameManager.Instance.IsBreakTime)
         {
@@ -73,10 +117,12 @@ public class BoardManager : Singleton<BoardManager>
 
         GameManager.Instance.UseGold(Constants.UNITPLACEMENT_PRICE);
     }
+
     private void OnChangedGameState(GameState _state)
     {
         FadeInOutPath(_state == GameState.Playing);
     }
+
     private void FadeInOutPath(bool _fadeOut)
     {
         if (pathfinding == null) return;
@@ -105,9 +151,10 @@ public class BoardManager : Singleton<BoardManager>
         UnitRarity _nextRarity = _placedTile.InUnit.Info.rarity + 1;
 
 
-        for (int i = 0; i < unitPlacementTiles.Count; i++)
+        for (int i = 0; i < placementTiles.Count; i++)
         {
-            UnitPlacementTile _tile = unitPlacementTiles[i];
+            if (placementTiles[i].Type != PlacementTileType.Unit) continue;
+            UnitPlacementTile _tile = placementTiles[i] as UnitPlacementTile;
 
             if (!_tile.HasUnit) continue;
             if (upgradeTargetUnitTiles.Contains(_tile)) continue;
@@ -128,53 +175,51 @@ public class BoardManager : Singleton<BoardManager>
 
         upgradeTargetUnitTiles.Clear();
     }
+
     private bool IsUpgradableUnit(UnitRarity _rarity)
     {
         return _rarity + 1 <= UnitRarity.Legendary;
     }
+
     private void CreateNewUnit(UnitPlacementTile _tile)
     {
         UnitInfo _selectedUnit = TableManager.Instance.GetRandomUnitInfo();
 
         ResourceStorage.GetComponentAsset<Unit>(_selectedUnit.unitId, _rawUnit =>
         {
-            Unit _instUnit = Instantiate(_rawUnit);
-            _instUnit.Init(_selectedUnit,_tile);
-            _instUnit.SetScale(_tile.GetUnitSize());
-            _tile.SetUnit(_instUnit);
+            ObjectPoolManager.Instance.GetParts<Unit>(_selectedUnit.unitId,_onComplete: _unit =>
+            {
+                _unit.Init(_selectedUnit, _tile);
+                _unit.SetScale(_tile.GetUnitSize());
+                _tile.SetUnit(_unit);
+            }); 
         });
-
     }
+
     private void CreateNewUnit(UnitPlacementTile _tile, UnitRarity _rarity)
     {
         UnitInfo _selectedUnit = TableManager.Instance.GetRandomUnitInfoByRarity(_rarity);
 
         ResourceStorage.GetComponentAsset<Unit>(_selectedUnit.unitId, _rawUnit =>
         {
-            Unit _instUnit = Instantiate(_rawUnit);
-            _instUnit.Init(_selectedUnit,_tile);
-            _instUnit.SetScale(_tile.GetUnitSize());
-            _tile.SetUnit(_instUnit);
-
+            ObjectPoolManager.Instance.GetParts<Unit>(_selectedUnit.unitId, _onComplete: _unit =>
+            {
+                _unit.Init(_selectedUnit, _tile);
+                _unit.SetScale(_tile.GetUnitSize());
+                _tile.SetUnit(_unit);
+            });
         });
     }
+
     private void CreateBoard(Vector2 _tileSize, EmptyTile _tileRes)
     {
         bool _isOddNumberX = _tileSize.x % 2 != 0;
         bool _isOddNumberY = _tileSize.y % 2 != 0;
-        Vector2 _start = _tileSize / 2;
 
         tileMap = new EmptyTile[(int)_tileSize.y, (int)_tileSize.x];
 
-
         Vector2 _resolusionSize = (Vector2)boardArea.localScale / _tileSize;
         Vector2 _startPos = (Vector2)boardArea.transform.position + (-_tileSize * 0.5f) * _resolusionSize;
-
-        // EmptyTile _rawTile = ResourceStorage.GetResource<EmptyTile>("Prefab/Tile");
-
-        int _createCount = 0;
-
-
 
         for (int y = 0; y < _tileSize.y; y++)
         {
@@ -186,15 +231,10 @@ public class BoardManager : Singleton<BoardManager>
                 Vector2 _nextPos = new Vector2(x, y) * _resolusionSize;
                 if (!_isOddNumberX || !_isOddNumberY) _nextPos += Vector2.one * (_resolusionSize * 0.5f);
 
-                // _tile.SetTilePos(x, y);
                 _tile.name = string.Format($"({x} / {y})");
                 _tile.transform.position = _startPos + _nextPos;
                 _tile.SetCoord(new Coord(x, y));
                 _tile.SetDefaultSize(_resolusionSize);
-
-
-
-                _createCount++;
 
                 tileMap[y, x] = _tile;
             }
@@ -220,6 +260,7 @@ public class BoardManager : Singleton<BoardManager>
         _boardSeq.OnComplete(() => _onComplete?.Invoke());
         _boardSeq.Play();
     }
+
     private void CreateUnitPlacementTile(EmptyTile _tile)
     {
         framework.ResourceStorage.GetComponentAsset<UnitPlacementTile>(Constants.UNITPLACEMENT_PATH, _unitTile =>
@@ -229,7 +270,7 @@ public class BoardManager : Singleton<BoardManager>
             ObjectPoolManager.Instance.GetParts<UnitPlacementTile>(Constants.UNITPLACEMENT_PATH, _onComplete:_placementTile =>
             {
                 _tile.SetInnerTile(_placementTile);
-                unitPlacementTiles.Add(_placementTile);
+                placementTiles.Add(_placementTile);
 
                 pathfinding.SynchronizeAt(tileMap, true);
                 pathfinding.FindPath();
@@ -240,16 +281,16 @@ public class BoardManager : Singleton<BoardManager>
         });
     }
 
-    private bool CanPlaceUnit()
-    {
-        for (int i = unitPlacementTiles.Count - 1; i >= 0; i--)
-        {
-            if (unitPlacementTiles[i].HasUnit) continue;
-            return true;
-        }
+    //private bool CanPlaceUnit()
+    //{
+    //    for (int i = placementTiles.Count - 1; i >= 0; i--)
+    //    {
+    //        if (placementTiles[i].HasUnit) continue;
+    //        return true;
+    //    }
 
-        return false;
-    }
+    //    return false;
+    //}
     public bool CheckPathImpactOnTileRemoval(EmptyTile _tile)
     {
         List<Node> _path = pathfinding.Path;
@@ -263,18 +304,8 @@ public class BoardManager : Singleton<BoardManager>
 
                 if (_path[i].coord == _nextCoord) return true;
             }
-            //bool _isContainsCoord = _removeCoord.x == _path[i].coord.x && _removeCoord.y == _path[i].coord.y;
         }
-        //for (int i = 0; i  < unitPlacementTiles.Count; i++)
-        //{
-        //    for(int j = 0; j < Coord.DIRECTIONS.Length;j++)
-        //    {
-        //        Coord _currCoord = unitPlacementTiles[i].GetCoord();
-        //        Coord _nextCoord = _currCoord + Coord.DIRECTIONS[j];
-
-        //        if (_nextCoord == _tile.TileCoord) return true;
-        //    }
-        //}
+        
         return false;
     }
     public void OnTriedSell(ISellable _sellable)
@@ -303,6 +334,13 @@ public class BoardManager : Singleton<BoardManager>
         {
             Gizmos.DrawWireCube(pathfinding.Path[i].worldPosition, Vector3.one);
         }
+    }
+
+    public void RemovePlacementTile(PlacementTile inTile)
+    {
+        if (!placementTiles.Contains(inTile)) return;
+
+        placementTiles.Remove(inTile);
     }
 #endif
     // private void OnDrawGizmos()
