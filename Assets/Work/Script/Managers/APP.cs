@@ -42,13 +42,13 @@ public class APP : Singleton<APP>
         //     // UIManager.Instance.Show(UiPath.INGAME, false, OnEnterInGame);
         // }));
     }
-    private IEnumerator ChangeScene(System.Action _onLoaded)
-    {
-        var _handle = Addressables.LoadSceneAsync("Scene/Loading", LoadSceneMode.Additive);
-        yield return _handle.Task;
+    //private IEnumerator ChangeScene(System.Action _onLoaded)
+    //{
+    //    var _handle = Addressables.LoadSceneAsync("Scene/Loading", LoadSceneMode.Additive);
+    //    yield return _handle.Task;
 
-        _onLoaded?.Invoke();
-    }
+    //    _onLoaded?.Invoke();
+    //}
     private void OnEnterInGame()
     {
         UIManager.Instance.Show(UiPath.INGAME, false, () =>
@@ -58,13 +58,6 @@ public class APP : Singleton<APP>
             BoardManager.Instance.Init();
             GameManager.Instance.ChangeGameState(GameState.BreakTime);
             InputController.Instance.Init();
-
-            // ResourceStorage.GetComponentAsset<Slider>(Constants.MONSTER_HPBAR, _res =>
-            // {
-            //     ObjectPoolManager.Instance.AddPool<Slider>(_res, 10, Constants.MONSTER_HPBAR, UIManager.Instance.CurrentPage.transform);
-            // });
-
-
         });
     }
     public async Task ResourcesLoad()

@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6320839231491869514}
   - component: {fileID: 1733553914635598063}
-  - component: {fileID: 3815970562462149787}
   - component: {fileID: 7783146657975093321}
+  - component: {fileID: -6093224535329471651}
   m_Layer: 0
   m_Name: unit-003
   m_TagString: Untagged
@@ -86,33 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3815970562462149787
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8603463926628691176}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 983bf4add1a36cb4d94d68778513040b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Info>k__BackingField:
-    unitId: 
-    rarity: 0
-    atk: 0
-    range: 0
-    coolTime: 0
-    projectileInfo:
-      prefab: 
-      effector: 
-      speed: 0
-      count: 0
-      radius: 0
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!61 &7783146657975093321
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -158,3 +131,31 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-6093224535329471651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8603463926628691176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e519f0617a1924499c12beda9fea0a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Info>k__BackingField:
+    unitId: 
+    rarity: 0
+    atk: 0
+    range: 0
+    coolTime: 0
+    projectileInfo:
+      prefab: 
+      effector: 
+      speed: 0
+      count: 0
+      radius: 0
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  angle: 45

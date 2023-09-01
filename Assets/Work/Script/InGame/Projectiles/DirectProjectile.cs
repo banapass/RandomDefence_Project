@@ -7,32 +7,36 @@ using UniRx.Triggers;
 public class DirectProjectile : ProjectileBase
 {
     private Vector3 direction;
-    private float speed = 3;
     private float addTime = 0;
     private List<Monster> hitMonsters;
     private System.IDisposable updateObserver;
 
-    public override void Init(Unit _unit, Monster _monster)
+    public override void Init(Unit _unit, Monster _monster , Vector2 _dir)
     {
         base.Init(_unit, _monster);
         if (hitMonsters == null) hitMonsters = new List<Monster>();
 
-        direction = (_monster.transform.position - _unit.transform.position).normalized;
+        direction = _dir; //(_monster.transform.position - _unit.transform.position).normalized;
         transform.position = _unit.transform.position;
         transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
 
-        addTime = 0;
-
-        updateObserver = this.UpdateAsObservable()
-        .Subscribe(_ => UpdateProjectile());
+        //updateObserver = this.UpdateAsObservable()
+        //.Subscribe(_ => UpdateProjectile());
     }
 
     private void OnDisable()
     {
-        if (updateObserver == null) return;
+        hitMonsters?.Clear();
+        addTime = 0;
 
-        updateObserver.Dispose();
-        updateObserver = null;
+        //if (updateObserver == null) return;
+
+        //updateObserver.Dispose();
+        //updateObserver = null;
+    }
+    private void Update()
+    {
+        UpdateProjectile();
     }
     private void UpdateProjectile()
     {
@@ -53,5 +57,10 @@ public class DirectProjectile : ProjectileBase
         hitMonsters.Add(_hitMonster);
         _hitMonster.TakeDamage(unit.CalculateDamage());
         TryApplyDebuff(_hitMonster);
+    }
+
+    private void OnBecameInvisible()
+    {
+        ReturnPool();
     }
 }

@@ -43,7 +43,7 @@ public class ObjectPool<T> where T : Component
             if (temp.gameObject.GetComponent<IObjectable>() != null)
                 temp.gameObject.GetComponent<IObjectable>().ObjectID = _key;
             else
-                Logger.LogError("[ObjectPoolManager/CreatePool] ObjectID Setting Error : IObjectable Is null");
+                Log.Logger.LogError("[ObjectPoolManager/CreatePool] ObjectID Setting Error : IObjectable Is null");
 
             pool.Enqueue(temp);
             temp.gameObject.SetActive(false);
@@ -99,7 +99,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
         ObjectSet<Component> _objSet = new ObjectSet<Component>(_obj, _createCount);
         objectPool.CreatePool(_objSet, _targetParent, _key);
 
-        poolList.Add(_key, objectPool as ObjectPool<Component>);
+        poolList.Add(_key, objectPool);
     }
     public bool IsExist(string _prefabName)
     {
@@ -125,7 +125,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
         }
         else
         {
-            Debug.LogError("GetObjectError : Object Key is Not Founded");
+            Log.Logger.LogError("GetObjectError : Object Key is Not Founded");
             return null;
         }
     }
@@ -145,7 +145,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
                 if (newObj.GetComponent<IObjectable>() != null)
                     newObj.GetComponent<IObjectable>().ObjectID = _key;
                 else
-                    Logger.LogError("Object Key Setting Failed : IObjetable Is null}");
+                    Log.Logger.LogError("Object Key Setting Failed : IObjetable Is null}");
 
                 _onComplete?.Invoke(newObj as T);
             }
@@ -181,7 +181,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
         }
         else
         {
-            Logger.LogError($"ReturnObjectError : Object Key is Not Founded {_objName}");
+            Log.Logger.LogError($"ReturnObjectError : Object Key is Not Founded {_objName}");
         }
     }
     private void OnDestroy()

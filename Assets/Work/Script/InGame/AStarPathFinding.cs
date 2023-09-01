@@ -143,7 +143,7 @@ public class AStarPathfinding
         if (startNode == null || endNode == null)
         {
             ShuffleStartEndPoint();
-            Logger.LogError("Start or end node is null!");
+            Log.Logger.LogError("Start or end node is null!");
             return path;
         }
 

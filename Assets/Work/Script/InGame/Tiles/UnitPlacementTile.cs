@@ -79,7 +79,7 @@ public class UnitPlacementTile : PlacementTile
     {
         if (HasUnit) return;
 
-        Logger.Log($"유닛 설치 타일 판매 : {Price}");
+        Log.Logger.Log($"유닛 설치 타일 판매 : {Price}");
         GameManager.Instance.GainGold(Price);
         ReturnPool();
 

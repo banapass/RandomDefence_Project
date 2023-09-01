@@ -14,7 +14,7 @@ public class MemoryPool<T> where T : class, IMemoryPool
     {
         if (poolDict.ContainsKey(_key))
         {
-            Logger.LogError("같은 Key값의 Pool 추가하려고 하고 있습니다");
+            Log.Logger.LogError("같은 Key값의 Pool 추가하려고 하고 있습니다");
             return;
         }
 
@@ -35,7 +35,7 @@ public class MemoryPool<T> where T : class, IMemoryPool
 
         if (!poolDict.ContainsKey(_key))
         {
-            Logger.LogWarning("풀안에 존재하지 않는 키값 입니다 새로운 풀을 생성합니다");
+            Log.Logger.LogWarning("풀안에 존재하지 않는 키값 입니다 새로운 풀을 생성합니다");
             AddPool<Child>(_key, 1);
             // return default(Child);
         }
@@ -55,7 +55,7 @@ public class MemoryPool<T> where T : class, IMemoryPool
     public void Release(string _key, T _item)
     {
         if (poolDict[_key].Contains(_item))
-            Logger.Log("이미 풀안에 들어가 있는 메모리를 다시 넣으려고 하고있습니다.");
+            Log.Logger.Log("이미 풀안에 들어가 있는 메모리를 다시 넣으려고 하고있습니다.");
 
         poolDict[_key].Enqueue(_item);
     }

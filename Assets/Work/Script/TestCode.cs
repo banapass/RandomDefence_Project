@@ -128,17 +128,15 @@ public class TestCode : MonoBehaviour
 
         _onLoadCompleted?.Invoke();
     }
-    public void LaunchProjectile()
+    public void LaunchProjectile(Vector2 _dir)
     {
-
-        Vector2 targetDirection = Vector2.right;
         float angleStep = angle / (count - 1);  // 각도 간격 계산
         float halfAngle = angle / 2;
 
         for (int i = 0; i < count; i++)
         {
             float currentAngle = -halfAngle + i * angleStep;
-            Vector2 direction = Quaternion.Euler(0f, 0f, currentAngle) * targetDirection;
+            Vector2 direction = Quaternion.Euler(0f, 0f, currentAngle) * _dir;
 
             DebugDrawLaunchDirection(Vector2.zero, direction);
         }

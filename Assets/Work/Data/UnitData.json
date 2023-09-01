@@ -22,11 +22,11 @@
         "rarity": "Uncommon",
         "atk": 20,
         "range": 1,
-        "coolTime": 5,
+        "coolTime": 1.5,
         "projectileInfo": {
             "prefab": "unit002-projectile",
             "count": 1,
-            "speed": 3
+            "speed": 10
         }
     },
     {
@@ -34,11 +34,11 @@
         "rarity": "Rare",
         "atk": 30,
         "range": 1,
-        "coolTime": 2,
+        "coolTime": 1,
         "projectileInfo": {
             "prefab": "unit003-projectile",
-            "count": 1,
-            "speed": 3
+            "count": 3,
+            "speed": 10
         }
     },
     {
@@ -46,12 +46,12 @@
         "rarity": "Epic",
         "atk": 50,
         "range": 1,
-        "coolTime": 3,
+        "coolTime": 0.9,
         "projectileInfo": {
             "prefab": "unit004-projectile",
             "effector": "unit004-effector",
             "count": 1,
-            "speed": 3,
+            "speed": 10,
             "radius": 2
         }
     },
@@ -64,7 +64,7 @@
         "projectileInfo": {
             "prefab": "unit005-projectile",
             "count": 1,
-            "speed": 5,
+            "speed": 10,
             "debuffInfo": {
                 "chanceOfDebuff": 0.4,
                 "intensity": 0.3,
@@ -82,7 +82,7 @@
         "projectileInfo": {
             "prefab": "unit006-projectile",
             "count": 1,
-            "speed": 5
+            "speed": 10
         }
     }
 ]

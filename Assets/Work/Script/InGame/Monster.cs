@@ -39,7 +39,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         currentPathIndex = 0;
         transform.position = path[currentPathIndex].worldPosition;
 
-        if (path == null) Logger.LogError("Monster Init Failed : Path Is Null");
+        if (path == null) Log.Logger.LogError("Monster Init Failed : Path Is Null");
 
         SetUpHpSlider();
         InitDebuffs();
@@ -102,12 +102,12 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
         if (!isDestination)
         {
-            Logger.Log("몬스터를 처치했습니다");
+            Log.Logger.Log("몬스터를 처치했습니다");
             OnDeath(this);
         }
         else
         {
-            Logger.Log("몬스터가 최종 목적지에 도착했습니다");
+            Log.Logger.Log("몬스터가 최종 목적지에 도착했습니다");
 
             OnDeath(this);
             OnArrivalLastDestination?.Invoke();

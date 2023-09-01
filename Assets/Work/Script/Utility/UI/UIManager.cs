@@ -20,11 +20,17 @@ namespace framework
         [field: SerializeField, ReadOnly]
         public BaseUi CurrentPage { get; private set; }
 
+        public void Init()
+        {
+            uiDict = new Dictionary<string, BaseUi>();
+            popupQueue = new Queue<BaseUi>();
+        }
+
         public void Show(string _uiPath, bool _isPopup, System.Action _onOpen = null)
         {
             if (uiDict.ContainsKey(_uiPath))
             {
-                Debug.LogError("이미 생성된 UI를 보여주려고 하고있습니다.");
+                Log.Logger.LogError("이미 생성된 UI를 보여주려고 하고있습니다.");
                 return;
             }
 

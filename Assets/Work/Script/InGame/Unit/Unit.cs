@@ -17,11 +17,11 @@ public class Unit : MonoBehaviour , ISellable , IObjectable
     [SerializeField, ReadOnly] protected LayerMask targetLayer;
     public LayerMask TargetLayer => targetLayer;
 
-    public int Price { get; set; } = 50;
     public string ObjectID { get; set; }
+    public int Price { get; set; } = 50;
 
 
-    private void Awake()
+    protected void Awake()
     {
         targetLayer = 1 << LayerMask.NameToLayer("Monster");
     }
