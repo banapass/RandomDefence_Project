@@ -17,11 +17,13 @@ public class InGamePage : BaseUi
 
     [Header("Text")]
     [SerializeField] TextMeshProUGUI gold_txt;
+    [SerializeField] TextMeshProUGUI round_txt;
 
     [SerializeField] Heart[] hearts;
 
 
     private const string GOLD_FORMAT = "{0} G";
+    private const string ROUND_FORMAT = "Round {0}";
     public static event Action<PlacementState> OnChangePlacementState;
 
     public override void OnOpen()
@@ -45,12 +47,19 @@ public class InGamePage : BaseUi
         GameManager.OnChangedGameState += OnChangedGameState;
         GameManager.OnLifeDamaged += OnLifeDamaged;
         GameManager.OnChangedGold += UpdateCost;
+        WaveManager.OnChangedRound += OnChangedRound;
     }
     private void OnDisable()
     {
         GameManager.OnChangedGameState -= OnChangedGameState;
         GameManager.OnLifeDamaged -= OnLifeDamaged;
         GameManager.OnChangedGold -= UpdateCost;
+        WaveManager.OnChangedRound -= OnChangedRound;
+    }
+
+    private void OnChangedRound(int _currRound)
+    {
+        round_txt.text = string.Format(ROUND_FORMAT, _currRound);
     }
 
     private void OnChangedGameState(GameState _changedStage)

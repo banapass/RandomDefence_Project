@@ -156,6 +156,7 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
             // AddPool<T>(await framework.ResourceStorage.GetResource<T>(_objName), 5, _objName);
             // return GetParts<T>(_objName);
 
+            Log.Logger.LogWarning($"Object의 Key값이 존재하지않아 새로운 풀을 생성합니다 : {_key}");
             framework.ResourceStorage.GetComponentAsset<T>(_key, _comp =>
             {
                 Transform _targetParent = _isUi ? uiParent : this.transform;

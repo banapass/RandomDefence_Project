@@ -58,9 +58,4 @@ public class DirectProjectile : ProjectileBase
         _hitMonster.TakeDamage(unit.CalculateDamage());
         TryApplyDebuff(_hitMonster);
     }
-
-    private void OnBecameInvisible()
-    {
-        ReturnPool();
-    }
 }

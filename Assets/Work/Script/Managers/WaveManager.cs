@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using framework;
+using System;
 
 public class WaveManager : Singleton<WaveManager>
 {
     // private BoardManager boardManager;
     private StageInfo currStageInfo;
-    private MonsterInfo currWaveMonster;
+    private MonsterInfo currWaveMonsterInfo;
+    private MonsterStatInfo currWaveStatInfo;
     private List<Monster> spawnMonsters;
 
     private WayNavigator wayNavigator;
@@ -15,6 +17,8 @@ public class WaveManager : Singleton<WaveManager>
     private int currRound;
     private int remainSpawnCount = 0;
     IEnumerator spawning;
+
+    public static Action<int> OnChangedRound;
 
     public void Init(StageInfo _stageInfo)
     {
@@ -45,16 +49,15 @@ public class WaveManager : Singleton<WaveManager>
     }
     private void MonsterPooling()
     {
-        var _monsterInfos = TableManager.Instance.GetAllMonsterInfo();
+        //var _monsterInfos = TableManager.Instance.GetAllMonsterInfo();
 
-        for (int i = 0; i < _monsterInfos.Count; i++)
-        {
-            ResourceStorage.GetComponentAsset<Monster, string>(_monsterInfos[i].prefabPath, (_monster, _monsterId) =>
-            {
-                ObjectPoolManager.Instance.AddPool<Monster>(_monster, 40, _monsterId);
-            }, _monsterInfos[i].monsterId);
-
-        }
+        //for (int i = 0; i < _monsterInfos.Count; i++)
+        //{
+        //    ResourceStorage.GetComponentAsset<Monster, string>(_monsterInfos[i].prefabPath, (_monster, _monsterId) =>
+        //    {
+        //        ObjectPoolManager.Instance.AddPool<Monster>(_monster, 10, _monsterId);
+        //    }, _monsterInfos[i].monsterId);
+        //}
     }
     public void StartNextRound()
     {
@@ -64,11 +67,14 @@ public class WaveManager : Singleton<WaveManager>
             spawning = Spawning();
 
         currRound++;
-        currWaveMonster = TableManager.Instance.GetMonsterInfo(currStageInfo.rounds[currRound].monsterId);
+        currWaveMonsterInfo = TableManager.Instance.GetMonsterInfo(currStageInfo.rounds[currRound].monsterId);
+        currWaveStatInfo = currStageInfo.rounds[currRound].monsterStatInfo;
         remainSpawnCount = currStageInfo.rounds[currRound].spawnCount;
 
         GameManager.Instance.ChangeGameState(GameState.Playing);
         StartCoroutine(spawning);
+
+        OnChangedRound?.Invoke(currRound + 1);
     }
     public void StopSpawning()
     {
@@ -88,9 +94,9 @@ public class WaveManager : Singleton<WaveManager>
     }
     private void SpawnMonster()
     {
-        ObjectPoolManager.Instance.GetParts<Monster>(currWaveMonster.monsterId, _onComplete: _newMonster =>
+        ObjectPoolManager.Instance.GetParts<Monster>(currWaveMonsterInfo.prefabPath, _onComplete: _newMonster =>
         {
-            _newMonster.Init(currWaveMonster);
+            _newMonster.Init(currWaveStatInfo);
             spawnMonsters.Add(_newMonster);
             remainSpawnCount--;
 

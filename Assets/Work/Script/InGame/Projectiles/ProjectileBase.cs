@@ -66,4 +66,10 @@ abstract public class ProjectileBase : MonoBehaviour, IObjectable
     {
         return unit.ProjectileInfo.speed;
     }
+
+    protected void OnBecameInvisible()
+    {
+        Log.Logger.Log("Return Projectile");
+        ReturnPool();
+    }
 }

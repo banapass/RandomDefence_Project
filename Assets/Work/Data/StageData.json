@@ -4,19 +4,59 @@
         "rounds": [
             {
                 "monsterId": "1001",
+                "monsterStatInfo": {
+                    "hp": 100,
+                    "speed": 1.5
+                },
                 "spawnCount": 40
             },
             {
                 "monsterId": "1002",
-                "spawnCount": 40
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 200,
+                    "speed": 1.5
+                }
             },
             {
                 "monsterId": "1003",
-                "spawnCount": 40
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 300,
+                    "speed": 1.5
+                }
             },
             {
                 "monsterId": "1004",
-                "spawnCount": 40
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 400,
+                    "speed": 1.5
+                }
+            },
+            {
+                "monsterId": "1001",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 500,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1001",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 600,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1001",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 700,
+                    "speed": 1
+                }
             }
         ]
     }

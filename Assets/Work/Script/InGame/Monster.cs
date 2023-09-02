@@ -8,7 +8,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
     public string ObjectID { get; set; }
 
-    private MonsterInfo inMonsterInfo;
+    private MonsterStatInfo statInfo;
     [SerializeField, ReadOnly] private float currHp;
     private MonsterHpSlider hpSlider;
 
@@ -29,10 +29,10 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     public static event Action OnArrivalLastDestination;
 
 
-    public void Init(MonsterInfo _monsterInfo)
+    public void Init(MonsterStatInfo _monsterStatInfo)
     {
-        this.inMonsterInfo = _monsterInfo;
-        this.currHp = inMonsterInfo.hp;
+        this.statInfo = _monsterStatInfo;
+        this.currHp = statInfo.hp;
         this.path = BoardManager.Instance.GetCurrentPath();
 
         isDead = false;
@@ -165,7 +165,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     
     private float GetHPPercent()
     {
-        return currHp / this.inMonsterInfo.hp;
+        return currHp / this.statInfo.hp;
     }
 
     private Vector2 GetHPBarPosition()
@@ -190,7 +190,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
         _slowIntensity = _slowIntensity > Constants.MAX_SLOW ? Constants.MAX_SLOW : _slowIntensity;
 
-        return inMonsterInfo.speed - inMonsterInfo.speed * _slowIntensity;
+        return statInfo.speed - statInfo.speed * _slowIntensity;
     }
 
     #region Debuff 관련
