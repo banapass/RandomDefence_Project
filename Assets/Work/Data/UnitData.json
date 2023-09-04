@@ -84,5 +84,17 @@
             "count": 1,
             "speed": 10
         }
+    },
+    {
+        "unitId": "unit007",
+        "rarity": "Epic",
+        "range": 1,
+        "atk": 25,
+        "coolTime": 1,
+        "projectileInfo": {
+            "prefab": "unit007-projectile",
+            "count": 5,
+            "speed": 10
+        }
     }
 ]

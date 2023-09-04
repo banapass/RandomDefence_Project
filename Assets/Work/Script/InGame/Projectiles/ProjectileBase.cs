@@ -13,11 +13,12 @@ abstract public class ProjectileBase : MonoBehaviour, IObjectable
         unit = _unit;
         target = _monster;
     }
-    public virtual void Init(Unit _unit, Monster _monster, Vector2 _dir)
+    public virtual void Init(Unit _unit , Monster _monster , Vector2 _dir)
     {
         unit = _unit;
         target = _monster;
     }
+    public virtual void SetDirection(Vector2 _dir) { }
 
     public void ReturnPool()
     {

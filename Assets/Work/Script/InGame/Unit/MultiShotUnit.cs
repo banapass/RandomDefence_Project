@@ -23,7 +23,7 @@ public class MultiShotUnit : Unit
     public void LaunchProjectile(Monster _target)
     {
         Vector2 _dir = (_target.transform.position - transform.position).normalized;
-        float angleStep = angle / (ProjectileInfo.count - 1);  // 각도 간격 계산
+        float angleStep = angle / (ProjectileInfo.count - 1);
         float halfAngle = angle / 2;
 
         for (int i = 0; i < ProjectileInfo.count; i++)

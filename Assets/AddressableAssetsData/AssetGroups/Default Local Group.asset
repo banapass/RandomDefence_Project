@@ -238,6 +238,17 @@ MonoBehaviour:
     m_SerializedLabels:
     - Pooling
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3b5a1283ef85374ba8732b20a0cfc85
+    m_Address: unit007
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5a4231e54fd784047a4f51609ff46088
+    m_Address: unit007-projectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 666a81586160cdf4a8f6fb30c36056ad, type: 2}
   m_SchemaSet:

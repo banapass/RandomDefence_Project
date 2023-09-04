@@ -11,17 +11,30 @@ public class DirectProjectile : ProjectileBase
     private List<Monster> hitMonsters;
     private System.IDisposable updateObserver;
 
-    public override void Init(Unit _unit, Monster _monster , Vector2 _dir)
+    public override void Init(Unit _unit, Monster _monster)
     {
         base.Init(_unit, _monster);
         if (hitMonsters == null) hitMonsters = new List<Monster>();
 
-        direction = _dir; //(_monster.transform.position - _unit.transform.position).normalized;
+        direction = (_monster.transform.position - _unit.transform.position).normalized;
         transform.position = _unit.transform.position;
         transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
 
         //updateObserver = this.UpdateAsObservable()
         //.Subscribe(_ => UpdateProjectile());
+    }
+    public override void Init(Unit _unit, Monster _monster, Vector2 _dir)
+    {
+        base.Init(_unit, _monster, _dir);
+        if (hitMonsters == null) hitMonsters = new List<Monster>();
+
+        direction = _dir;
+        transform.position = _unit.transform.position;
+        transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
+    }
+    public override void SetDirection(Vector2 _dir)
+    {
+        direction = _dir;
     }
 
     private void OnDisable()
