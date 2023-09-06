@@ -126,6 +126,7 @@ public class BoardManager : Singleton<BoardManager>
     private void FadeInOutPath(bool _fadeOut)
     {
         if (pathfinding == null) return;
+        if (pathfinding.Path == null) return;
 
         List<Node> _currPath = pathfinding.Path;
         for (int i = 0; i < _currPath.Count; i++)
@@ -336,6 +337,10 @@ public class BoardManager : Singleton<BoardManager>
         }
     }
 
+    public override bool IsDontDestroyOnLoad()
+    {
+        return false;
+    }
     public void RemovePlacementTile(PlacementTile inTile)
     {
         if (!placementTiles.Contains(inTile)) return;

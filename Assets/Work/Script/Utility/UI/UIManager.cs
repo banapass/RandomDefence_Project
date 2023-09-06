@@ -14,8 +14,9 @@ namespace framework
         [SerializeField] RectTransform pageRect;
         [SerializeField] Transform popupCanvas;
         [SerializeField] RectTransform popupRect;
+        [SerializeField] Transform propRoot; 
 
-        public Transform UIParent { get { return pageCanvas; } }
+        public Transform UIPropRoot { get { return propRoot; } }
 
         [field: SerializeField, ReadOnly]
         public BaseUi CurrentPage { get; private set; }

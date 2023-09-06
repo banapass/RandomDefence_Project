@@ -31,7 +31,8 @@ public class GameManager : Singleton<GameManager>
     public void GameStart()
     {
         currHeart = Constants.MAX_LIFE;
-        GainGold(Constants.START_GOLD);
+        currGold = Constants.START_GOLD;
+        OnChangedGold?.Invoke(currGold);
     }
 
     public void ChangeGameState(GameState _gameState)
@@ -44,12 +45,15 @@ public class GameManager : Singleton<GameManager>
 
     public void TakeDamage()
     {
+        if (CurrentGameState == GameState.GameOver) return;
+
         currHeart--;
 
         if (currHeart <= 0)
         {
             ChangeGameState(GameState.GameOver);
             currHeart = 0;
+            OpenGameOverUI();
         }
 
         OnLifeDamaged?.Invoke(currHeart);
@@ -81,6 +85,13 @@ public class GameManager : Singleton<GameManager>
     public void OnMonsterDeath(Monster _monster)
     {
         GainGold(10);
+    }
+    public void OpenGameOverUI()
+    {
+        UIManager.Instance.Show(UIPath.GAMEOVER, true, () =>
+        {
+            Log.Logger.Log("Open GameOver Popup");
+        });
     }
 
 }

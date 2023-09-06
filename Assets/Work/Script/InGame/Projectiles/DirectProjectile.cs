@@ -32,10 +32,6 @@ public class DirectProjectile : ProjectileBase
         transform.position = _unit.transform.position;
         transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
     }
-    public override void SetDirection(Vector2 _dir)
-    {
-        direction = _dir;
-    }
 
     private void OnDisable()
     {
@@ -53,7 +49,7 @@ public class DirectProjectile : ProjectileBase
     }
     private void UpdateProjectile()
     {
-        if (addTime > Constants.PROJECTILE_LIFETIME)
+        if (addTime > Constants.PROJECTILE_LIFETIME || unit.enabled == false)
         {
             ReturnPool();
             return;
@@ -65,10 +61,21 @@ public class DirectProjectile : ProjectileBase
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.TryGetComponent<Monster>(out var _hitMonster)) return;
+
+        OnCollisionMonster(_hitMonster);
+
+        //hitMonsters.Add(_hitMonster);
+        //_hitMonster.TakeDamage(unit.CalculateDamage());
+        //TryApplyDebuff(_hitMonster);
+    }
+
+    protected override void OnCollisionMonster(Monster _hitMonster)
+    {
         if (hitMonsters.Contains(_hitMonster)) return;
 
         hitMonsters.Add(_hitMonster);
         _hitMonster.TakeDamage(unit.CalculateDamage());
         TryApplyDebuff(_hitMonster);
+        TryShowEffect();
     }
 }

@@ -9,6 +9,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using TMPro;
 using UnityEditor;
+using static UnityEditor.Timeline.Actions.MenuPriority;
 
 public class TestCode : MonoBehaviour
 {
@@ -146,4 +147,24 @@ public class TestCode : MonoBehaviour
     {
         Debug.DrawRay(startPos, direction, Color.red, 1f);
     }
+    //private void LerpToTarget()
+    //{
+    //    if (addTime > 1)
+    //    {
+    //        OnCollisionMonster(null);
+    //        ReturnPool();
+    //        return;
+    //    }
+
+    //    Vector2 _startPoint = unit.transform.position;
+    //    Vector2 _middlePoint = _startPoint + direction;
+    //    Vector2 _endPoint = target.transform.position;
+
+    //    Vector2 _point1 = Vector2.LerpUnclamped(_startPoint, _middlePoint, addTime);
+    //    Vector2 _point2 = Vector2.LerpUnclamped(_middlePoint, _endPoint, addTime);
+    //    Vector2 _point3 = Vector2.LerpUnclamped(_point1, _point2, addTime);
+
+    //    addTime += Time.deltaTime * unit.ProjectileInfo.speed;
+    //    transform.position = _point3;
+    //}
 }

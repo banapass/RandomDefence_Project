@@ -36,6 +36,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         this.path = BoardManager.Instance.GetCurrentPath();
 
         isDead = false;
+        isDestination = false;
         currentPathIndex = 0;
         transform.position = path[currentPathIndex].worldPosition;
 
@@ -48,9 +49,26 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     {
         if (path == null) return;
         if (isDestination) return;
+
         FollowPath();
         UpdateDebuff(Time.deltaTime);
         UpdateHpSliderPosition();
+    }
+    private void OnEnable()
+    {
+        GameManager.OnChangedGameState += OnChangedGameState;
+    }
+
+    private void OnChangedGameState(GameState _state)
+    {
+        if (_state != GameState.GameOver) return;
+        OnDie();
+        if (hpSlider != null) Destroy(hpSlider.gameObject);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnChangedGameState -= OnChangedGameState;
     }
     private void SetUpHpSlider()
     {
@@ -77,21 +95,26 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         if (hpSlider == null) return;
         hpSlider.UpdatePosition(GetHPBarPosition());
     }
+    private void UpdateHpSliderValue()
+    {
+        if(hpSlider == null) return;
+        hpSlider.UpdateSlider(GetHPPercent());
+    }
     public void TakeDamage(float _damage)
     {
         if (isDead) return;
 
         currHp -= _damage;
-        hpSlider.UpdateSlider(GetHPPercent());
+        UpdateHpSliderValue();
 
         if (currHp <= 0)
             OnDie();
 
-        ObjectPoolManager.Instance.GetParts<TextEffector>(Constants.FLOATING_TEXT, _onComplete: _text =>
-        {
-            _text.transform.position = transform.position;
-            _text.Play(_damage);
-        });
+        //ObjectPoolManager.Instance.GetParts<TextEffector>(Constants.FLOATING_TEXT, _onComplete: _text =>
+        //{
+        //    _text.transform.position = transform.position;
+        //    _text.Play(_damage);
+        //});
 
         OnTakeDamage?.Invoke(new MonsterHitInfo((int)_damage, transform.position));
     }

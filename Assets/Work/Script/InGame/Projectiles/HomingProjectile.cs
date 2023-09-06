@@ -8,18 +8,30 @@ public class HomingProjectile : ProjectileBase
     {
         base.Init(_unit, _monster);
 
-        if (_unit == null)
-        {
-            ReturnPool();
-            return;
-        }
+        //if (_unit == null ||_monster == null)
+        //{
+        //    ReturnPool();
+        //    return;
+        //}
+
+        transform.position = _unit.transform.position;
+    }
+    public override void Init(Unit _unit, Monster _monster, Vector2 _dir)
+    {
+        base.Init(_unit, _monster, _dir);
+
+        //if (_unit == null || _monster == null)
+        //{
+        //    ReturnPool();
+        //    return;
+        //}
 
         transform.position = _unit.transform.position;
     }
 
-    protected void Update()
+    protected virtual void Update()
     {
-        if (target.IsDead)
+        if (!CheckValidProjectile())
         {
             ReturnPool();
             return;

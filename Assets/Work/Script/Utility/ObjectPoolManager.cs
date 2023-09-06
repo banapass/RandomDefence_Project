@@ -191,8 +191,14 @@ public class ObjectPoolManager : framework.Singleton<ObjectPoolManager>
         {
             while (_item.Value.pool.Count > 0)
             {
-                Destroy(_item.Value.pool.Dequeue());
+                var _obj = _item.Value.pool.Dequeue();
+                if (_obj == null) continue;
+                Destroy(_obj?.gameObject);
             }
         }
+    }
+    public override bool IsDontDestroyOnLoad()
+    {
+        return false;   
     }
 }

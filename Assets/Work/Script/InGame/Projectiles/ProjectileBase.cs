@@ -12,13 +12,22 @@ abstract public class ProjectileBase : MonoBehaviour, IObjectable
     {
         unit = _unit;
         target = _monster;
+        CheckValidProjectile();
     }
     public virtual void Init(Unit _unit , Monster _monster , Vector2 _dir)
     {
         unit = _unit;
         target = _monster;
+        CheckValidProjectile();
     }
-    public virtual void SetDirection(Vector2 _dir) { }
+    protected virtual bool CheckValidProjectile()
+    {
+        if (unit.enabled && !target.IsDead) return true;
+
+        ReturnPool();
+        return false;
+    }
+
 
     public void ReturnPool()
     {
@@ -68,7 +77,7 @@ abstract public class ProjectileBase : MonoBehaviour, IObjectable
         return unit.ProjectileInfo.speed;
     }
 
-    protected void OnBecameInvisible()
+    protected virtual void OnBecameInvisible()
     {
         Log.Logger.Log("Return Projectile");
         ReturnPool();

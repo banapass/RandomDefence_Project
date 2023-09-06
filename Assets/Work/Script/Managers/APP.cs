@@ -22,7 +22,7 @@ public class APP : Singleton<APP>
         TableManager.Instance.Init();
         MemoryPoolManager.Instance.Init();
 
-        UIManager.Instance.Show(UiPath.INTRO, false);
+        UIManager.Instance.Show(UIPath.INTRO, false);
     }
     private void AppSetting()
     {
@@ -31,7 +31,7 @@ public class APP : Singleton<APP>
     public void EnterInGame()
     {
 
-        UIManager.Instance.Show(UiPath.LOADING, true, () =>
+        UIManager.Instance.Show(UIPath.LOADING, true, () =>
         {
             LoadingManager.Instance.LoadScene("Scene/InGame", OnEnterInGame, "Effector", "Projectile", "Unit","Pooling");
         });
@@ -42,6 +42,13 @@ public class APP : Singleton<APP>
         //     // UIManager.Instance.Show(UiPath.INGAME, false, OnEnterInGame);
         // }));
     }
+    public void EnterIntro()
+    {
+        UIManager.Instance.Show(UIPath.INTRO, false, () =>
+        {
+
+        });
+    }
     //private IEnumerator ChangeScene(System.Action _onLoaded)
     //{
     //    var _handle = Addressables.LoadSceneAsync("Scene/Loading", LoadSceneMode.Additive);
@@ -51,9 +58,9 @@ public class APP : Singleton<APP>
     //}
     private void OnEnterInGame()
     {
-        UIManager.Instance.Show(UiPath.INGAME, false, () =>
+        UIManager.Instance.Show(UIPath.INGAME, false, () =>
         {
-            ObjectPoolManager.Instance.SetUIParent(UIManager.Instance.UIParent);
+            ObjectPoolManager.Instance.SetUIParent(UIManager.Instance.UIPropRoot);
             GameManager.Instance.GameStart();
             BoardManager.Instance.Init();
             GameManager.Instance.ChangeGameState(GameState.BreakTime);

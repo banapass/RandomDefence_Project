@@ -15,7 +15,21 @@ public class LoadingManager : Singleton<LoadingManager>
     {
         StartCoroutine(Loading(_scene, _onCompleted, _labels));
     }
+    public void LoadScene(string _scene, Action _onComplete = null)
+    {
+        StartCoroutine(Loading(_scene, _onComplete));
+    }
 
+    private IEnumerator Loading(string _scene , Action _onComplete = null)
+    {
+        var _sceneHandle = Addressables.LoadSceneAsync(_scene);
+        yield return _sceneHandle.Task;
+
+        _sceneHandle.Completed += _op =>
+        {
+            _onComplete?.Invoke();
+        };
+    }
     // private IEnumerator Loading(string _scene, Action _onCompleted = null)
     // {
     //     var _handle = Addressables.LoadSceneAsync(_scene);
@@ -51,6 +65,7 @@ public class LoadingManager : Singleton<LoadingManager>
                 while (!_handle.IsDone)
                     yield return _handle.Task;
 
+                ResourceStorage.AddResource(_location.PrimaryKey, _handle.Result);
                 loadCompletedAssets++;
                 loadedAssets = (loadCompletedAssets / totalAssets);
                 OnLoadingProgress?.Invoke(loadedAssets);

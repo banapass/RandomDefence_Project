@@ -96,5 +96,19 @@
             "count": 5,
             "speed": 10
         }
+    },
+    {
+        "unitId": "unit008",
+        "rarity": "Uncommon",
+        "range": 3,
+        "atk": 20,
+        "coolTime": 1,
+        "projectileInfo": {
+            "prefab": "unit008-projectile",
+            "count": 1,
+            "speed": 10,
+            "radius": 1.5,
+            "effector": "unit008-effector"
+        }
     }
 ]
