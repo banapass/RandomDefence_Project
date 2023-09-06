@@ -8,8 +8,6 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using TMPro;
-using UnityEditor;
-using static UnityEditor.Timeline.Actions.MenuPriority;
 
 public class TestCode : MonoBehaviour
 {

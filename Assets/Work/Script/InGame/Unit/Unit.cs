@@ -69,14 +69,6 @@ public class Unit : MonoBehaviour , ISellable , IObjectable
     {
         return Info.atk;
     }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, Vector2.one * Info.CalculateRange());
-    }
-
     public void Sell()
     {
         if (placedTile == null) return;
@@ -91,5 +83,13 @@ public class Unit : MonoBehaviour , ISellable , IObjectable
     {
         ObjectPoolManager.Instance.ReturnParts(this, ObjectID);
     }
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position, Vector2.one * Info.CalculateRange());
+    }
+
+    
 #endif
 }

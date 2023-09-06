@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Work/Script/UI/unit_creator_uss.uss?fileID=7433441132597879392&amp;guid=f1d2bb2eea4f485469d8e84d3c3ece9a&amp;type=3#unit_creator_uss" />
+    <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+        <ui:Label text="Hello World! From UXML" />
+        <ui:Label text="Hello World! With Style" class="custom-label" />
+        <ui:VisualElement name="VisualElement" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; height: 25px; justify-content: center;">
+            <ui:Button text="Button" display-tooltip-when-elided="true" />
+            <ui:Button text="Button" display-tooltip-when-elided="true" />
+        </ui:VisualElement>
+        <uie:ObjectField label="Object Field" type="UnityEngine.Sprite, UnityEngine.CoreModule" />
+    </ui:VisualElement>
+</ui:UXML>

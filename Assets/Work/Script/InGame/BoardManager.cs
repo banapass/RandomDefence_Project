@@ -5,7 +5,6 @@ using UnityEngine;
 using DG.Tweening;
 using framework;
 using System.Linq;
-using UnityEditor.AddressableAssets.GUI;
 using System.Threading.Tasks;
 
 public class BoardManager : Singleton<BoardManager>
@@ -322,7 +321,16 @@ public class BoardManager : Singleton<BoardManager>
     }
     public List<Node> GetCurrentPath() => pathfinding.Path;
 
+    public override bool IsDontDestroyOnLoad()
+    {
+        return false;
+    }
+    public void RemovePlacementTile(PlacementTile inTile)
+    {
+        if (!placementTiles.Contains(inTile)) return;
 
+        placementTiles.Remove(inTile);
+    }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
@@ -335,17 +343,6 @@ public class BoardManager : Singleton<BoardManager>
         {
             Gizmos.DrawWireCube(pathfinding.Path[i].worldPosition, Vector3.one);
         }
-    }
-
-    public override bool IsDontDestroyOnLoad()
-    {
-        return false;
-    }
-    public void RemovePlacementTile(PlacementTile inTile)
-    {
-        if (!placementTiles.Contains(inTile)) return;
-
-        placementTiles.Remove(inTile);
     }
 #endif
     // private void OnDrawGizmos()
