@@ -4,7 +4,7 @@
         "rarity": "Common",
         "atk": 10,
         "range": 1,
-        "coolTime": 0.4,
+        "coolTime": 1,
         "projectileInfo": {
             "prefab": "unit001-projectile",
             "count": 1,
@@ -19,10 +19,10 @@
     },
     {
         "unitId": "unit002",
-        "rarity": "Uncommon",
-        "atk": 20,
+        "rarity": "Common",
+        "atk": 10,
         "range": 1,
-        "coolTime": 1.5,
+        "coolTime": 1,
         "projectileInfo": {
             "prefab": "unit002-projectile",
             "count": 1,
@@ -31,7 +31,7 @@
     },
     {
         "unitId": "unit003",
-        "rarity": "Rare",
+        "rarity": "Common",
         "atk": 30,
         "range": 1,
         "coolTime": 1,
@@ -43,7 +43,7 @@
     },
     {
         "unitId": "unit004",
-        "rarity": "Epic",
+        "rarity": "Legendary",
         "atk": 50,
         "range": 1,
         "coolTime": 0.9,
@@ -57,10 +57,10 @@
     },
     {
         "unitId": "unit005",
-        "rarity": "Legendary",
+        "rarity": "Common",
         "range": 1,
-        "atk": 40,
-        "coolTime": 0.25,
+        "atk": 10,
+        "coolTime": 1,
         "projectileInfo": {
             "prefab": "unit005-projectile",
             "count": 1,
@@ -75,9 +75,9 @@
     },
     {
         "unitId": "unit006",
-        "rarity": "Rare",
+        "rarity": "Common",
         "range": 1,
-        "atk": 20,
+        "atk": 10,
         "coolTime": 2,
         "projectileInfo": {
             "prefab": "unit006-projectile",
@@ -87,10 +87,10 @@
     },
     {
         "unitId": "unit007",
-        "rarity": "Epic",
+        "rarity": "Legendary",
         "range": 1,
-        "atk": 25,
-        "coolTime": 1,
+        "atk": 50,
+        "coolTime": 0.25,
         "projectileInfo": {
             "prefab": "unit007-projectile",
             "count": 5,
@@ -109,6 +109,68 @@
             "speed": 10,
             "radius": 1.5,
             "effector": "unit008-effector"
+        }
+    },
+    {
+        "unitId": "unit009",
+        "rarity": "Epic",
+        "range": 3,
+        "atk": 30,
+        "coolTime": 1,
+        "projectileInfo": {
+            "prefab": "unit009-projectile",
+            "count": 3,
+            "speed": 10
+        }
+    },
+    {
+        "unitId": "unit010",
+        "rarity": "Uncommon",
+        "range": 1,
+        "atk": 20,
+        "coolTime": 0.8,
+        "projectileInfo": {
+            "prefab": "unit010-projectile",
+            "count": 1,
+            "speed": 10
+        }
+    },
+    {
+        "unitId": "unit011",
+        "rarity": "Uncommon",
+        "range": 1,
+        "atk": 20,
+        "coolTime": 0.8,
+        "projectileInfo": {
+            "prefab": "unit011-projectile",
+            "count": 1,
+            "speed": 10
+        }
+    },
+    {
+        "unitId": "unit012",
+        "rarity": "Epic",
+        "range": 1,
+        "atk": 40,
+        "coolTime": 1,
+        "projectileInfo": {
+            "prefab": "unit012-projectile",
+            "count": 1,
+            "speed": 10,
+            "effector": "unit012-effector",
+            "radius": 2
+        }
+    },
+    {
+        "unitId": "unit013",
+        "rarity": "Uncommon",
+        "range": 1,
+        "atk": 20,
+        "coolTime": 0.8,
+        "projectileInfo": {
+            "prefab": "unit013-projectile",
+            "count": 1,
+            "speed": 10
         }
     }
 ]

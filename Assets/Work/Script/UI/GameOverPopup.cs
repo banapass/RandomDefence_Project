@@ -5,11 +5,12 @@ using UnityEngine.UI;
 using framework;
 using DG.Tweening;
 using UniRx;
-using UnityEngine.SceneManagement;
+using Utility;
 
 public class GameOverPopup : BaseUi
 {
     [SerializeField] RectTransform popupRect;
+    [SerializeField] Transform bottomTf;
 
     [Header("Button")]
     [SerializeField] Button home_btn;
@@ -25,12 +26,18 @@ public class GameOverPopup : BaseUi
                     });
                 });
 
-        float _halfWidth = Screen.width * 0.5f;
-        float _halfHeight = Screen.height * 0.5f;
-        float _halfPopupHeight = popupRect.sizeDelta.y * 0.5f;
 
-
-        popupRect.DOMove(new Vector2(_halfWidth, _halfHeight + _halfPopupHeight), 0.5f)
+        StartPositioning();
+        popupRect.DOAnchorPos(Vector2.zero, 0.5f)
                  .SetEase(Ease.OutBack);
+    }
+
+    private void StartPositioning()
+    {
+        float _halfPopupHeight = -popupRect.rect.size.y * 0.5f;
+
+        //Constants.REFERANCE_SIZE
+        Vector2 _bottomPos = UIUtility.GetCanvasPosition(PositionType.Bottom, popupRect, new Vector2(Screen.width, Screen.height));
+        popupRect.anchoredPosition = new Vector2(_bottomPos.x, _bottomPos.y);
     }
 }

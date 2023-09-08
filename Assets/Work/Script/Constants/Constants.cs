@@ -18,4 +18,9 @@ public class Constants
     public const string MONSTER_DEAD_KEY = "DeadEffect";
     public const string MONSTER_HPBAR = "Monster_Hpbar";
 
+    public const float REFERANCE_WIDTH = 1920;
+    public const float REFERANCE_HEIGHT = 1080;
+
+    public static readonly Vector2 REFERANCE_SIZE = new Vector2(1920, 1080);
+
 }

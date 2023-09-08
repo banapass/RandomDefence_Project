@@ -7,14 +7,14 @@ namespace framework
 
     public class UIManager : Singleton<UIManager>
     {
-        private Dictionary<string, BaseUi> uiDict = new Dictionary<string, BaseUi>();
-        private Queue<BaseUi> popupQueue = new Queue<BaseUi>();
+        private Dictionary<string, BaseUi> uiDict; //= new Dictionary<string, BaseUi>();
+        private Queue<BaseUi> popupQueue;//= new Queue<BaseUi>();
 
         [SerializeField] Transform pageCanvas;
         [SerializeField] RectTransform pageRect;
         [SerializeField] Transform popupCanvas;
         [SerializeField] RectTransform popupRect;
-        [SerializeField] Transform propRoot; 
+        [SerializeField] Transform propRoot;
 
         public Transform UIPropRoot { get { return propRoot; } }
 
@@ -25,6 +25,18 @@ namespace framework
         {
             uiDict = new Dictionary<string, BaseUi>();
             popupQueue = new Queue<BaseUi>();
+            // AdjustPage();
+        }
+        private void AdjustPage()
+        {
+            Rect safeArea = Screen.safeArea;
+
+            Vector2 anchorMin = new Vector2(safeArea.x / Screen.width, 0);
+            Vector2 anchorMax = new Vector2((safeArea.x + safeArea.width) / Screen.width, 1);
+
+            pageRect.anchorMin = anchorMin;
+            pageRect.anchorMax = anchorMax;
+
         }
 
         public void Show(string _uiPath, bool _isPopup, System.Action _onOpen = null)

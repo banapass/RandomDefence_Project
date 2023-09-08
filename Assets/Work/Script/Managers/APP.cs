@@ -21,6 +21,7 @@ public class APP : Singleton<APP>
         AtlasManager.Instance.Init();
         TableManager.Instance.Init();
         MemoryPoolManager.Instance.Init();
+        UIManager.Instance.Init();
 
         UIManager.Instance.Show(UIPath.INTRO, false);
     }
@@ -33,7 +34,7 @@ public class APP : Singleton<APP>
 
         UIManager.Instance.Show(UIPath.LOADING, true, () =>
         {
-            LoadingManager.Instance.LoadScene("Scene/InGame", OnEnterInGame, "Effector", "Projectile", "Unit","Pooling");
+            LoadingManager.Instance.LoadScene("Scene/InGame", OnEnterInGame, "Effector", "Projectile", "Unit", "Pooling");
         });
 
 

@@ -1,12 +1,11 @@
 using UnityEngine;
 using framework;
-using System;
-using DG.Tweening;
 using UnityEngine.UI;
 using UniRx;
 
 public class IntroPage : BaseUi
 {
+
     [SerializeField] Button startBtn;
     public override void OnOpen()
     {
@@ -15,6 +14,7 @@ public class IntroPage : BaseUi
         {
             APP.Instance.EnterInGame();
         });
+
     }
     // public override void OnClose(TweenCallback<BaseUi> _onComplete)
     // {

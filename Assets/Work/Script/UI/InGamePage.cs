@@ -40,6 +40,8 @@ public class InGamePage : BaseUi
         sellBtn.OnClickAsObservable()
         .Subscribe(_observer => OnChangePlacementState?.Invoke(PlacementState.Sell));
 
+
+        // UIManager.Instance.Show(UIPath.GAMEOVER, true);
     }
 
     private void OnEnable()

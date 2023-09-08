@@ -455,6 +455,7 @@ MonoBehaviour:
   pageRect: {fileID: 2412546234882693460}
   popupCanvas: {fileID: 5466897632452869858}
   popupRect: {fileID: 9065322791412639532}
+  propRoot: {fileID: 0}
   <CurrentPage>k__BackingField: {fileID: 0}
 --- !u!224 &5466897632452869858
 RectTransform:

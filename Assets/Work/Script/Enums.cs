@@ -12,7 +12,7 @@ public enum GameState
 
 public enum PlacementState
 {
-    None, UnitPlacement, Unit , Sell
+    None, UnitPlacement, Unit, Sell
 }
 
 [System.Serializable]
@@ -21,7 +21,6 @@ public enum UnitRarity
     None,
     Common,
     Uncommon,
-    Rare,
     Epic,
     Legendary
 }
@@ -37,5 +36,5 @@ public enum CostType
 }
 public enum PlacementTileType
 {
-    None , Unit
+    None, Unit
 }
