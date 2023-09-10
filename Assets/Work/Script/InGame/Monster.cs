@@ -19,6 +19,8 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     private int currentPathIndex;
     private bool isDestination;
 
+    public float CurrHp { get { return currHp; } }
+    public float MaxHp { get { return statInfo.hp; } }
 
     private bool isDead;
     public bool IsDead { get { return isDead; } }
@@ -97,7 +99,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     }
     private void UpdateHpSliderValue()
     {
-        if(hpSlider == null) return;
+        if (hpSlider == null) return;
         hpSlider.UpdateSlider(GetHPPercent());
     }
     public void TakeDamage(float _damage)
@@ -185,7 +187,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     }
 
     #endregion
-    
+
     private float GetHPPercent()
     {
         return currHp / this.statInfo.hp;
@@ -222,7 +224,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     {
         for (int i = 0; i < debuffs.Count; i++)
         {
-            debuffs[i].UpdateDuration(Time.deltaTime);
+            debuffs[i].UpdateTime(Time.deltaTime);
 
             if (!debuffs[i].IsDubuffFinished()) continue;
             if (finishedDebuffs.Contains(debuffs[i])) continue;
@@ -255,6 +257,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     {
         if (!debuffs.Contains(_debuff)) return;
 
+        _debuff.Release();
         debuffs.Remove(_debuff);
     }
 

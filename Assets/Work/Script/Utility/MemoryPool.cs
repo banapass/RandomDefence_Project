@@ -55,7 +55,10 @@ public class MemoryPool<T> where T : class, IMemoryPool
     public void Release(string _key, T _item)
     {
         if (poolDict[_key].Contains(_item))
+        {
             Log.Logger.Log("이미 풀안에 들어가 있는 메모리를 다시 넣으려고 하고있습니다.");
+            return;
+        }
 
         poolDict[_key].Enqueue(_item);
     }

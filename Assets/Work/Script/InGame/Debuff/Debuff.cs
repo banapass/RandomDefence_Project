@@ -10,25 +10,22 @@ public class Debuff : IMemoryPool
     [field: SerializeField]
     public DebuffInfo Info { get; protected set; }
     public Unit Attacker { get; protected set; }
+    protected Monster debuffedMonster;
 
     [SerializeField] protected float elapsedTime;
-
-    // public virtual DebuffType DebuffType { get; }
-    // protected float duration;
-    // protected float intensity;
-    // protected float chanceOfDebuff;
 
     public Debuff()
     {
 
     }
-    public void Init(DebuffInfo _info, Unit _unit)
+    public virtual void Init(DebuffInfo _info, Unit _unit, Monster _monster)
     {
         Info = _info;
         Attacker = _unit;
+        debuffedMonster = _monster;
         elapsedTime = Info.duration;
     }
-    public virtual void UpdateDuration(float _deltaTime)
+    public virtual void UpdateTime(float _deltaTime)
     {
         elapsedTime -= _deltaTime;
     }
@@ -37,8 +34,8 @@ public class Debuff : IMemoryPool
     {
         elapsedTime = Info.duration;
     }
-    public void Release()
+    public virtual void Release()
     {
-
+        MemoryPoolManager.Instance.Release<Debuff>(this);
     }
 }

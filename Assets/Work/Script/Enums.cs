@@ -27,7 +27,7 @@ public enum UnitRarity
 
 public enum DebuffType
 {
-    None = 0, Slow
+    None = 0, Slow, Bleed
 }
 
 public enum CostType
