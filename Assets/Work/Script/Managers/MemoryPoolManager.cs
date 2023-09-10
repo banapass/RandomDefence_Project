@@ -22,9 +22,14 @@ public class MemoryPoolManager : Singleton<MemoryPoolManager>
     {
         memoryPool.Release(_target.Key, _target);
     }
-    public Debuff GetDebuff()
+    public Debuff GetDebuff(DebuffType _type)
     {
-        return Get<Debuff>(Constants.DEBUFF_KEY);
+        if (_type == DebuffType.Slow)
+            return Get<Debuff>(Constants.DEBUFF_KEY);
+        else if (_type == DebuffType.Bleed)
+            return Get<Bleed>(Constants.BLEED_KEY);
+
+        return null;
     }
     public void ReleaseDebuff(IMemoryPool _debuff)
     {

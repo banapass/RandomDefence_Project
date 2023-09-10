@@ -13,7 +13,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     private MonsterHpSlider hpSlider;
 
     private List<Node> path;
-    private List<Debuff> debuffs;
+    [SerializeField] private List<Debuff> debuffs;
     private List<Debuff> finishedDebuffs;
 
     private int currentPathIndex;
@@ -222,6 +222,27 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
     private void UpdateDebuff(float _deltaTime)
     {
+        //int i = 0; i < debuffs.Count; i++
+
+        // using (var _em = debuffs.GetEnumerator())
+        // {
+        //     while (_em.MoveNext())
+        //     {
+        //         Debuff _debuff = _em.Current;
+        //         _debuff.UpdateTime(Time.deltaTime);
+
+        //         if (!_debuff.IsDubuffFinished()) continue;
+        //         if (finishedDebuffs.Contains(_debuff)) continue;
+
+        //         finishedDebuffs.Add(_debuff);
+        //     }
+
+        //     for (int i = 0; i < finishedDebuffs.Count; i++)
+        //         RemoveDebuff(finishedDebuffs[i]);
+
+        //     if (finishedDebuffs.Count > 0)
+        //         finishedDebuffs.Clear();
+        // }
         for (int i = 0; i < debuffs.Count; i++)
         {
             debuffs[i].UpdateTime(Time.deltaTime);
@@ -267,7 +288,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
 
         for (int i = 0; i < debuffs.Count; i++)
         {
-            MemoryPoolManager.Instance.ReleaseDebuff(debuffs[i]);
+            debuffs[i].Release();
         }
 
         debuffs.Clear();

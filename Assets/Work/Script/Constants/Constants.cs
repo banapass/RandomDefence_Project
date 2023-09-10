@@ -6,6 +6,7 @@ public class Constants
     public const float PROJECTILE_LIFETIME = 5.0f;
     public const float MAX_SLOW = 0.8f;
     public const string DEBUFF_KEY = "Debuff";
+    public const string BLEED_KEY = "Bleed";
     public const int MAX_LIFE = 5;
     public const int START_GOLD = 500;
     public const int UNITPLACEMENT_PRICE = 10;
@@ -16,6 +17,7 @@ public class Constants
     public const string UNITPLACEMENT_PATH = "Prefab/Unitplacement";
     public const string FLOATING_TEXT = "Prefab/Effect/FloatingText";
     public const string MONSTER_DEAD_KEY = "DeadEffect";
+    public const string BLEED_EFFECT = "BleedEffect";
     public const string MONSTER_HPBAR = "Monster_Hpbar";
 
     public const float REFERANCE_WIDTH = 1920;

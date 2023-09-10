@@ -14,7 +14,7 @@ abstract public class ProjectileBase : MonoBehaviour, IObjectable
         target = _monster;
         CheckValidProjectile();
     }
-    public virtual void Init(Unit _unit , Monster _monster , Vector2 _dir)
+    public virtual void Init(Unit _unit, Monster _monster, Vector2 _dir)
     {
         unit = _unit;
         target = _monster;
@@ -35,6 +35,7 @@ abstract public class ProjectileBase : MonoBehaviour, IObjectable
     }
     protected void TryApplyDebuff(Monster _target)
     {
+        if (_target.IsDead) return;
         if (!unit.HasDebuff) return;
 
         DebuffInfo _debuffInfo = unit.Info.projectileInfo.debuffInfo.Value;
@@ -50,8 +51,8 @@ abstract public class ProjectileBase : MonoBehaviour, IObjectable
         }
         else
         {
-            Debuff _debuff = MemoryPoolManager.Instance.GetDebuff();
-            _debuff.Init(_debuffInfo, unit);
+            Debuff _debuff = MemoryPoolManager.Instance.GetDebuff(_debuffInfo.debuffType);
+            _debuff.Init(_debuffInfo, unit, _target);
             _target.AddDebuff(_debuff);
         }
     }

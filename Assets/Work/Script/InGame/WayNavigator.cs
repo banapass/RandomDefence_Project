@@ -12,14 +12,14 @@ public class WayNavigator : MonoBehaviour
     private bool isDestination;
     private float addTime;
     [SerializeField] private float navigateSpeed = 5;
-    IEnumerator navigateCo;
+    // IEnumerator navigateCo;
 
     private const float NEXT_NAVIGATE_DELAY = 3f;
 
     private void Awake()
     {
         TryGetComponent<TrailRenderer>(out trail);
-        navigateCo = Navigate();
+        // navigateCo = Navigate();
     }
     private void OnEnable()
     {
@@ -48,14 +48,14 @@ public class WayNavigator : MonoBehaviour
         trail.Clear();
         currPathIndex = 0;
 
-        StartCoroutine(navigateCo);
+        // StartCoroutine(navigateCo);
     }
     public void StopNavigate()
     {
         trail.enabled = false;
         currPathIndex = 0;
         addTime = 0;
-        StopCoroutine(navigateCo);
+        // StopCoroutine(navigateCo);
     }
     private bool IsArrivalNextDestination(Vector3 _nextPos)
     {
@@ -106,6 +106,25 @@ public class WayNavigator : MonoBehaviour
             {
                 FollowPath();
             }
+        }
+    }
+    private void Update()
+    {
+        if (isDestination)
+        {
+            addTime += Time.deltaTime;
+            if (addTime < NEXT_NAVIGATE_DELAY) return;
+
+            addTime = 0;
+            currPathIndex = 0;
+            transform.position = path[currPathIndex].worldPosition;
+            trail.Clear();
+            isDestination = false;
+
+        }
+        else
+        {
+            FollowPath();
         }
     }
 

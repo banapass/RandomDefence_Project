@@ -120,7 +120,13 @@
         "projectileInfo": {
             "prefab": "unit009-projectile",
             "count": 3,
-            "speed": 10
+            "speed": 10,
+            "debuffInfo": {
+                "chanceOfDebuff": 0.25,
+                "debuffType": "Bleed",
+                "duration": 2,
+                "intensity": 0.05
+            }
         }
     },
     {
