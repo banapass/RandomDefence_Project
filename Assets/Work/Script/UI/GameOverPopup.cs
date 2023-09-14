@@ -10,7 +10,6 @@ using Utility;
 public class GameOverPopup : BaseUi
 {
     [SerializeField] RectTransform popupRect;
-    [SerializeField] Transform bottomTf;
 
     [Header("Button")]
     [SerializeField] Button home_btn;

@@ -4,14 +4,16 @@
         "rounds": [
             {
                 "monsterId": "1001",
+                "type": "Normal",
+                "spawnCount": 40,
                 "monsterStatInfo": {
                     "hp": 50,
                     "speed": 1.5
-                },
-                "spawnCount": 40
+                }
             },
             {
                 "monsterId": "1002",
+                "type": "Normal",
                 "spawnCount": 40,
                 "monsterStatInfo": {
                     "hp": 150,
@@ -20,6 +22,7 @@
             },
             {
                 "monsterId": "1003",
+                "type": "Normal",
                 "spawnCount": 40,
                 "monsterStatInfo": {
                     "hp": 300,
@@ -28,6 +31,7 @@
             },
             {
                 "monsterId": "1004",
+                "type": "Normal",
                 "spawnCount": 40,
                 "monsterStatInfo": {
                     "hp": 400,
@@ -36,6 +40,7 @@
             },
             {
                 "monsterId": "1001",
+                "type": "Normal",
                 "spawnCount": 40,
                 "monsterStatInfo": {
                     "hp": 500,
@@ -44,6 +49,7 @@
             },
             {
                 "monsterId": "1001",
+                "type": "Normal",
                 "spawnCount": 40,
                 "monsterStatInfo": {
                     "hp": 600,
@@ -52,9 +58,127 @@
             },
             {
                 "monsterId": "1001",
+                "type": "Normal",
                 "spawnCount": 40,
                 "monsterStatInfo": {
                     "hp": 700,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1001",
+                "type": "Normal",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 900,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1002",
+                "type": "Normal",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 1200,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1003",
+                "type": "Boss",
+                "spawnCount": 1,
+                "monsterStatInfo": {
+                    "hp": 5000,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1003",
+                "type": "Normal",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 1800,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1001",
+                "type": "Normal",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 2300,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1003",
+                "type": "Normal",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 2800,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1003",
+                "type": "Normal",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 3200,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1003",
+                "type": "Normal",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 4000,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1002",
+                "type": "Normal",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 4500,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1001",
+                "type": "Normal",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 5000,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1003",
+                "type": "Normal",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 5000,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1002",
+                "type": "Normal",
+                "spawnCount": 40,
+                "monsterStatInfo": {
+                    "hp": 5500,
+                    "speed": 1
+                }
+            },
+            {
+                "monsterId": "1003",
+                "type": "Boss",
+                "spawnCount": 1,
+                "monsterStatInfo": {
+                    "hp": 10000,
                     "speed": 1
                 }
             }

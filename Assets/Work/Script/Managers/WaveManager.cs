@@ -26,6 +26,10 @@ public class WaveManager : Singleton<WaveManager>
         currStageInfo = _stageInfo;
         currRound = -1;
 
+        for (int i = 0; i < _stageInfo.rounds.Length; i++)
+        {
+            Log.Logger.Log(_stageInfo.rounds[i].type);
+        }
         StartWayNavigate();
     }
     public void StartWayNavigate()
@@ -136,6 +140,7 @@ public class WaveManager : Singleton<WaveManager>
         if (_isEnded)
         {
             Log.Logger.Log("게임 클리어");
+            UIManager.Instance.Show(UIPath.GAMECLEAR, true);
             GameManager.Instance.ChangeGameState(GameState.GameClear);
         }
         else

@@ -38,3 +38,9 @@ public enum PlacementTileType
 {
     None, Unit
 }
+
+[System.Serializable]
+public enum MonsterType
+{
+    Normal, Boss
+}
