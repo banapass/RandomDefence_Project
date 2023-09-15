@@ -51,6 +51,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     {
         if (path == null) return;
         if (isDestination) return;
+        if (isDead) return;
 
         FollowPath();
         UpdateDebuff(Time.deltaTime);
@@ -60,7 +61,11 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
     {
         GameManager.OnChangedGameState += OnChangedGameState;
     }
-
+    private void OnDisable()
+    {
+        GameManager.OnChangedGameState -= OnChangedGameState;
+        ReturnAllDebuff();
+    }
     private void OnChangedGameState(GameState _state)
     {
         if (_state != GameState.GameOver) return;
@@ -68,10 +73,7 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         if (hpSlider != null) Destroy(hpSlider.gameObject);
     }
 
-    private void OnDisable()
-    {
-        GameManager.OnChangedGameState -= OnChangedGameState;
-    }
+
     private void SetUpHpSlider()
     {
         if (hpSlider != null) return;
@@ -149,7 +151,6 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
             hpSlider = null;
         }
 
-        ReturnAllDebuff();
         ReturnPool();
     }
 
@@ -245,12 +246,15 @@ public class Monster : MonoBehaviour, IDamageable, IObjectable
         // }
         for (int i = 0; i < debuffs.Count; i++)
         {
-            debuffs[i].UpdateTime(Time.deltaTime);
+            Debuff _debuff = debuffs[i];
+            if (_debuff == null) continue;
 
-            if (!debuffs[i].IsDubuffFinished()) continue;
-            if (finishedDebuffs.Contains(debuffs[i])) continue;
+            _debuff.UpdateTime(Time.deltaTime);
 
-            finishedDebuffs.Add(debuffs[i]);
+            if (!_debuff.IsDubuffFinished()) continue;
+            if (finishedDebuffs.Contains(_debuff)) continue;
+
+            finishedDebuffs.Add(_debuff);
         }
 
         for (int i = 0; i < finishedDebuffs.Count; i++)

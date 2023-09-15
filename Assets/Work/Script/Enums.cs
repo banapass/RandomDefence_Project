@@ -44,3 +44,9 @@ public enum MonsterType
 {
     Normal, Boss
 }
+
+
+public enum SoundType
+{
+    Music, SFX
+}
