@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using System.IO;
 using UnityEngine;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
+
 
 public class AudioGenerator
 {
@@ -38,38 +41,13 @@ public class AudioGenerator
 
         TryCreateDirectoryAndFiles();
 
-
-
         var _audioBundles = GetAudioBundles();
 
-        List<string> _sfxList = new List<string>();
-        List<string> _musicList = new List<string>();
+        List<string> _sfxList = GetBundleNames(_audioBundles, SoundType.SFX);
+        List<string> _musicList = GetBundleNames(_audioBundles, SoundType.Music);
 
-        for (int i = 0; i < _audioBundles.Count; i++)
-        {
-            if (_audioBundles[i].audioType == SoundType.Music)
-                _musicList.Add(_audioBundles[i].audioName);
-            else if (_audioBundles[i].audioType == SoundType.SFX)
-                _sfxList.Add(_audioBundles[i].audioName);
-        }
-
-        string _musicEnum = string.Empty;
-        for (int i = 0; i < _musicList.Count; i++)
-        {
-            _musicEnum += _musicList[i];
-
-            if (i < _musicList.Count - 1)
-                _musicEnum += ",";
-        }
-
-        string _sfxEnum = string.Empty;
-        for (int i = 0; i < _sfxList.Count; i++)
-        {
-            _sfxEnum += _sfxList[i];
-
-            if (i < _sfxList.Count - 1)
-                _sfxEnum += ",";
-        }
+        string _musicEnum = ConvertEnumText(_musicList);
+        string _sfxEnum = ConvertEnumText(_sfxList);
 
         string _newMusicText = string.Format(MUSIC_FORMAT, _musicEnum);
         string _newSFXText = string.Format(SFX_FORMAT, _sfxEnum);
@@ -77,6 +55,31 @@ public class AudioGenerator
         File.WriteAllText(MUSIC_PATH, _newMusicText);
         File.WriteAllText(SFX_PATH, _newSFXText);
 
+    }
+    private static List<string> GetBundleNames(List<AudioBundle> _audioBundles, SoundType _type)
+    {
+        List<string> _bundleNames = new List<string>();
+        for (int i = 0; i < _audioBundles.Count; i++)
+        {
+            if (_audioBundles[i].audioType != _type) continue;
+            if (_bundleNames.Contains(_audioBundles[i].audioName)) continue;
+
+            _bundleNames.Add(_audioBundles[i].audioName);
+        }
+
+        return _bundleNames;
+    }
+    private static string ConvertEnumText(List<string> _bundleNames)
+    {
+        string _enums = string.Empty;
+        for (int i = 0; i < _bundleNames.Count; i++)
+        {
+            _enums += _bundleNames[i];
+
+            if (i < _bundleNames.Count - 1)
+                _enums += ",";
+        }
+        return _enums;
     }
     private static void TryCreateDirectoryAndFiles()
     {
@@ -124,10 +127,23 @@ public class AudioGenerator
             var _bundle = AssetDatabase.LoadAssetAtPath<AudioBundle>(_slicePath);
             if (_bundle == null) continue;
 
+            SetAudioBundleAddress(_bundle, _slicePath);
             _bundles.Add(_bundle);
         }
 
         return _bundles;
+    }
+    private static void SetAudioBundleAddress(AudioBundle _bundle, string _path)
+    {
+        AddressableAssetSettings _settings = AddressableAssetSettingsDefaultObject.Settings;
+        AddressableAssetGroup _group = _settings.DefaultGroup;
+
+        string _guid = AssetDatabase.AssetPathToGUID(_path);
+        _settings.CreateOrMoveEntry(_guid, _group);
+
+        AddressableAssetEntry _entry = _settings.FindAssetEntry(_guid);
+        _entry.address = _bundle.audioName;
+        _entry.SetLabel(_bundle.audioType.ToString(), true, true);
     }
 
 }

@@ -1,7 +1,7 @@
 namespace framework.Audio
 {
-    public enum Music
-    {
-
+    public enum Music 
+    { 
+         
     }
 }

@@ -14,8 +14,8 @@ namespace framework
     {
         private static Dictionary<string, KeyValuePair<bool, UObject>> resDict = new Dictionary<string, KeyValuePair<bool, UObject>>();
 
-        
-        public async static Task LoadObjectByLabel<T>(string _label,bool _isCache = false) where T : UObject
+
+        public async static Task LoadObjectByLabel<T>(string _label, bool _isCache = false) where T : UObject
         {
             var _handle = Addressables.LoadResourceLocationsAsync(_label);
             await _handle.Task;
@@ -90,7 +90,7 @@ namespace framework
         {
             if (resDict == null) resDict = new Dictionary<string, KeyValuePair<bool, UObject>>();
 
-            if (resDict.TryGetValue(_path, out KeyValuePair<bool,UObject> _res))
+            if (resDict.TryGetValue(_path, out KeyValuePair<bool, UObject> _res))
             {
                 _onCompleted?.Invoke((T)_res.Value);
                 return;
@@ -106,7 +106,6 @@ namespace framework
                     }
                     else
                     {
-                        // Debug.Log(_handle.Status);
                         Log.Logger.LogError($"Resource Load Failed : {_handle.OperationException}");
                         _onCompleted?.Invoke(default);
                     }
@@ -135,7 +134,6 @@ namespace framework
             }
             else
             {
-                // resDict.Add(_path, null);
                 Addressables.LoadAssetAsync<GameObject>(_path).Completed += _handle =>
                 {
                     if (_handle.Status == AsyncOperationStatus.Succeeded)
@@ -148,7 +146,6 @@ namespace framework
                     }
                     else
                     {
-                        // Debug.Log(_handle.Status);
                         Log.Logger.Log($"Resource Load Failed : {_handle.OperationException}");
                         _onCompleted?.Invoke(default);
                     }
@@ -203,7 +200,7 @@ namespace framework
             if (resDict.ContainsKey(_key)) return;
             bool _isComponent = _obj as GameObject != null;
 
-            if(_isComponent)
+            if (_isComponent)
             {
                 resDict.Add(_key, new KeyValuePair<bool, UObject>(false, _obj as GameObject));
             }
@@ -211,7 +208,7 @@ namespace framework
             {
                 resDict.Add(_key, new KeyValuePair<bool, UObject>(true, _obj));
             }
-            
+
         }
 
         public static void ClearResource()
