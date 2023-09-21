@@ -1,3 +1,4 @@
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,37 +8,34 @@ using framework.Audio;
 public class AudioManager : Singleton<AudioManager>
 {
     private Dictionary<SFX, string> sfxCacheDict;
-    private Queue<AudioSource> audioSourceQueue;
+    private Queue<SFXPlayer> sfxPlayQueue;
+    private MusicPlayer musicPlayer;
 
     private void Start()
     {
-        audioSourceQueue = new Queue<AudioSource>();
+        sfxPlayQueue = new Queue<SFXPlayer>();
         sfxCacheDict = new Dictionary<SFX, string>();
+        CreateNewMusicPlayer();
+
     }
 
     public void PlaySound(SFX _sfx)
     {
-        if (audioSourceQueue.Count > 0)
+        if (sfxPlayQueue.Count > 0)
         {
             ResourceStorage.GetObjectRes<AudioBundle>(GetSFXName(_sfx), _audio =>
             {
-                AudioSource _source = audioSourceQueue.Dequeue();
-                _source.loop = false;
-                _source.clip = _audio.clip;
-                _source.Play();
+                AudioPlayer _player = sfxPlayQueue.Dequeue();
+                _player.Init(_audio);
+                _player.Play();
             });
         }
         else
         {
             ResourceStorage.GetObjectRes<AudioBundle>(GetSFXName(_sfx), _audio =>
             {
-                GameObject _newObj = new GameObject();
-                AudioSource _newSource = _newObj.AddComponent<AudioSource>();
-                _newObj.transform.parent = this.transform;
-
-                _newSource.clip = _audio.clip;
-                _newSource.loop = false;
-                _newSource.Play();
+                SFXPlayer _newPlayer = CreateNewSFXPlayer(_audio);
+                _newPlayer.Play();
             });
 
         }
@@ -51,9 +49,38 @@ public class AudioManager : Singleton<AudioManager>
     }
     public void PlayMusic(Music _music)
     {
+        if (musicPlayer == null)
+            CreateNewMusicPlayer();
 
+        ResourceStorage.GetObjectRes<AudioBundle>(_music.ToString(), _audio =>
+        {
+            musicPlayer.Init(_audio);
+            musicPlayer.Play();
+        });
     }
 
+    private SFXPlayer CreateNewSFXPlayer(AudioBundle _bundle)
+    {
+        GameObject _newObj = new GameObject();
+        AudioSource _newSource = _newObj.AddComponent<AudioSource>();
+        SFXPlayer _newPlayer = _newObj.AddComponent<SFXPlayer>();
+
+        _newPlayer.transform.parent = this.transform;
+        _newPlayer.Init(_newSource, _bundle);
+
+        return _newPlayer;
+    }
+    private void CreateNewMusicPlayer()
+    {
+        MusicPlayer _newMusicPlayer = GetComponent<MusicPlayer>() == null ? gameObject.AddComponent<MusicPlayer>() : GetComponent<MusicPlayer>();
+        AudioSource _musicSource = GetComponent<AudioSource>() == null ? gameObject.AddComponent<AudioSource>() : GetComponent<AudioSource>();
+    }
+    public void ReturnSFXPlayer(SFXPlayer _player)
+    {
+        if (sfxPlayQueue.Contains(_player)) return;
+
+        sfxPlayQueue.Enqueue(_player);
+    }
     private string GetSFXName(SFX _sfx)
     {
         if (sfxCacheDict.TryGetValue(_sfx, out var _sfxName))
@@ -67,5 +94,4 @@ public class AudioManager : Singleton<AudioManager>
             return _newSfxName;
         }
     }
-
 }
