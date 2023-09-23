@@ -68,6 +68,8 @@ public class APP : Singleton<APP>
             BoardManager.Instance.Init();
             GameManager.Instance.ChangeGameState(GameState.BreakTime);
             InputController.Instance.Init();
+
+            AudioManager.Instance.PlayMusic(framework.Audio.Music.InGameBGM);
         });
     }
     public async Task ResourcesLoad()

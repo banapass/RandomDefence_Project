@@ -44,21 +44,23 @@ public class BoardManager : Singleton<BoardManager>
 
         });
     }
-    private IEnumerator ShuffleStartEndPoint(int _suffleCount , float _delayTime , Action _onComplete = null)
+    private IEnumerator ShuffleStartEndPoint(int _suffleCount, float _delayTime, Action _onComplete = null)
     {
         int _count = 0;
         WaitForSeconds _delay = new WaitForSeconds(_delayTime);
 
-        while(_count < _suffleCount)
+        while (_count < _suffleCount)
         {
+
             pathfinding.ShuffleStartEndPoint();
             startPoint.transform.position = pathfinding.StartNode.worldPosition;
             endPoint.transform.position = pathfinding.EndNode.worldPosition;
 
+            AudioManager.Instance.PlaySound(framework.Audio.SFX.Spawn_Select);
             _count++;
 
             yield return _delay;
-            
+
         }
         _onComplete?.Invoke();
     }
@@ -187,12 +189,12 @@ public class BoardManager : Singleton<BoardManager>
 
         ResourceStorage.GetComponentAsset<Unit>(_selectedUnit.unitId, _rawUnit =>
         {
-            ObjectPoolManager.Instance.GetParts<Unit>(_selectedUnit.unitId,_onComplete: _unit =>
+            ObjectPoolManager.Instance.GetParts<Unit>(_selectedUnit.unitId, _onComplete: _unit =>
             {
                 _unit.Init(_selectedUnit, _tile);
                 _unit.SetScale(_tile.GetUnitSize());
                 _tile.SetUnit(_unit);
-            }); 
+            });
         });
     }
 
@@ -267,7 +269,7 @@ public class BoardManager : Singleton<BoardManager>
         {
             bool _isContainPath = pathfinding.IsContainPath(_tile.TileCoord);
 
-            ObjectPoolManager.Instance.GetParts<UnitPlacementTile>(Constants.UNITPLACEMENT_PATH, _onComplete:_placementTile =>
+            ObjectPoolManager.Instance.GetParts<UnitPlacementTile>(Constants.UNITPLACEMENT_PATH, _onComplete: _placementTile =>
             {
                 _tile.SetInnerTile(_placementTile);
                 placementTiles.Add(_placementTile);
@@ -295,7 +297,7 @@ public class BoardManager : Singleton<BoardManager>
     {
         List<Node> _path = pathfinding.Path;
 
-        for(int i = _path.Count - 1; i >= 0; i--) 
+        for (int i = _path.Count - 1; i >= 0; i--)
         {
             for (int j = 0; j < Coord.DIRECTIONS.Length; j++)
             {
@@ -305,7 +307,7 @@ public class BoardManager : Singleton<BoardManager>
                 if (_path[i].coord == _nextCoord) return true;
             }
         }
-        
+
         return false;
     }
     public void OnTriedSell(ISellable _sellable)

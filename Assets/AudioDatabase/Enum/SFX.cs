@@ -2,6 +2,6 @@ namespace framework.Audio
 {
     public enum SFX
     { 
-        Hit 
+        Hit,Spawn_Select,UI_Click 
     }
 }

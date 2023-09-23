@@ -2,6 +2,7 @@ using UnityEngine;
 using framework;
 using UnityEngine.UI;
 using UniRx;
+using framework.Audio;
 
 public class IntroPage : BaseUi
 {
@@ -12,6 +13,7 @@ public class IntroPage : BaseUi
         startBtn.OnClickAsObservable()
         .Subscribe(_observer =>
         {
+            AudioManager.Instance.PlaySound(SFX.UI_Click);
             APP.Instance.EnterInGame();
         });
 
@@ -22,8 +24,4 @@ public class IntroPage : BaseUi
     //     // .OnComplete(() => _onComplete(this));
     // }
 
-    private void OnClickStart()
-    {
-        Debug.Log("on Click");
-    }
 }

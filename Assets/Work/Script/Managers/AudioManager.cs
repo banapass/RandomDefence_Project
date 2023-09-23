@@ -72,8 +72,8 @@ public class AudioManager : Singleton<AudioManager>
     }
     private void CreateNewMusicPlayer()
     {
-        MusicPlayer _newMusicPlayer = GetComponent<MusicPlayer>() == null ? gameObject.AddComponent<MusicPlayer>() : GetComponent<MusicPlayer>();
-        AudioSource _musicSource = GetComponent<AudioSource>() == null ? gameObject.AddComponent<AudioSource>() : GetComponent<AudioSource>();
+        musicPlayer = GetComponent<MusicPlayer>() == null ? gameObject.AddComponent<MusicPlayer>() : GetComponent<MusicPlayer>();
+        // AudioSource _musicSource = GetComponent<AudioSource>() == null ? gameObject.AddComponent<AudioSource>() : GetComponent<AudioSource>();
     }
     public void ReturnSFXPlayer(SFXPlayer _player)
     {
