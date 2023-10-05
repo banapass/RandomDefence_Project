@@ -13,6 +13,7 @@ public class AudioPlayer : MonoBehaviour
 
     public virtual void Init(AudioBundle _bundle)
     {
+        if (_bundle == null) return;
         if (source == null) source = GetComponent<AudioSource>();
         source.loop = _bundle.audioType == SoundType.Music;
         source.clip = _bundle.clip;
@@ -20,6 +21,7 @@ public class AudioPlayer : MonoBehaviour
     }
     public virtual void Init(AudioSource _source, AudioBundle _bundle)
     {
+        if (_bundle == null) return;
         this.source = _source;
         source.loop = _bundle.audioType == SoundType.Music;
         source.clip = _bundle.clip;

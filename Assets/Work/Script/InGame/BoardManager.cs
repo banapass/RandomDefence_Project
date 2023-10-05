@@ -279,6 +279,7 @@ public class BoardManager : Singleton<BoardManager>
 
                 if (_isContainPath)
                     OnChangedPath?.Invoke();
+                AudioManager.Instance.PlaySound(framework.Audio.SFX.Build);
             });
         });
     }

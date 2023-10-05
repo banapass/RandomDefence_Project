@@ -10,12 +10,12 @@ public class SFXPlayer : AudioPlayer
     public override void Init(AudioBundle _bundle)
     {
         base.Init(_bundle);
-        SetActive(true);
+        SetActive(_bundle != null);
     }
     public override void Init(AudioSource _source, AudioBundle _bundle)
     {
         base.Init(_source, _bundle);
-        SetActive(true);
+        SetActive(_bundle != null);
     }
 
     private void Update()

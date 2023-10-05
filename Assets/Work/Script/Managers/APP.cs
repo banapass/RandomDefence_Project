@@ -24,6 +24,7 @@ public class APP : Singleton<APP>
         TableManager.Instance.Init();
         MemoryPoolManager.Instance.Init();
         UIManager.Instance.Init();
+        AudioManager.Instance.Init();
 
         UIManager.Instance.Show(UIPath.INTRO, false);
     }

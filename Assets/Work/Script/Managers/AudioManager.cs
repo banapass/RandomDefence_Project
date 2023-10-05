@@ -11,12 +11,12 @@ public class AudioManager : Singleton<AudioManager>
     private Queue<SFXPlayer> sfxPlayQueue;
     private MusicPlayer musicPlayer;
 
-    private void Start()
+    public void Init()
     {
         sfxPlayQueue = new Queue<SFXPlayer>();
         sfxCacheDict = new Dictionary<SFX, string>();
         CreateNewMusicPlayer();
-
+        PoolingSFXPlayer();
     }
 
     public void PlaySound(SFX _sfx)
@@ -40,13 +40,13 @@ public class AudioManager : Singleton<AudioManager>
 
         }
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            PlaySound(SFX.Hit);
-        }
-    }
+    // private void Update()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Space))
+    //     {
+    //         PlaySound(SFX.Hit);
+    //     }
+    // }
     public void PlayMusic(Music _music)
     {
         if (musicPlayer == null)
@@ -93,5 +93,11 @@ public class AudioManager : Singleton<AudioManager>
             sfxCacheDict.Add(_sfx, _newSfxName);
             return _newSfxName;
         }
+    }
+    private void PoolingSFXPlayer()
+    {
+        for (int i = 0; i < 10; i++)
+            sfxPlayQueue.Enqueue(CreateNewSFXPlayer(null));
+
     }
 }

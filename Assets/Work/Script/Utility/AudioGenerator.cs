@@ -43,11 +43,11 @@ public class AudioGenerator
 
         var _audioBundles = GetAudioBundles();
 
-        List<string> _sfxList = GetBundleNames(_audioBundles, SoundType.SFX);
-        List<string> _musicList = GetBundleNames(_audioBundles, SoundType.Music);
+        List<string> _sfxList = GetBundleNamesByType(_audioBundles, SoundType.SFX);
+        List<string> _musicList = GetBundleNamesByType(_audioBundles, SoundType.Music);
 
-        string _musicEnum = ConvertEnumText(_musicList);
-        string _sfxEnum = ConvertEnumText(_sfxList);
+        string _musicEnum = BuildEnumText(_musicList);
+        string _sfxEnum = BuildEnumText(_sfxList);
 
         string _newMusicText = string.Format(MUSIC_FORMAT, _musicEnum);
         string _newSFXText = string.Format(SFX_FORMAT, _sfxEnum);
@@ -56,7 +56,7 @@ public class AudioGenerator
         File.WriteAllText(SFX_PATH, _newSFXText);
 
     }
-    private static List<string> GetBundleNames(List<AudioBundle> _audioBundles, SoundType _type)
+    private static List<string> GetBundleNamesByType(List<AudioBundle> _audioBundles, SoundType _type)
     {
         List<string> _bundleNames = new List<string>();
         for (int i = 0; i < _audioBundles.Count; i++)
@@ -69,7 +69,7 @@ public class AudioGenerator
 
         return _bundleNames;
     }
-    private static string ConvertEnumText(List<string> _bundleNames)
+    private static string BuildEnumText(List<string> _bundleNames)
     {
         string _enums = string.Empty;
         for (int i = 0; i < _bundleNames.Count; i++)
