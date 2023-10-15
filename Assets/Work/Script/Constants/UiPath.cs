@@ -5,4 +5,5 @@ public class UIPath
     public const string LOADING = "UI/Popup/Loading";
     public const string GAMEOVER = "UI/Popup/GameOverPopup";
     public const string GAMECLEAR = "UI/Popup/GameClearPopup";
+    public const string OPTION = "UI/Popup/OptionPopup";
 }

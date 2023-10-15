@@ -16,7 +16,7 @@ public class UnitPlacementTile : PlacementTile
 
     private void Awake()
     {
-        TryGetComponent<SpriteRenderer>(out sp); 
+        TryGetComponent<SpriteRenderer>(out sp);
     }
 
     public override void Init(EmptyTile _parent)
@@ -79,7 +79,6 @@ public class UnitPlacementTile : PlacementTile
     {
         if (HasUnit) return;
 
-        Log.Logger.Log($"유닛 설치 타일 판매 : {Price}");
         GameManager.Instance.GainGold(Price);
         ReturnPool();
 

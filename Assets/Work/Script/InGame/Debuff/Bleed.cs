@@ -53,11 +53,6 @@ public class Bleed : Debuff
     {
         if (bleedEffector == null) return;
         if (debuffedMonster == null) return;
-        // if (debuffedMonster.IsDead)
-        // {
-        //     Release();
-        //     return;
-        // }
 
         bleedEffector.transform.position = debuffedMonster.transform.position;
 

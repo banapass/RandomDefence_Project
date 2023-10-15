@@ -26,10 +26,6 @@ public class WaveManager : Singleton<WaveManager>
         currStageInfo = _stageInfo;
         currRound = -1;
 
-        for (int i = 0; i < _stageInfo.rounds.Length; i++)
-        {
-            Log.Logger.Log(_stageInfo.rounds[i].type);
-        }
         StartWayNavigate();
     }
     public void StartWayNavigate()
@@ -59,18 +55,7 @@ public class WaveManager : Singleton<WaveManager>
 
         StopCoroutine(spawning);
     }
-    //private void MonsterPooling()
-    //{
-    //    //var _monsterInfos = TableManager.Instance.GetAllMonsterInfo();
 
-    //    //for (int i = 0; i < _monsterInfos.Count; i++)
-    //    //{
-    //    //    ResourceStorage.GetComponentAsset<Monster, string>(_monsterInfos[i].prefabPath, (_monster, _monsterId) =>
-    //    //    {
-    //    //        ObjectPoolManager.Instance.AddPool<Monster>(_monster, 10, _monsterId);
-    //    //    }, _monsterInfos[i].monsterId);
-    //    //}
-    //}
     public void StartNextRound()
     {
         if (!GameManager.Instance.IsBreakTime) return;

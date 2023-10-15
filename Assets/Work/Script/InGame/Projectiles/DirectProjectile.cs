@@ -19,9 +19,6 @@ public class DirectProjectile : ProjectileBase
         direction = (_monster.transform.position - _unit.transform.position).normalized;
         transform.position = _unit.transform.position;
         transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
-
-        //updateObserver = this.UpdateAsObservable()
-        //.Subscribe(_ => UpdateProjectile());
     }
     public override void Init(Unit _unit, Monster _monster, Vector2 _dir)
     {
@@ -37,11 +34,6 @@ public class DirectProjectile : ProjectileBase
     {
         hitMonsters?.Clear();
         addTime = 0;
-
-        //if (updateObserver == null) return;
-
-        //updateObserver.Dispose();
-        //updateObserver = null;
     }
     private void Update()
     {

@@ -25,4 +25,9 @@ public class Constants
 
     public static readonly Vector2 REFERANCE_SIZE = new Vector2(1920, 1080);
 
+
+    // PlayerPref Key 값
+    public const string MUSIC_KEY = "Music";
+    public const string SFX_KEY = "SFX";
+
 }

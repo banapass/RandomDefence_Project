@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2537845615784032735}
   - component: {fileID: 8931294465065707804}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: Option_Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 8650606060933130125}
   - component: {fileID: 9077600016088845082}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Start_Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -607,6 +607,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startBtn: {fileID: 9077600016088845082}
+  optionBtn: {fileID: 8931294465065707804}
 --- !u!1 &7966091033245937960
 GameObject:
   m_ObjectHideFlags: 0

@@ -40,13 +40,6 @@ public class AudioManager : Singleton<AudioManager>
 
         }
     }
-    // private void Update()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.Space))
-    //     {
-    //         PlaySound(SFX.Hit);
-    //     }
-    // }
     public void PlayMusic(Music _music)
     {
         if (musicPlayer == null)

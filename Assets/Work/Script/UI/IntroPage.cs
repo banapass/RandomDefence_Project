@@ -8,6 +8,7 @@ public class IntroPage : BaseUi
 {
 
     [SerializeField] Button startBtn;
+    [SerializeField] Button optionBtn;
     public override void OnOpen()
     {
         startBtn.OnClickAsObservable()
@@ -15,6 +16,12 @@ public class IntroPage : BaseUi
         {
             AudioManager.Instance.PlaySound(SFX.UI_Click);
             APP.Instance.EnterInGame();
+        });
+
+        optionBtn.OnClickAsObservable()
+        .Subscribe(_observer =>
+        {
+            UIManager.Instance.Show(UIPath.OPTION, true);
         });
 
     }
