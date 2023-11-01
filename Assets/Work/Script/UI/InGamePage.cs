@@ -19,6 +19,9 @@ public class InGamePage : BaseUi
     [SerializeField] TextMeshProUGUI gold_txt;
     [SerializeField] TextMeshProUGUI round_txt;
 
+    [Header("Tweener")]
+    [SerializeField] Tweener tweener_startBtn;
+
     [SerializeField] Heart[] hearts;
 
 
@@ -57,6 +60,20 @@ public class InGamePage : BaseUi
         GameManager.OnLifeDamaged -= OnLifeDamaged;
         GameManager.OnChangedGold -= UpdateCost;
         WaveManager.OnChangedRound -= OnChangedRound;
+    }
+
+    private bool isTest = true;
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (isTest)
+                tweener_startBtn.Show();
+            else
+                tweener_startBtn.Hide();
+
+            isTest = !isTest;
+        }
     }
 
     private void OnChangedRound(int _currRound)
