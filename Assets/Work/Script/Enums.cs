@@ -54,3 +54,12 @@ public enum SpaceType
 {
     World, Local
 }
+
+public enum GameSpeed
+{
+    Pause,
+    Normal,
+    Double,
+    Max
+
+}

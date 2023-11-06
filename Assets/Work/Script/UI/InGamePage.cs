@@ -14,6 +14,8 @@ public class InGamePage : BaseUi
     [SerializeField] Button unitBtn;
     [SerializeField] Button nextRoundBtn;
     [SerializeField] Button sellBtn;
+    [SerializeField] Button pauseBtn;
+    [SerializeField] Button speedBtn; // 배속 버튼
 
     [Header("Text")]
     [SerializeField] TextMeshProUGUI gold_txt;
@@ -21,6 +23,11 @@ public class InGamePage : BaseUi
 
     [Header("Tweener")]
     [SerializeField] Tweener tweener_startBtn;
+
+    [Header("Sprite")]
+    [SerializeField] Sprite normalSpeed_sprite;
+    [SerializeField] Sprite doubleSpeed_sprite;
+
 
     [SerializeField] Heart[] hearts;
 
@@ -35,13 +42,27 @@ public class InGamePage : BaseUi
         .Subscribe(_observer => OnChangePlacementState?.Invoke(PlacementState.UnitPlacement));
 
         nextRoundBtn.OnClickAsObservable()
-        .Subscribe(_observer => WaveManager.Instance.StartNextRound());
+        .Subscribe(_observer =>
+        {
+            if (!GameManager.Instance.IsBreakTime) return;
+            WaveManager.Instance.StartNextRound();
+        });
 
         unitBtn.OnClickAsObservable()
         .Subscribe(_observer => OnChangePlacementState?.Invoke(PlacementState.Unit));
 
         sellBtn.OnClickAsObservable()
         .Subscribe(_observer => OnChangePlacementState?.Invoke(PlacementState.Sell));
+
+        pauseBtn.OnClickAsObservable()
+        .Subscribe(_observer =>
+            {
+                GameManager.Instance.ChangeGameSpeed(GameSpeed.Pause);
+                UIManager.Instance.Show(UIPath.OPTION, true);
+            });
+
+        speedBtn.OnClickAsObservable()
+        .Subscribe(_observer => GameManager.Instance.ChangeToNextGameSpeed());
 
 
         // UIManager.Instance.Show(UIPath.GAMEOVER, true);
@@ -52,6 +73,8 @@ public class InGamePage : BaseUi
         GameManager.OnChangedGameState += OnChangedGameState;
         GameManager.OnLifeDamaged += OnLifeDamaged;
         GameManager.OnChangedGold += UpdateCost;
+        GameManager.OnChangedGameSpeed += OnChangedGameSpeed;
+
         WaveManager.OnChangedRound += OnChangedRound;
     }
     private void OnDisable()
@@ -59,6 +82,8 @@ public class InGamePage : BaseUi
         GameManager.OnChangedGameState -= OnChangedGameState;
         GameManager.OnLifeDamaged -= OnLifeDamaged;
         GameManager.OnChangedGold -= UpdateCost;
+        GameManager.OnChangedGameSpeed -= OnChangedGameSpeed;
+
         WaveManager.OnChangedRound -= OnChangedRound;
     }
 
@@ -86,6 +111,11 @@ public class InGamePage : BaseUi
         bool _isBreakTime = _changedStage == GameState.BreakTime;
 
         nextRoundBtn.enabled = _isBreakTime;
+
+        if (_isBreakTime)
+            tweener_startBtn.Show();
+        else
+            tweener_startBtn.Hide();
     }
     private void OnLifeDamaged(int _currLife)
     {
@@ -101,6 +131,19 @@ public class InGamePage : BaseUi
 
             if (_isDamagedHeart)
                 hearts[i].TakeDamage();
+        }
+    }
+
+    private void OnChangedGameSpeed(GameSpeed _speed)
+    {
+        switch (_speed)
+        {
+            case GameSpeed.Normal:
+                speedBtn.image.sprite = normalSpeed_sprite;
+                break;
+            case GameSpeed.Double:
+                speedBtn.image.sprite = doubleSpeed_sprite;
+                break;
         }
     }
 

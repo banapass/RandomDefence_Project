@@ -40,7 +40,7 @@ public class APP : Singleton<APP>
     {
         UIManager.Instance.Show(UIPath.INTRO, false, () =>
         {
-
+            GameManager.Instance.ChangeGameSpeed(GameSpeed.Normal);
         });
     }
     private void OnEnterInGame()
@@ -50,7 +50,7 @@ public class APP : Singleton<APP>
             ObjectPoolManager.Instance.SetUIParent(UIManager.Instance.UIPropRoot);
             GameManager.Instance.GameStart();
             BoardManager.Instance.Init();
-            GameManager.Instance.ChangeGameState(GameState.BreakTime);
+            // GameManager.Instance.ChangeGameState(GameState.BreakTime);
             InputController.Instance.Init();
 
             AudioManager.Instance.PlayMusic(framework.Audio.Music.InGameBGM);

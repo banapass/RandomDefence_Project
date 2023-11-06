@@ -101,7 +101,9 @@ namespace framework
                 {
                     if (_handle.Status == AsyncOperationStatus.Succeeded)
                     {
-                        resDict.Add(_path, new KeyValuePair<bool, UObject>(true, _handle.Result));
+                        if (!resDict.ContainsKey(_path))
+                            resDict.Add(_path, new KeyValuePair<bool, UObject>(true, _handle.Result));
+
                         _onCompleted?.Invoke(_handle.Result);
                     }
                     else

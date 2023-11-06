@@ -34,6 +34,10 @@ public class OptionPopup : BaseUi
     }
     public override void OnClose(TweenCallback<BaseUi> _onComplete)
     {
+        if (GameManager.Instance.CurrGameSpeed == GameSpeed.Pause)
+        {
+            GameManager.Instance.ChangePrevGameSpeed();
+        }
         _onComplete(this);
     }
 }

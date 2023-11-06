@@ -1,3 +1,4 @@
+using System.Security.AccessControl;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,10 @@ public class GameManager : Singleton<GameManager>
     private int currHeart;
     private int currGold;
 
+    public GameSpeed CurrGameSpeed { get; private set; } = GameSpeed.Normal;
+    private GameSpeed prevGameSpeed;
+
+
     public bool IsBreakTime { get { return CurrentGameState == GameState.BreakTime; } }
     [field: SerializeField, ReadOnly] public GameState CurrentGameState { get; private set; }
 
@@ -16,6 +21,7 @@ public class GameManager : Singleton<GameManager>
     public static event Action<GameState> OnChangedGameState;
     public static event Action<int> OnLifeDamaged;
     public static event Action<int> OnChangedGold;
+    public static event Action<GameSpeed> OnChangedGameSpeed;
 
     private void OnEnable()
     {
@@ -32,6 +38,7 @@ public class GameManager : Singleton<GameManager>
     {
         currHeart = Constants.MAX_LIFE;
         currGold = Constants.START_GOLD;
+        ChangeGameSpeed(GameSpeed.Normal);
         OnChangedGold?.Invoke(currGold);
     }
 
@@ -86,6 +93,28 @@ public class GameManager : Singleton<GameManager>
     {
         GainGold(10);
     }
+    public void ChangeGameSpeed(GameSpeed _speed)
+    {
+        prevGameSpeed = CurrGameSpeed;
+        CurrGameSpeed = _speed;
+        Time.timeScale = (int)CurrGameSpeed;
+        OnChangedGameSpeed?.Invoke(CurrGameSpeed);
+    }
+    public void ChangePrevGameSpeed()
+    {
+        ChangeGameSpeed(prevGameSpeed);
+    }
+    public void ChangeToNextGameSpeed()
+    {
+        CurrGameSpeed++;
+        GameSpeed _changeSpeed = (GameSpeed)CurrGameSpeed;
+
+        if (_changeSpeed >= GameSpeed.Max)
+            _changeSpeed = GameSpeed.Normal;
+
+        Log.Logger.Log(_changeSpeed);
+        ChangeGameSpeed(_changeSpeed);
+    }
     public void OpenGameOverUI()
     {
         UIManager.Instance.Show(UIPath.GAMEOVER, true, () =>
@@ -93,5 +122,6 @@ public class GameManager : Singleton<GameManager>
             Log.Logger.Log("Open GameOver Popup");
         });
     }
+
 
 }

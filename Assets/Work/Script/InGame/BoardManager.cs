@@ -81,6 +81,7 @@ public class BoardManager : Singleton<BoardManager>
         pathfinding.FindPath();
         isVaildBoard = true;
 
+        GameManager.Instance.ChangeGameState(GameState.BreakTime);
         WaveManager.Instance.Init(TableManager.Instance.GetStageInfo("stage01"));
     }
     private void OnEnable()
